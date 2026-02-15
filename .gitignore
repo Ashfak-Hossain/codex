@@ -9,5 +9,6 @@ tsconfig.tsbuildinfo
 private/
 .replit
 replit.nix
-.smart-env
 template
+.env
+.smart-env/

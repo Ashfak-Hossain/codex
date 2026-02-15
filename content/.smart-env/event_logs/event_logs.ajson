@@ -22,12 +22,13 @@
 "event_logs:sources:opened": {"key":"sources:opened","ct":19,"first_at":1765724977783,"last_at":1771140780233,"class_name":"EventLog","event_sources":{"active-leaf-change":19}},
 "event_logs:sources:modified": {"key":"sources:modified","ct":1282,"first_at":1765725465934,"last_at":1771141176535,"class_name":"EventLog","event_sources":{"obsidian:workspace.editor-change":1007,"obsidian:vault.modify":275}},
 "event_logs:sources:imported": {"key":"sources:imported","ct":54,"first_at":1765724911764,"last_at":1771141189833,"class_name":"EventLog"},
-<<<<<<< Updated upstream
 "event_logs:item:embedded": {"key":"item:embedded","ct":36,"first_at":1765724921758,"last_at":1771141191692,"class_name":"EventLog"},
 "event_logs:sources:created": {"key":"sources:created","ct":8,"first_at":1765725125117,"last_at":1771142282314,"class_name":"EventLog","event_sources":{"obsidian:vault.create":8}},
 "event_logs:sources:modified": {"key":"sources:modified","ct":1284,"first_at":1765725465934,"last_at":1771142282317,"class_name":"EventLog","event_sources":{"obsidian:workspace.editor-change":1007,"obsidian:vault.modify":277}},
 "event_logs:sources:imported": {"key":"sources:imported","ct":59,"first_at":1765724911764,"last_at":1771142295696,"class_name":"EventLog"},
 "event_logs:item:embedded": {"key":"item:embedded","ct":41,"first_at":1765724921758,"last_at":1771142297122,"class_name":"EventLog"},
-=======
-"event_logs:item:embedded": {"key":"item:embedded","ct":36,"first_at":1765724921758,"last_at":1771141191692,"class_name":"EventLog"},
->>>>>>> Stashed changes
+
+"event_logs:sources:opened": {"key":"sources:opened","ct":20,"first_at":1765724977783,"last_at":1771143150728,"class_name":"EventLog","event_sources":{"active-leaf-change":20}},
+"event_logs:sources:opened": {"key":"sources:opened","ct":21,"first_at":1765724977783,"last_at":1771143152813,"class_name":"EventLog","event_sources":{"active-leaf-change":21}},
+"event_logs:sources:opened": {"key":"sources:opened","ct":22,"first_at":1765724977783,"last_at":1771143156421,"class_name":"EventLog","event_sources":{"active-leaf-change":22}},
+"event_logs:sources:opened": {"key":"sources:opened","ct":23,"first_at":1765724977783,"last_at":1771143160893,"class_name":"EventLog","event_sources":{"active-leaf-change":23}},

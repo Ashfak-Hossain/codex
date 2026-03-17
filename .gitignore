@@ -12,3 +12,4 @@ replit.nix
 template
 .env
 .smart-env
+.keep-the-rhythm

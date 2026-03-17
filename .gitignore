@@ -11,4 +11,4 @@ private/
 replit.nix
 template
 .env
-.smart-env/
+.smart-env

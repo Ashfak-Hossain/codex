@@ -59,13 +59,11 @@ li > code {
 // ═════════════════════════════════════════════════════════════════════
 
 body[data-slug="index"] {
-  .sidebar.right {
-    display: none;
-  }
-  hr,
-  .page-footer {
-    display: none !important;
-  }
+  .sidebar.right { display: none; }
+  hr, .page-footer { display: none !important; }
+  .sidebar.left { padding-top: 0; margin-top: 0; }
+  .center { margin-top: 0 !important; }
+  article { margin-top: 0 !important; }
 }
 
 @media all and (min-width: 1200px) {
@@ -246,4 +244,245 @@ body[data-slug="index"] {
   transition:
     transform 220ms ease,
     color 220ms ease;
+}
+
+// ── Fourier Series panel ───────────────────────────────────────────────
+
+.fourier-wrap {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 0 2.5rem;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.45),
+    0 24px 48px -12px rgba(0, 0, 0, 0.5);
+  font-family: var(--codeFont);
+  user-select: none;
+}
+
+.fourier-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.fourier-hdr-l {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fourier-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(230, 237, 243, 0.75);
+  letter-spacing: 0.02em;
+}
+
+.fourier-meta {
+  font-size: 0.7rem;
+  color: rgba(180, 198, 218, 0.28);
+  letter-spacing: 0.05em;
+}
+
+.fourier-eq {
+  font-size: 0.71rem;
+  color: #7aafd4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 420px;
+  opacity: 0.85;
+}
+
+.fourier-canvas {
+  display: block;
+  width: 100%;
+  height: 260px;
+  background: #060810;
+  cursor: crosshair;
+}
+
+.fourier-ctrl {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fourier-bars {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  padding: 0.65rem 0.8rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fb-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.fb-val {
+  font-size: 8.5px;
+  color: rgba(180, 198, 218, 0.38);
+  height: 12px;
+  line-height: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.fb-track {
+  flex: 1;
+  width: 100%;
+  min-height: 120px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.035);
+  border: 0.5px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  cursor: ns-resize;
+}
+
+.fb-zero {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  top: 50%;
+  z-index: 1;
+}
+
+.fb-fill {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.fb-n {
+  font-size: 8.5px;
+  color: rgba(180, 198, 218, 0.22);
+  letter-spacing: 0.04em;
+}
+
+.fourier-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  padding: 0.65rem 0.85rem;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fourier-preset {
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(180, 198, 218, 0.32);
+  font-family: var(--codeFont);
+  font-size: 0.68rem;
+  padding: 0.22rem 0.7rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 120ms ease;
+  text-align: left;
+
+  &:hover {
+    border-color: rgba(122, 175, 212, 0.35);
+    color: #7aafd4;
+  }
+
+  &.active {
+    background: rgba(122, 175, 212, 0.1);
+    border-color: rgba(122, 175, 212, 0.4);
+    color: #7aafd4;
+  }
+}
+
+// ── Conway's Game of Life panel ────────────────────────────────────────
+
+.gol-wrap {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 0 2.5rem;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.45),
+    0 24px 48px -12px rgba(0, 0, 0, 0.5);
+  font-family: var(--codeFont);
+  user-select: none;
+}
+
+.gol-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.gol-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(230, 237, 243, 0.75);
+  letter-spacing: 0.02em;
+}
+
+.gol-meta {
+  font-size: 0.7rem;
+  color: rgba(180, 198, 218, 0.28);
+  letter-spacing: 0.05em;
+}
+
+.gol-canvas {
+  display: block;
+  width: 100%;
+  height: 200px;
+  background: #060810;
+  cursor: crosshair;
+}
+
+.gol-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gol-gen {
+  font-size: 0.68rem;
+  color: rgba(180, 198, 218, 0.28);
+  letter-spacing: 0.04em;
+}
+
+.gol-btn {
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(180, 198, 218, 0.32);
+  font-family: var(--codeFont);
+  font-size: 0.68rem;
+  padding: 0.22rem 0.7rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 120ms ease;
+
+  &:hover {
+    border-color: rgba(40, 200, 64, 0.35);
+    color: #28c840;
+  }
 }

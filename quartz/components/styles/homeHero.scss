@@ -1,0 +1,257 @@
+.hero-full {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  isolation: isolate;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+}
+
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+
+.hero-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  width: 100%;
+  padding: 0rem 1.5rem 4rem;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+    padding: 3rem 1rem 3rem;
+  }
+}
+
+// ── Left: bio ─────────────────────────────────────────────────────────
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.hero-name {
+  font-family: var(--headerFont);
+  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--dark);
+}
+
+.hero-role {
+  font-family: var(--codeFont);
+  font-size: 0.88rem;
+  color: var(--gray);
+  letter-spacing: 0.03em;
+}
+
+.hero-bio {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--darkgray);
+  max-width: 420px;
+
+  em {
+    color: var(--tertiary);
+    font-style: italic;
+  }
+}
+
+@keyframes statusPulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--tertiary) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 9px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+// ── Right: interactive terminal ───────────────────────────────────────
+
+#iterm {
+  background: #0d1117;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.45),
+    0 40px 80px -20px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  height: clamp(360px, 58vh, 520px);
+  cursor: text;
+  animation: itermIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+
+  @media (max-width: 960px) {
+    height: 340px;
+  }
+}
+
+@keyframes itermIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.iterm-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.tdot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.tdot-r {
+  background: #ff5f57;
+  box-shadow: 0 0 6px rgba(255, 95, 87, 0.55);
+}
+.tdot-y {
+  background: #ffbd2e;
+  box-shadow: 0 0 6px rgba(255, 189, 46, 0.5);
+}
+.tdot-g {
+  background: #28c840;
+  box-shadow: 0 0 6px rgba(40, 200, 64, 0.5);
+}
+
+.iterm-title {
+  margin: 0 auto;
+  font-family: var(--codeFont);
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.03em;
+}
+
+.iterm-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  padding: 0.8rem 1rem 0;
+}
+
+.iterm-log {
+  flex: 1;
+  overflow-y: auto;
+  font-family: var(--codeFont);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.iterm-welcome {
+  color: rgba(180, 198, 218, 0.45);
+}
+.iterm-echo {
+  color: #e6edf3;
+  margin-top: 0.3rem;
+}
+.iterm-out {
+  color: rgba(180, 198, 218, 0.72);
+  padding-left: 0.15rem;
+}
+
+.iterm-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.iterm-ps {
+  color: #28c840;
+  font-family: var(--codeFont);
+  font-size: 0.88rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.iterm-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--codeFont);
+  font-size: 0.82rem;
+  color: #e6edf3;
+  caret-color: #28c840;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// terminal color classes
+.c-ps {
+  color: #28c840;
+  font-weight: 700;
+}
+.c-accent {
+  color: #7aafd4;
+}
+.c-warm {
+  color: #d4956a;
+}
+.c-dir {
+  color: #8aa9f5;
+}
+.c-dim {
+  color: rgba(180, 198, 218, 0.4);
+}
+.c-err {
+  color: #ff7b72;
+}
+
+.iterm-help {
+  border-collapse: collapse;
+
+  td {
+    padding: 0.08rem 1rem 0.08rem 0;
+    vertical-align: top;
+
+    &:first-child {
+      min-width: 130px;
+    }
+    &:last-child {
+      color: rgba(180, 198, 218, 0.45);
+    }
+  }
+}

@@ -246,81 +246,132 @@ body[data-slug="index"] {
     color 220ms ease;
 }
 
-// ── Fourier Series panel ───────────────────────────────────────────────
+// ── Interactive Panels ────────────────────────────────────────────────
 
-.fourier-wrap {
-  background: #0d1117;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+.fourier-wrap,
+.gol-wrap {
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 14px;
   overflow: hidden;
-  margin: 0 0 2.5rem;
+  margin: 0 0 2rem;
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.45),
-    0 24px 48px -12px rgba(0, 0, 0, 0.5);
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px -6px rgba(0, 0, 0, 0.08);
   font-family: var(--codeFont);
   user-select: none;
+  display: flex;
+  flex-direction: column;
 }
 
-.fourier-hdr {
+// ── Shared panel header ────────────────────────────────────────────────
+
+.fourier-hdr,
+.gol-hdr {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.55rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  gap: 1rem;
+  background: color-mix(in srgb, var(--lightgray) 55%, var(--light));
+  border-bottom: 1px solid var(--lightgray);
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.fourier-title,
+.gol-title {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--dark);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+// ── Fourier: preset tabs in header ────────────────────────────────────
+
+.fourier-presets {
+  display: flex;
+  gap: 0.25rem;
   flex-wrap: wrap;
 }
 
-.fourier-hdr-l {
+.fourier-preset {
+  background: transparent;
+  border: 1px solid var(--lightgray);
+  border-radius: 5px;
+  color: var(--gray);
+  font-family: var(--codeFont);
+  font-size: 0.67rem;
+  padding: 0.18rem 0.55rem;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all 140ms ease;
+
+  &:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+    background: color-mix(in srgb, var(--secondary) 8%, transparent);
+  }
+
+  &.active {
+    background: color-mix(in srgb, var(--secondary) 12%, transparent);
+    border-color: var(--secondary);
+    color: var(--secondary);
+  }
+}
+
+// ── Fourier: equation + hint row ──────────────────────────────────────
+
+.fourier-meta-row {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.fourier-title {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: rgba(230, 237, 243, 0.75);
-  letter-spacing: 0.02em;
-}
-
-.fourier-meta {
-  font-size: 0.7rem;
-  color: rgba(180, 198, 218, 0.28);
-  letter-spacing: 0.05em;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.32rem 1rem;
+  border-bottom: 1px solid var(--lightgray);
+  gap: 0.75rem;
+  flex-shrink: 0;
+  min-height: 28px;
 }
 
 .fourier-eq {
-  font-size: 0.71rem;
-  color: #7aafd4;
+  font-size: 0.74rem;
+  color: var(--secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 420px;
-  opacity: 0.85;
+  flex: 1;
+  min-width: 0;
 }
+
+.fourier-hint {
+  font-size: 0.61rem;
+  color: var(--gray);
+  font-style: italic;
+  white-space: nowrap;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+// ── Fourier: oscilloscope canvas ───────────────────────────────────────
 
 .fourier-canvas {
   display: block;
   width: 100%;
-  height: 260px;
-  background: #060810;
+  height: clamp(220px, 38vh, 340px);
+  background: color-mix(in srgb, var(--lightgray) 38%, var(--light));
   cursor: crosshair;
+  flex-shrink: 0;
 }
 
-.fourier-ctrl {
-  display: flex;
-  align-items: stretch;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
+// ── Fourier: amplitude bars ────────────────────────────────────────────
 
 .fourier-bars {
   display: flex;
+  gap: 5px;
+  padding: 0.65rem 0.9rem 0.75rem;
   flex: 1;
-  gap: 4px;
-  padding: 0.65rem 0.8rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: stretch;
 }
 
 .fb-col {
@@ -333,23 +384,29 @@ body[data-slug="index"] {
 }
 
 .fb-val {
-  font-size: 8.5px;
-  color: rgba(180, 198, 218, 0.38);
-  height: 12px;
-  line-height: 12px;
+  font-size: 8px;
+  color: var(--gray);
+  height: 11px;
+  line-height: 11px;
   text-align: center;
   white-space: nowrap;
+  opacity: 0.7;
 }
 
 .fb-track {
   flex: 1;
   width: 100%;
-  min-height: 120px;
+  min-height: 100px;
   position: relative;
-  background: rgba(255, 255, 255, 0.035);
-  border: 0.5px solid rgba(255, 255, 255, 0.07);
+  background: color-mix(in srgb, var(--lightgray) 65%, var(--light));
+  border: 1px solid var(--lightgray);
   border-radius: 3px;
   cursor: ns-resize;
+  transition: border-color 120ms ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--secondary) 45%, var(--lightgray));
+  }
 }
 
 .fb-zero {
@@ -357,9 +414,10 @@ body[data-slug="index"] {
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--gray);
   top: 50%;
   z-index: 1;
+  opacity: 0.35;
 }
 
 .fb-fill {
@@ -371,88 +429,27 @@ body[data-slug="index"] {
 }
 
 .fb-n {
-  font-size: 8.5px;
-  color: rgba(180, 198, 218, 0.22);
-  letter-spacing: 0.04em;
-}
-
-.fourier-presets {
-  display: flex;
-  flex-direction: column;
-  gap: 0.28rem;
-  padding: 0.65rem 0.85rem;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.fourier-preset {
-  background: transparent;
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  color: rgba(180, 198, 218, 0.32);
-  font-family: var(--codeFont);
-  font-size: 0.68rem;
-  padding: 0.22rem 0.7rem;
-  cursor: pointer;
-  letter-spacing: 0.06em;
-  transition: all 120ms ease;
-  text-align: left;
-
-  &:hover {
-    border-color: rgba(122, 175, 212, 0.35);
-    color: #7aafd4;
-  }
-
-  &.active {
-    background: rgba(122, 175, 212, 0.1);
-    border-color: rgba(122, 175, 212, 0.4);
-    color: #7aafd4;
-  }
-}
-
-// ── Conway's Game of Life panel ────────────────────────────────────────
-
-.gol-wrap {
-  background: #0d1117;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 0 0 2.5rem;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.45),
-    0 24px 48px -12px rgba(0, 0, 0, 0.5);
-  font-family: var(--codeFont);
-  user-select: none;
-}
-
-.gol-hdr {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.gol-title {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: rgba(230, 237, 243, 0.75);
+  font-size: 8px;
+  color: var(--gray);
   letter-spacing: 0.02em;
+  opacity: 0.55;
 }
+
+// ── GoL ────────────────────────────────────────────────────────────────
 
 .gol-meta {
-  font-size: 0.7rem;
-  color: rgba(180, 198, 218, 0.28);
-  letter-spacing: 0.05em;
+  font-size: 0.67rem;
+  color: var(--gray);
+  letter-spacing: 0.03em;
 }
 
 .gol-canvas {
   display: block;
   width: 100%;
-  height: 200px;
-  background: #060810;
+  height: clamp(200px, 32vh, 280px);
+  background: color-mix(in srgb, var(--lightgray) 38%, var(--light));
   cursor: crosshair;
+  flex-shrink: 0;
 }
 
 .gol-footer {
@@ -460,29 +457,31 @@ body[data-slug="index"] {
   align-items: center;
   justify-content: space-between;
   padding: 0.45rem 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--lightgray);
+  flex-shrink: 0;
 }
 
 .gol-gen {
   font-size: 0.68rem;
-  color: rgba(180, 198, 218, 0.28);
-  letter-spacing: 0.04em;
+  color: var(--gray);
+  opacity: 0.75;
 }
 
 .gol-btn {
   background: transparent;
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  color: rgba(180, 198, 218, 0.32);
+  border: 1px solid var(--lightgray);
+  border-radius: 5px;
+  color: var(--gray);
   font-family: var(--codeFont);
-  font-size: 0.68rem;
-  padding: 0.22rem 0.7rem;
+  font-size: 0.67rem;
+  padding: 0.2rem 0.65rem;
   cursor: pointer;
-  letter-spacing: 0.06em;
   transition: all 120ms ease;
 
   &:hover {
-    border-color: rgba(40, 200, 64, 0.35);
-    color: #28c840;
+    border-color: var(--secondary);
+    color: var(--secondary);
+    background: color-mix(in srgb, var(--secondary) 8%, transparent);
   }
 }
+

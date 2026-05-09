@@ -152,6 +152,12 @@ function initTerminal() {
         <tr><td class="c-accent">prime [n]</td><td>first n primes</td></tr>
         <tr><td class="c-accent">gcd a b</td><td>euclidean algorithm with steps</td></tr>
         <tr><td class="c-accent">collatz n</td><td>3n+1 conjecture sequence</td></tr>
+        <tr><td class="c-accent">factor n</td><td>prime factorization</td></tr>
+        <tr><td class="c-accent">pi</td><td>Leibniz convergence demo</td></tr>
+        <tr><td class="c-accent">det a b c d</td><td>2×2 matrix determinant</td></tr>
+        <tr><td class="c-accent">tree</td><td>directory tree</td></tr>
+        <tr><td class="c-accent">neofetch</td><td>system info</td></tr>
+        <tr><td class="c-accent">echo &lt;text&gt;</td><td>echo text</td></tr>
         <tr><td class="c-accent">clear</td><td>clear screen</td></tr>
       </table>`),
 
@@ -258,6 +264,63 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
 <span class="c-dim">steps: <span class="c-accent">${steps}</span> &nbsp;·&nbsp; peak: <span class="c-warm">${peak}</span> &nbsp;·&nbsp; ${steps < 500 ? "reached 1 ✓" : "limit hit"}</span>`)
     },
 
+    factor: (args) => {
+      const n = Math.abs(Math.floor(parseFloat(args)))
+      if (!n || isNaN(n) || n < 2) { out(`<span class="c-err">usage: factor &lt;n&gt;  (integer ≥ 2)</span>`); return }
+      if (n > 1e9) { out(`<span class="c-err">too large (max 10⁹)</span>`); return }
+      const factors: number[] = []
+      let x = n, d = 2
+      while (d * d <= x) { while (x % d === 0) { factors.push(d); x /= d } d++ }
+      if (x > 1) factors.push(x)
+      const grouped = factors.reduce((acc: Record<number, number>, f) => { acc[f] = (acc[f] || 0) + 1; return acc }, {})
+      const display = Object.entries(grouped).map(([p, e]) => e > 1 ? `${p}<sup>${e}</sup>` : p).join(" × ")
+      out(`<span class="c-dim">${n} =</span> <span class="c-accent">${display}</span>${factors.length === 1 ? ' <span class="c-dim">(prime)</span>' : ''}`)
+    },
+
+    pi: () => {
+      let sum = 0
+      const terms: string[] = []
+      for (let i = 0; i < 8; i++) {
+        const sign = i % 2 === 0 ? 1 : -1
+        sum += sign / (2 * i + 1)
+        terms.push(`${sign > 0 ? "+" : "−"}1/${2 * i + 1}`)
+      }
+      out(`<span class="c-dim">Leibniz: π/4 = 1 − 1/3 + 1/5 − 1/7 + …</span>
+<span class="c-dim">8 terms: ${terms.join(" ")} + …</span>
+<span class="c-dim">× 4 ≈ </span><span class="c-accent">${(sum * 4).toFixed(8)}</span>
+<span class="c-dim">actual: ${Math.PI.toFixed(8)}  · needs ~10⁶ terms for 6 correct digits</span>`)
+    },
+
+    det: (args) => {
+      const nums = args.trim().split(/[\s,]+/).map(Number)
+      if (nums.length !== 4 || nums.some(isNaN)) {
+        out(`<span class="c-err">usage: det a b c d</span><br><span class="c-dim">  |a b|  →  ad − bc</span><br><span class="c-dim">  |c d|</span>`); return
+      }
+      const [a, b, c, d] = nums
+      const det = a * d - b * c
+      out(`<span class="c-dim">  |<span class="c-accent">${a}</span> <span class="c-accent">${b}</span>|</span>
+<span class="c-dim">  |<span class="c-accent">${c}</span> <span class="c-accent">${d}</span>|  →  ${a}×${d} − ${b}×${c} = </span><span class="c-warm">${det}</span>
+<span class="c-dim">${det === 0 ? "singular — not invertible" : "invertible ✓  (det ≠ 0)"}</span>`)
+    },
+
+    tree: () =>
+      out(`<span class="c-dim">/hilbert-notebooks</span>
+<span class="c-dir">  ├── forge-of-algorithms/</span>  <span class="c-dim">algorithms & proofs</span>
+<span class="c-dir">  ├── math-canvas/</span>         <span class="c-dim">pure mathematics</span>
+<span class="c-dir">  ├── scribble-vault/</span>      <span class="c-dim">loose thoughts</span>
+<span class="c-dir">  └── reading-log/</span>         <span class="c-dim">books & papers</span>`),
+
+    neofetch: () =>
+      out(`<span class="c-accent"> █ █  </span>  <span class="c-warm">ashfak</span><span class="c-dim">@</span><span class="c-accent">hilbert-notebooks</span>
+<span class="c-accent"> █ █  </span>  <span class="c-dim">──────────────────────────────</span>
+<span class="c-accent"> █████</span>  <span class="c-dim">role  </span><span class="c-accent">CS undergrad</span><span class="c-dim"> @ AIUB</span>
+<span class="c-accent"> █ █  </span>  <span class="c-dim">focus </span><span class="c-warm">algorithms · proofs · CP</span>
+<span class="c-accent"> █ █  </span>  <span class="c-dim">tools </span>obsidian · vim · c++ · python
+       <span class="c-dim">lang  </span><span class="c-accent">math</span> (<span class="c-warm">first</span>) · code (second)
+       <span class="c-dim">now   </span>greedy proofs &amp; segment trees`),
+
+    echo: (args) => out(`<span class="c-dim">${args.replace(/</g, "&lt;") || ""}</span>`),
+
     clear: () => {
       log!.innerHTML = ""
     },
@@ -333,6 +396,17 @@ function initFourier() {
     rand:   [],
   }
 
+  const HINTS: Record<string, string> = {
+    square: "odd harmonics only · amplitude ∝ 1/n",
+    saw:    "all harmonics · amplitude ∝ 1/n · sign alternates",
+    tri:    "odd harmonics · amplitude ∝ 1/n² · converges faster",
+    pulse:  "wide bandwidth · sharp edge = many harmonics",
+    rand:   "drag bars to sculpt your own waveform",
+  }
+
+  const hintEl = document.getElementById("fourier-hint") as HTMLElement | null
+  if (hintEl) hintEl.textContent = HINTS.square
+
   let amps = [...PRESETS.square]
   let tOff = 0, animId = 0
   let dragIdx = -1, dragStartY = 0, dragStartAmp = 0
@@ -356,10 +430,13 @@ function initFourier() {
     const a = Math.max(-1, Math.min(1, amps[i]))
     bars[i].val.textContent = a.toFixed(2)
     const pct = Math.abs(a) * 46
+    const rs = getComputedStyle(document.documentElement)
+    const pos = rs.getPropertyValue("--secondary").trim()
+    const neg = rs.getPropertyValue("--tertiary").trim()
     if (a >= 0) {
-      bars[i].fill.style.cssText = `top:${50 - pct}%;height:${pct}%;background:#7aafd4;box-shadow:0 0 8px rgba(122,175,212,0.55)`
+      bars[i].fill.style.cssText = `top:${50 - pct}%;height:${pct}%;background:${pos};border-radius:2px;opacity:0.85`
     } else {
-      bars[i].fill.style.cssText = `top:50%;height:${pct}%;background:#d4956a;box-shadow:0 0 8px rgba(212,149,106,0.55)`
+      bars[i].fill.style.cssText = `top:50%;height:${pct}%;background:${neg};border-radius:2px;opacity:0.85`
     }
   }
 
@@ -402,6 +479,7 @@ function initFourier() {
       amps = p === "rand"
         ? Array.from({ length: N }, (_, i) => (Math.random() * 2 - 1) / (i * 0.8 + 1))
         : [...PRESETS[p]]
+      if (hintEl && HINTS[p]) hintEl.textContent = HINTS[p]
       updateAll()
     })
   })
@@ -416,22 +494,39 @@ function initFourier() {
   function draw() {
     const W = canvas.offsetWidth, H = canvas.offsetHeight
     ctx.clearRect(0, 0, W, H)
-    const cy = H / 2, sc = H * 0.36
+    const cy = H / 2, sc = H * 0.38
+    const light = document.documentElement.getAttribute("saved-theme") === "light"
+    const rs = getComputedStyle(document.documentElement)
+    const secondary = rs.getPropertyValue("--secondary").trim()
 
     // Subtle grid
     ctx.lineWidth = 0.5
-    ctx.strokeStyle = "rgba(122,175,212,0.055)"
-    for (const f of [-0.7, -0.35, 0.35, 0.7]) {
-      ctx.beginPath(); ctx.moveTo(0, cy - f * sc / 0.36 * 0.25); ctx.lineTo(W, cy - f * sc / 0.36 * 0.25); ctx.stroke()
+    ctx.strokeStyle = light ? "rgba(80,80,100,0.1)" : "rgba(200,200,220,0.07)"
+    for (const f of [0.5, 1]) {
+      ctx.beginPath(); ctx.moveTo(0, cy - f * sc); ctx.lineTo(W, cy - f * sc); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(0, cy + f * sc); ctx.lineTo(W, cy + f * sc); ctx.stroke()
     }
-    ctx.strokeStyle = "rgba(122,175,212,0.13)"
+    ctx.strokeStyle = light ? "rgba(80,80,100,0.18)" : "rgba(200,200,220,0.13)"
     ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke()
 
-    // Ghost harmonics
+    // Y-axis labels
+    ctx.font = "9px monospace"
+    ctx.fillStyle = light ? "rgba(80,80,100,0.35)" : "rgba(200,200,220,0.22)"
+    ctx.textAlign = "left"
+    ctx.fillText("+1", 5, cy - sc + 11)
+    ctx.fillText("0",  5, cy - 4)
+    ctx.fillText("−1", 5, cy + sc - 3)
+
+    // Ghost harmonics — colorized by harmonic index
     ctx.lineWidth = 1
     for (let n = 0; n < N; n++) {
       if (Math.abs(amps[n]) < 0.02) continue
-      ctx.beginPath(); ctx.strokeStyle = "rgba(122,175,212,0.09)"
+      const hue = 205 - (n / N) * 50
+      const alpha = light
+        ? 0.07 + Math.abs(amps[n]) * 0.08
+        : 0.09 + Math.abs(amps[n]) * 0.11
+      ctx.beginPath()
+      ctx.strokeStyle = `hsla(${hue}, 55%, ${light ? 38 : 68}%, ${alpha})`
       for (let x = 0; x <= W; x += 2) {
         const y = cy - amps[n] * Math.sin((n + 1) * TAU * (x / W + tOff)) * sc
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
@@ -439,10 +534,13 @@ function initFourier() {
       ctx.stroke()
     }
 
-    // Sum wave with phosphor glow
+    // Sum wave — glow in dark, clean in light
     ctx.save()
-    ctx.shadowColor = "rgba(122,175,212,0.75)"; ctx.shadowBlur = 14
-    ctx.beginPath(); ctx.strokeStyle = "#7aafd4"; ctx.lineWidth = 2.5
+    ctx.shadowColor = secondary
+    ctx.shadowBlur = light ? 5 : 12
+    ctx.beginPath()
+    ctx.strokeStyle = secondary
+    ctx.lineWidth = 2.2
     for (let x = 0; x <= W; x++) {
       let s = 0
       for (let n = 0; n < N; n++) s += amps[n] * Math.sin((n + 1) * TAU * (x / W + tOff))
@@ -605,11 +703,13 @@ function initGameOfLife() {
   }
 
   function draw() {
-    ctx.fillStyle = "#060810"
+    const light = document.documentElement.getAttribute("saved-theme") === "light"
+    // match color-mix(in srgb, var(--lightgray) 38%, var(--light)) approximation
+    ctx.fillStyle = light ? "#eeece5" : "#131318"
     ctx.fillRect(0, 0, W, H)
-    ctx.shadowColor = "rgba(40,200,64,0.5)"
-    ctx.shadowBlur = 3
-    ctx.fillStyle = "#28c840"
+    ctx.shadowColor = light ? "rgba(22,100,40,0.35)" : "rgba(40,200,64,0.45)"
+    ctx.shadowBlur = 2
+    ctx.fillStyle = light ? "#1e7a2a" : "#2ec84a"
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         if (grid[idx(r, c)]) ctx.fillRect(c * CELL + 1, r * CELL + 1, CELL - 1, CELL - 1)

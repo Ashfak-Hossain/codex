@@ -69,6 +69,12 @@ export const defaultContentPageLayout: PageLayout = {
       condition: (page) => page.fileData.slug !== "index",
     }),
   ],
+  afterBody: [
+    Component.ConditionalRender({
+      component: Component.MazeLab(),
+      condition: (page) => page.fileData.slug === "math-canvas/maze-lab",
+    }),
+  ],
 }
 
 // components for pages that display lists of pages  (e.g. tags or folders)

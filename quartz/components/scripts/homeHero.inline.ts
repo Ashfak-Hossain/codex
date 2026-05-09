@@ -131,7 +131,7 @@ function initTerminal() {
   function out(html: string, cls = "iterm-out") {
     const d = document.createElement("div")
     d.className = cls
-    d.innerHTML = html
+    d.innerHTML = html.replace(/\n/g, "<br>")
     log!.appendChild(d)
     log!.scrollTop = log!.scrollHeight
   }
@@ -226,7 +226,7 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
       const n = Math.min(Math.max(parseInt(args) || 10, 1), 50)
       const primes: number[] = []
       for (let c = 2; primes.length < n; c++) {
-        if (primes.every(p => c % p !== 0)) primes.push(c)
+        if (primes.every((p) => c % p !== 0)) primes.push(c)
       }
       out(`<span class="c-dim">first ${n} primes:</span> <span class="c-accent">${primes.join(", ")}</span>
 <span class="c-dim">p(${n}) = ${primes[primes.length - 1]} &nbsp;·&nbsp; by prime number theorem: ~${n} · ln(${primes[primes.length - 1]}) ≈ ${Math.round(n * Math.log(primes[primes.length - 1]))}</span>`)
@@ -235,46 +235,76 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
     gcd: (args) => {
       const [a, b] = args.trim().split(/\s+/).map(Number)
       if (!a || !b || isNaN(a) || isNaN(b)) {
-        out(`<span class="c-err">usage: gcd &lt;a&gt; &lt;b&gt;</span>`); return
+        out(`<span class="c-err">usage: gcd &lt;a&gt; &lt;b&gt;</span>`)
+        return
       }
       const steps: string[] = []
-      let x = Math.abs(Math.floor(a)), y = Math.abs(Math.floor(b))
+      let x = Math.abs(Math.floor(a)),
+        y = Math.abs(Math.floor(b))
       while (y !== 0) {
         steps.push(`gcd(${x}, ${y})`)
         ;[x, y] = [y, x % y]
       }
       steps.push(`gcd(${x}, 0) = <span class="c-warm">${x}</span>`)
-      out(`<span class="c-dim">euclidean algorithm:</span><br>${steps.map(s => `  ${s}`).join("<br>")}`)
+      out(
+        `<span class="c-dim">euclidean algorithm:</span><br>${steps.map((s) => `  ${s}`).join("<br>")}`,
+      )
     },
 
     collatz: (args) => {
       const n0 = parseInt(args)
       if (!n0 || isNaN(n0) || n0 < 1) {
-        out(`<span class="c-err">usage: collatz &lt;n&gt;  (positive integer)</span>`); return
+        out(`<span class="c-err">usage: collatz &lt;n&gt;  (positive integer)</span>`)
+        return
       }
       const seq: number[] = [n0]
-      let c = n0, steps = 0
+      let c = n0,
+        steps = 0
       while (c !== 1 && steps < 500) {
         c = c % 2 === 0 ? c / 2 : 3 * c + 1
-        seq.push(c); steps++
+        seq.push(c)
+        steps++
       }
       const peak = Math.max(...seq)
-      const display = seq.length <= 24 ? seq.join(" → ") : seq.slice(0, 12).join(" → ") + ` → … → ${seq[seq.length - 1]}`
+      const display =
+        seq.length <= 24
+          ? seq.join(" → ")
+          : seq.slice(0, 12).join(" → ") + ` → … → ${seq[seq.length - 1]}`
       out(`<span class="c-dim">${display}</span>
 <span class="c-dim">steps: <span class="c-accent">${steps}</span> &nbsp;·&nbsp; peak: <span class="c-warm">${peak}</span> &nbsp;·&nbsp; ${steps < 500 ? "reached 1 ✓" : "limit hit"}</span>`)
     },
 
     factor: (args) => {
       const n = Math.abs(Math.floor(parseFloat(args)))
-      if (!n || isNaN(n) || n < 2) { out(`<span class="c-err">usage: factor &lt;n&gt;  (integer ≥ 2)</span>`); return }
-      if (n > 1e9) { out(`<span class="c-err">too large (max 10⁹)</span>`); return }
+      if (!n || isNaN(n) || n < 2) {
+        out(`<span class="c-err">usage: factor &lt;n&gt;  (integer ≥ 2)</span>`)
+        return
+      }
+      if (n > 1e9) {
+        out(`<span class="c-err">too large (max 10⁹)</span>`)
+        return
+      }
       const factors: number[] = []
-      let x = n, d = 2
-      while (d * d <= x) { while (x % d === 0) { factors.push(d); x /= d } d++ }
+      let x = n,
+        d = 2
+      while (d * d <= x) {
+        while (x % d === 0) {
+          factors.push(d)
+          x /= d
+        }
+        d++
+      }
       if (x > 1) factors.push(x)
-      const grouped = factors.reduce((acc: Record<number, number>, f) => { acc[f] = (acc[f] || 0) + 1; return acc }, {})
-      const display = Object.entries(grouped).map(([p, e]) => e > 1 ? `${p}<sup>${e}</sup>` : p).join(" × ")
-      out(`<span class="c-dim">${n} =</span> <span class="c-accent">${display}</span>${factors.length === 1 ? ' <span class="c-dim">(prime)</span>' : ''}`)
+      const grouped = factors.reduce((acc: Record<number, number>, f) => {
+        acc[f] = (acc[f] || 0) + 1
+        return acc
+      }, {})
+      const display = Object.entries(grouped)
+        .map(([p, e]) => (e > 1 ? `${p}<sup>${e}</sup>` : p))
+        .join(" × ")
+      out(
+        `<span class="c-dim">${n} =</span> <span class="c-accent">${display}</span>${factors.length === 1 ? ' <span class="c-dim">(prime)</span>' : ""}`,
+      )
     },
 
     pi: () => {
@@ -292,9 +322,15 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
     },
 
     det: (args) => {
-      const nums = args.trim().split(/[\s,]+/).map(Number)
+      const nums = args
+        .trim()
+        .split(/[\s,]+/)
+        .map(Number)
       if (nums.length !== 4 || nums.some(isNaN)) {
-        out(`<span class="c-err">usage: det a b c d</span><br><span class="c-dim">  |a b|  →  ad − bc</span><br><span class="c-dim">  |c d|</span>`); return
+        out(
+          `<span class="c-err">usage: det a b c d</span><br><span class="c-dim">  |a b|  →  ad − bc</span><br><span class="c-dim">  |c d|</span>`,
+        )
+        return
       }
       const [a, b, c, d] = nums
       const det = a * d - b * c
@@ -380,36 +416,31 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
 
 // ── Fourier Series ────────────────────────────────────────────────────
 function initFourier() {
-  const canvas  = document.getElementById("fourier-canvas") as HTMLCanvasElement | null
-  const barsEl  = document.getElementById("fourier-bars")   as HTMLElement | null
-  const eqEl    = document.getElementById("fourier-eq")     as HTMLElement | null
+  const canvas = document.getElementById("fourier-canvas") as HTMLCanvasElement | null
+  const barsEl = document.getElementById("fourier-bars") as HTMLElement | null
+  const eqEl = document.getElementById("fourier-eq") as HTMLElement | null
   if (!canvas || !barsEl) return
 
   const ctx = canvas.getContext("2d")!
-  const N = 8, TAU = Math.PI * 2
+  const N = 8,
+    TAU = Math.PI * 2
 
   const PRESETS: Record<string, number[]> = {
-    square: [1, 0, 1/3, 0, 1/5, 0, 1/7, 0],
-    saw:    [1, -1/2, 1/3, -1/4, 1/5, -1/6, 1/7, -1/8],
-    tri:    [1, 0, -1/9, 0, 1/25, 0, -1/49, 0],
-    pulse:  [1, 0.88, 0.65, 0.45, 0.28, 0.14, 0.06, 0.02],
-    rand:   [],
+    square: [1, 0, 1 / 3, 0, 1 / 5, 0, 1 / 7, 0],
+    saw: [1, -1 / 2, 1 / 3, -1 / 4, 1 / 5, -1 / 6, 1 / 7, -1 / 8],
+    tri: [1, 0, -1 / 9, 0, 1 / 25, 0, -1 / 49, 0],
+    pulse: [1, 0.88, 0.65, 0.45, 0.28, 0.14, 0.06, 0.02],
+    organ: [1, 0.55, 0.35, 0.18, 0.09, 0.05, 0.02, 0.01],
+    even: [0, 0.8, 0, 0.6, 0, 0.4, 0, 0.25],
+    rand: [],
   }
-
-  const HINTS: Record<string, string> = {
-    square: "odd harmonics only · amplitude ∝ 1/n",
-    saw:    "all harmonics · amplitude ∝ 1/n · sign alternates",
-    tri:    "odd harmonics · amplitude ∝ 1/n² · converges faster",
-    pulse:  "wide bandwidth · sharp edge = many harmonics",
-    rand:   "drag bars to sculpt your own waveform",
-  }
-
-  const hintEl = document.getElementById("fourier-hint") as HTMLElement | null
-  if (hintEl) hintEl.textContent = HINTS.square
 
   let amps = [...PRESETS.square]
-  let tOff = 0, animId = 0
-  let dragIdx = -1, dragStartY = 0, dragStartAmp = 0
+  let tOff = 0,
+    animId = 0
+  let dragIdx = -1,
+    dragStartY = 0,
+    dragStartAmp = 0
 
   type BarEl = { fill: HTMLElement; val: HTMLElement }
   const bars: BarEl[] = []
@@ -417,13 +448,27 @@ function initFourier() {
   for (let i = 0; i < N; i++) {
     const col = document.createElement("div")
     col.className = "fb-col"
-    col.innerHTML = `<div class="fb-val" id="fv${i}">0.00</div><div class="fb-track" data-i="${i}"><div class="fb-zero"></div><div class="fb-fill" id="ff${i}"></div></div><div class="fb-n">n=${i+1}</div>`
+    col.innerHTML = `<div class="fb-val" id="fv${i}">0.00</div><div class="fb-track" data-i="${i}"><div class="fb-zero"></div><div class="fb-fill" id="ff${i}"></div></div><div class="fb-n">n=${i + 1}</div>`
     barsEl.appendChild(col)
     bars.push({ fill: col.querySelector(".fb-fill")!, val: col.querySelector(".fb-val")! })
 
     const track = col.querySelector(".fb-track") as HTMLElement
-    track.addEventListener("mousedown", (e) => { dragIdx = i; dragStartY = (e as MouseEvent).clientY; dragStartAmp = amps[i]; e.preventDefault() })
-    track.addEventListener("touchstart", (e) => { dragIdx = i; dragStartY = (e as TouchEvent).touches[0].clientY; dragStartAmp = amps[i]; e.preventDefault() }, { passive: false })
+    track.addEventListener("mousedown", (e) => {
+      dragIdx = i
+      dragStartY = (e as MouseEvent).clientY
+      dragStartAmp = amps[i]
+      e.preventDefault()
+    })
+    track.addEventListener(
+      "touchstart",
+      (e) => {
+        dragIdx = i
+        dragStartY = (e as TouchEvent).touches[0].clientY
+        dragStartAmp = amps[i]
+        e.preventDefault()
+      },
+      { passive: false },
+    )
   }
 
   function updateBar(i: number) {
@@ -434,67 +479,102 @@ function initFourier() {
     const pos = rs.getPropertyValue("--secondary").trim()
     const neg = rs.getPropertyValue("--tertiary").trim()
     if (a >= 0) {
-      bars[i].fill.style.cssText = `top:${50 - pct}%;height:${pct}%;background:${pos};border-radius:2px;opacity:0.85`
+      bars[i].fill.style.cssText =
+        `top:${50 - pct}%;height:${pct}%;background:${pos};border-radius:2px;opacity:0.85`
     } else {
-      bars[i].fill.style.cssText = `top:50%;height:${pct}%;background:${neg};border-radius:2px;opacity:0.85`
+      bars[i].fill.style.cssText =
+        `top:50%;height:${pct}%;background:${neg};border-radius:2px;opacity:0.85`
     }
   }
 
   function updateEq() {
     if (!eqEl) return
-    const terms = amps
-      .map((a, i) => ({ a, n: i + 1 }))
-      .filter(({ a }) => Math.abs(a) > 0.005)
-    if (!terms.length) { eqEl.textContent = "f(t) = 0"; return }
-    eqEl.textContent = "f(t) = " + terms.map(({ a, n }, idx) => {
-      const abs = Math.abs(a).toFixed(2)
-      const neg = a < 0
-      const pre = idx === 0 ? (neg ? "−" : "") : (neg ? " − " : " + ")
-      return `${pre}${abs}·sin(${n > 1 ? n : ""}ωt)`
-    }).join("")
+    const terms = amps.map((a, i) => ({ a, n: i + 1 })).filter(({ a }) => Math.abs(a) > 0.005)
+    if (!terms.length) {
+      eqEl.textContent = "f(t) = 0"
+      return
+    }
+    eqEl.textContent =
+      "f(t) = " +
+      terms
+        .map(({ a, n }, idx) => {
+          const abs = Math.abs(a).toFixed(2)
+          const neg = a < 0
+          const pre = idx === 0 ? (neg ? "−" : "") : neg ? " − " : " + "
+          return `${pre}${abs}·sin(${n > 1 ? n : ""}ωt)`
+        })
+        .join("")
   }
 
-  function updateAll() { amps.forEach((_, i) => updateBar(i)); updateEq() }
+  let peakAmp = 1.0
+
+  function computePeak() {
+    let p = 0
+    for (let i = 0; i < 256; i++) {
+      const t = (i / 256) * TAU
+      let s = 0
+      for (let n = 0; n < N; n++) s += amps[n] * Math.sin((n + 1) * t)
+      p = Math.max(p, Math.abs(s))
+    }
+    peakAmp = Math.max(p, 0.01)
+  }
+
+  function updateAll() {
+    amps.forEach((_, i) => updateBar(i))
+    updateEq()
+    computePeak()
+  }
 
   const onMove = (clientY: number) => {
     if (dragIdx < 0) return
     amps[dragIdx] = Math.max(-1, Math.min(1, dragStartAmp + (dragStartY - clientY) / 80))
-    updateBar(dragIdx); updateEq()
-    document.querySelectorAll(".fourier-preset").forEach(b => b.classList.remove("active"))
+    updateBar(dragIdx)
+    updateEq()
+    computePeak()
+    document.querySelectorAll(".fourier-preset").forEach((b) => b.classList.remove("active"))
   }
   const onMouseMove = (e: MouseEvent) => onMove(e.clientY)
-  const onTouchMove = (e: TouchEvent) => { if (dragIdx >= 0) { onMove(e.touches[0].clientY); e.preventDefault() } }
-  const onUp = () => { dragIdx = -1 }
+  const onTouchMove = (e: TouchEvent) => {
+    if (dragIdx >= 0) {
+      onMove(e.touches[0].clientY)
+      e.preventDefault()
+    }
+  }
+  const onUp = () => {
+    dragIdx = -1
+  }
 
   document.addEventListener("mousemove", onMouseMove)
   document.addEventListener("touchmove", onTouchMove, { passive: false })
   document.addEventListener("mouseup", onUp)
   document.addEventListener("touchend", onUp)
 
-  document.querySelectorAll(".fourier-preset").forEach(btn => {
+  document.querySelectorAll(".fourier-preset").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".fourier-preset").forEach(b => b.classList.remove("active"))
+      document.querySelectorAll(".fourier-preset").forEach((b) => b.classList.remove("active"))
       btn.classList.add("active")
       const p = (btn as HTMLElement).dataset.p!
-      amps = p === "rand"
-        ? Array.from({ length: N }, (_, i) => (Math.random() * 2 - 1) / (i * 0.8 + 1))
-        : [...PRESETS[p]]
-      if (hintEl && HINTS[p]) hintEl.textContent = HINTS[p]
+      amps =
+        p === "rand"
+          ? Array.from({ length: N }, (_, i) => (Math.random() * 2 - 1) / (i * 0.8 + 1))
+          : [...PRESETS[p]]
       updateAll()
     })
   })
 
   function resize() {
     const dpr = window.devicePixelRatio || 1
-    canvas.width  = canvas.offsetWidth  * dpr
+    canvas.width = canvas.offsetWidth * dpr
     canvas.height = canvas.offsetHeight * dpr
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }
 
   function draw() {
-    const W = canvas.offsetWidth, H = canvas.offsetHeight
+    const W = canvas.offsetWidth,
+      H = canvas.offsetHeight
     ctx.clearRect(0, 0, W, H)
-    const cy = H / 2, sc = H * 0.38
+    const cy = H / 2,
+      sc = (H * 0.44) / peakAmp
     const light = document.documentElement.getAttribute("saved-theme") === "light"
     const rs = getComputedStyle(document.documentElement)
     const secondary = rs.getPropertyValue("--secondary").trim()
@@ -503,28 +583,37 @@ function initFourier() {
     ctx.lineWidth = 0.5
     ctx.strokeStyle = light ? "rgba(80,80,100,0.1)" : "rgba(200,200,220,0.07)"
     for (const f of [0.5, 1]) {
-      ctx.beginPath(); ctx.moveTo(0, cy - f * sc); ctx.lineTo(W, cy - f * sc); ctx.stroke()
-      ctx.beginPath(); ctx.moveTo(0, cy + f * sc); ctx.lineTo(W, cy + f * sc); ctx.stroke()
+      ctx.beginPath()
+      ctx.moveTo(0, cy - f * sc)
+      ctx.lineTo(W, cy - f * sc)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.moveTo(0, cy + f * sc)
+      ctx.lineTo(W, cy + f * sc)
+      ctx.stroke()
     }
     ctx.strokeStyle = light ? "rgba(80,80,100,0.18)" : "rgba(200,200,220,0.13)"
-    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(0, cy)
+    ctx.lineTo(W, cy)
+    ctx.stroke()
 
-    // Y-axis labels
+    // Y-axis labels (dynamic — reflect actual peak amplitude)
+    const ampLabel =
+      peakAmp >= 10 ? peakAmp.toFixed(0) : peakAmp >= 1.5 ? peakAmp.toFixed(1) : peakAmp.toFixed(2)
     ctx.font = "9px monospace"
     ctx.fillStyle = light ? "rgba(80,80,100,0.35)" : "rgba(200,200,220,0.22)"
     ctx.textAlign = "left"
-    ctx.fillText("+1", 5, cy - sc + 11)
-    ctx.fillText("0",  5, cy - 4)
-    ctx.fillText("−1", 5, cy + sc - 3)
+    ctx.fillText(`+${ampLabel}`, 5, cy - sc + 11)
+    ctx.fillText("0", 5, cy - 4)
+    ctx.fillText(`−${ampLabel}`, 5, cy + sc - 3)
 
     // Ghost harmonics — colorized by harmonic index
     ctx.lineWidth = 1
     for (let n = 0; n < N; n++) {
       if (Math.abs(amps[n]) < 0.02) continue
       const hue = 205 - (n / N) * 50
-      const alpha = light
-        ? 0.07 + Math.abs(amps[n]) * 0.08
-        : 0.09 + Math.abs(amps[n]) * 0.11
+      const alpha = light ? 0.07 + Math.abs(amps[n]) * 0.08 : 0.09 + Math.abs(amps[n]) * 0.11
       ctx.beginPath()
       ctx.strokeStyle = `hsla(${hue}, 55%, ${light ? 38 : 68}%, ${alpha})`
       for (let x = 0; x <= W; x += 2) {
@@ -547,7 +636,8 @@ function initFourier() {
       const y = cy - s * sc
       x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
     }
-    ctx.stroke(); ctx.restore()
+    ctx.stroke()
+    ctx.restore()
 
     tOff += 0.004
     animId = requestAnimationFrame(draw)
@@ -555,10 +645,13 @@ function initFourier() {
 
   const ro = new ResizeObserver(resize)
   ro.observe(canvas)
-  resize(); updateAll(); draw()
+  resize()
+  updateAll()
+  draw()
 
   window.addCleanup(() => {
-    cancelAnimationFrame(animId); ro.disconnect()
+    cancelAnimationFrame(animId)
+    ro.disconnect()
     document.removeEventListener("mousemove", onMouseMove)
     document.removeEventListener("touchmove", onTouchMove)
     document.removeEventListener("mouseup", onUp)
@@ -645,18 +738,140 @@ function initGameOfLife() {
   const ctx = canvas.getContext("2d")!
   const CELL = 6
 
-  let W = 0, H = 0, cols = 0, rows = 0
-  let grid = new Uint8Array(0), next = new Uint8Array(0)
-  let animId = 0, gen = 0, frameCount = 0
+  let W = 0,
+    H = 0,
+    cols = 0,
+    rows = 0
+  let grid = new Uint8Array(0),
+    next = new Uint8Array(0)
+  let animId = 0,
+    gen = 0,
+    frameCount = 0
 
   const PATTERNS = [
-    [[0,1],[1,2],[2,0],[2,1],[2,2]],   // glider
-    [[0,1],[0,2],[1,0],[1,1],[2,1]],   // R-pentomino
-    [[0,0],[0,1],[0,2],[1,0],[2,1]],   // L-shape
-    [[0,0],[0,1],[1,2],[1,3],[2,1],[2,2]], // beacon-ish
+    [
+      [0, 1],
+      [1, 2],
+      [2, 0],
+      [2, 1],
+      [2, 2],
+    ], // glider
+    [
+      [0, 1],
+      [0, 2],
+      [1, 0],
+      [1, 1],
+      [2, 1],
+    ], // R-pentomino
+    [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [1, 0],
+      [2, 1],
+    ], // L-shape
+    [
+      [0, 0],
+      [0, 1],
+      [1, 2],
+      [1, 3],
+      [2, 1],
+      [2, 2],
+    ], // beacon-ish
   ]
 
-  function idx(r: number, c: number) { return r * cols + c }
+  const NAMED_PATS: Record<string, [number, number][]> = {
+    glider: [
+      [0, 1],
+      [1, 2],
+      [2, 0],
+      [2, 1],
+      [2, 2],
+    ],
+    blinker: [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+    ],
+    pulsar: [
+      [0, 2],
+      [0, 3],
+      [0, 4],
+      [0, 8],
+      [0, 9],
+      [0, 10],
+      [2, 0],
+      [2, 5],
+      [2, 7],
+      [2, 12],
+      [3, 0],
+      [3, 5],
+      [3, 7],
+      [3, 12],
+      [4, 0],
+      [4, 5],
+      [4, 7],
+      [4, 12],
+      [5, 2],
+      [5, 3],
+      [5, 4],
+      [5, 8],
+      [5, 9],
+      [5, 10],
+      [7, 2],
+      [7, 3],
+      [7, 4],
+      [7, 8],
+      [7, 9],
+      [7, 10],
+      [8, 0],
+      [8, 5],
+      [8, 7],
+      [8, 12],
+      [9, 0],
+      [9, 5],
+      [9, 7],
+      [9, 12],
+      [10, 0],
+      [10, 5],
+      [10, 7],
+      [10, 12],
+      [12, 2],
+      [12, 3],
+      [12, 4],
+      [12, 8],
+      [12, 9],
+      [12, 10],
+    ],
+    rpent: [
+      [0, 1],
+      [0, 2],
+      [1, 0],
+      [1, 1],
+      [2, 1],
+    ],
+  }
+
+  function idx(r: number, c: number) {
+    return r * cols + c
+  }
+
+  function loadPat(name: string) {
+    const pat = NAMED_PATS[name]
+    if (!pat) return
+    grid.fill(0)
+    gen = 0
+    if (genEl) genEl.textContent = "gen 0"
+    const maxR = Math.max(...pat.map(([r]) => r))
+    const maxC = Math.max(...pat.map(([, c]) => c))
+    const r0 = Math.floor((rows - maxR - 1) / 2)
+    const c0 = Math.floor((cols - maxC - 1) / 2)
+    for (const [dr, dc] of pat) {
+      const r = r0 + dr,
+        c = c0 + dc
+      if (r >= 0 && r < rows && c >= 0 && c < cols) grid[idx(r, c)] = 1
+    }
+  }
 
   function randomize() {
     gen = 0
@@ -666,7 +881,8 @@ function initGameOfLife() {
       const r0 = Math.floor(Math.random() * Math.max(1, rows - 6)) + 2
       const c0 = Math.floor(Math.random() * Math.max(1, cols - 6)) + 2
       for (const [dr, dc] of pat) {
-        const r = r0 + dr, c = c0 + dc
+        const r = r0 + dr,
+          c = c0 + dc
         if (r >= 0 && r < rows && c >= 0 && c < cols) grid[idx(r, c)] = 1
       }
     }
@@ -718,7 +934,10 @@ function initGameOfLife() {
   }
 
   function loop() {
-    if (frameCount++ % 4 === 0) { step(); draw() }
+    if (frameCount++ % 4 === 0) {
+      step()
+      draw()
+    }
     animId = requestAnimationFrame(loop)
   }
 
@@ -732,7 +951,20 @@ function initGameOfLife() {
     }
   })
 
-  resetBtn?.addEventListener("click", () => { randomize(); draw() })
+  resetBtn?.addEventListener("click", () => {
+    document.querySelectorAll(".gol-pat").forEach((b) => b.classList.remove("active"))
+    randomize()
+    draw()
+  })
+
+  document.querySelectorAll(".gol-pat").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".gol-pat").forEach((b) => b.classList.remove("active"))
+      btn.classList.add("active")
+      loadPat((btn as HTMLElement).dataset.pat!)
+      draw()
+    })
+  })
 
   const ro = new ResizeObserver(resize)
   ro.observe(canvas)
@@ -741,6 +973,144 @@ function initGameOfLife() {
 
   window.addCleanup(() => {
     cancelAnimationFrame(animId)
+    ro.disconnect()
+  })
+}
+
+// ── (maze moved to /math-canvas/maze-lab) ────────────────────────────
+function initMaze_REMOVED() {
+  const canvas = document.getElementById("maze-canvas") as HTMLCanvasElement | null
+  const regenBtn = document.getElementById("maze-regen") as HTMLButtonElement | null
+  if (!canvas) return
+
+  const ctx = canvas.getContext("2d")!
+  const CS = 11 // cell size px
+
+  let W = 0,
+    H = 0,
+    cols = 0,
+    rows = 0
+  let walls = new Uint8Array(0) // bit flags: N=1 E=2 S=4 W=8
+  let visited = new Uint8Array(0)
+  let stack: number[] = []
+  let cur = 0,
+    done = false
+  let animId = 0,
+    autoTimer = 0
+
+  const DR = [-1, 0, 1, 0]
+  const DC = [0, 1, 0, -1]
+  const WBIT = [1, 2, 4, 8]
+  const OPP = [4, 8, 1, 2]
+
+  function ci(r: number, c: number) {
+    return r * cols + c
+  }
+
+  function initGrid() {
+    cols = Math.max(1, Math.floor((W + 1) / (CS + 1)))
+    rows = Math.max(1, Math.floor((H + 1) / (CS + 1)))
+    walls = new Uint8Array(cols * rows).fill(15)
+    visited = new Uint8Array(cols * rows)
+    visited[0] = 1
+    stack = [0]
+    cur = 0
+    done = false
+    if (autoTimer) {
+      clearTimeout(autoTimer)
+      autoTimer = 0
+    }
+  }
+
+  function stepMaze() {
+    if (stack.length === 0) {
+      done = true
+      return
+    }
+    cur = stack[stack.length - 1]
+    const r = Math.floor(cur / cols),
+      c = cur % cols
+    const nbrs: [number, number, number][] = []
+    for (let d = 0; d < 4; d++) {
+      const nr = r + DR[d],
+        nc = c + DC[d]
+      if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && !visited[ci(nr, nc)])
+        nbrs.push([ci(nr, nc), WBIT[d], OPP[d]])
+    }
+    if (nbrs.length) {
+      const [ni, mw, ow] = nbrs[Math.floor(Math.random() * nbrs.length)]
+      walls[cur] &= ~mw
+      walls[ni] &= ~ow
+      visited[ni] = 1
+      stack.push(ni)
+      cur = ni
+    } else {
+      stack.pop()
+    }
+  }
+
+  function draw() {
+    const light = document.documentElement.getAttribute("saved-theme") === "light"
+    const rs = getComputedStyle(document.documentElement)
+    const secondary = rs.getPropertyValue("--secondary").trim()
+    const wallCol = light ? "#d8d5ce" : "#111118"
+    const pathCol = light ? "#f5f2ec" : "#21212e"
+
+    ctx.fillStyle = wallCol
+    ctx.fillRect(0, 0, W, H)
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const i = ci(r, c)
+        if (!visited[i]) continue
+        const x = c * (CS + 1),
+          y = r * (CS + 1)
+        ctx.fillStyle = !done && i === cur ? secondary : pathCol
+        ctx.fillRect(x, y, CS, CS)
+        if (!(walls[i] & 2) && c + 1 < cols) {
+          ctx.fillStyle = pathCol
+          ctx.fillRect(x + CS, y, 1, CS)
+        }
+        if (!(walls[i] & 4) && r + 1 < rows) {
+          ctx.fillStyle = pathCol
+          ctx.fillRect(x, y + CS, CS, 1)
+        }
+      }
+    }
+  }
+
+  function loop() {
+    if (!done) for (let i = 0; i < 5; i++) if (!done) stepMaze()
+    draw()
+    if (done && !autoTimer)
+      autoTimer = window.setTimeout(() => {
+        initGrid()
+      }, 5000)
+    animId = requestAnimationFrame(loop)
+  }
+
+  function resize() {
+    W = canvas!.width = canvas!.offsetWidth
+    H = canvas!.height = canvas!.offsetHeight
+    initGrid()
+  }
+
+  regenBtn?.addEventListener("click", () => {
+    if (autoTimer) {
+      clearTimeout(autoTimer)
+      autoTimer = 0
+    }
+    resize()
+  })
+
+  const ro = new ResizeObserver(resize)
+  ro.observe(canvas)
+  resize()
+  loop()
+
+  window.addCleanup(() => {
+    cancelAnimationFrame(animId)
+    if (autoTimer) clearTimeout(autoTimer)
     ro.disconnect()
   })
 }

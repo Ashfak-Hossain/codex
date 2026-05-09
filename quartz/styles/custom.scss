@@ -59,11 +59,23 @@ li > code {
 // ═════════════════════════════════════════════════════════════════════
 
 body[data-slug="index"] {
-  .sidebar.right { display: none; }
-  hr, .page-footer { display: none !important; }
-  .sidebar.left { padding-top: 0; margin-top: 0; }
-  .center { margin-top: 0 !important; }
-  article { margin-top: 0 !important; }
+  .sidebar.right {
+    display: none;
+  }
+  hr,
+  .page-footer {
+    display: none !important;
+  }
+  .sidebar.left {
+    padding-top: 0;
+    margin-top: 0;
+  }
+  .center {
+    margin-top: 0 !important;
+  }
+  article {
+    margin-top: 0 !important;
+  }
 }
 
 @media all and (min-width: 1200px) {
@@ -250,127 +262,84 @@ body[data-slug="index"] {
 
 .fourier-wrap,
 .gol-wrap {
-  background: var(--light);
-  border: 1px solid var(--lightgray);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--lightgray) 44%, var(--light));
+  border-radius: 16px;
   overflow: hidden;
   margin: 0 0 2rem;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 8px 24px -6px rgba(0, 0, 0, 0.08);
   font-family: var(--codeFont);
   user-select: none;
   display: flex;
   flex-direction: column;
 }
 
-// ── Shared panel header ────────────────────────────────────────────────
-
 .fourier-hdr,
 .gol-hdr {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.55rem 1rem;
-  background: color-mix(in srgb, var(--lightgray) 55%, var(--light));
-  border-bottom: 1px solid var(--lightgray);
+  padding: 0.6rem 1.1rem;
   gap: 0.75rem;
-  flex-wrap: wrap;
   flex-shrink: 0;
 }
 
 .fourier-title,
 .gol-title {
-  font-size: 0.74rem;
-  font-weight: 600;
+  font-size: 0.71rem;
+  font-weight: 500;
   color: var(--dark);
-  letter-spacing: 0.01em;
-  white-space: nowrap;
+  opacity: 0.6;
 }
 
-// ── Fourier: preset tabs in header ────────────────────────────────────
+// ── Fourier: presets ──────────────────────────────────────────────────
 
 .fourier-presets {
   display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
+  gap: 0.15rem;
 }
 
 .fourier-preset {
   background: transparent;
-  border: 1px solid var(--lightgray);
+  border: none;
   border-radius: 5px;
   color: var(--gray);
   font-family: var(--codeFont);
-  font-size: 0.67rem;
-  padding: 0.18rem 0.55rem;
+  font-size: 0.66rem;
+  padding: 0.18rem 0.5rem;
   cursor: pointer;
-  letter-spacing: 0.03em;
   transition: all 140ms ease;
+  opacity: 0.65;
 
   &:hover {
-    border-color: var(--secondary);
+    background: color-mix(in srgb, var(--secondary) 12%, transparent);
     color: var(--secondary);
-    background: color-mix(in srgb, var(--secondary) 8%, transparent);
+    opacity: 1;
   }
 
   &.active {
-    background: color-mix(in srgb, var(--secondary) 12%, transparent);
-    border-color: var(--secondary);
+    background: color-mix(in srgb, var(--secondary) 16%, transparent);
     color: var(--secondary);
+    opacity: 1;
+    font-weight: 600;
   }
 }
 
-// ── Fourier: equation + hint row ──────────────────────────────────────
-
-.fourier-meta-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 0.32rem 1rem;
-  border-bottom: 1px solid var(--lightgray);
-  gap: 0.75rem;
-  flex-shrink: 0;
-  min-height: 28px;
-}
-
-.fourier-eq {
-  font-size: 0.74rem;
-  color: var(--secondary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-}
-
-.fourier-hint {
-  font-size: 0.61rem;
-  color: var(--gray);
-  font-style: italic;
-  white-space: nowrap;
-  flex-shrink: 0;
-  opacity: 0.8;
-}
-
-// ── Fourier: oscilloscope canvas ───────────────────────────────────────
+// ── Fourier: canvas ───────────────────────────────────────────────────
 
 .fourier-canvas {
   display: block;
   width: 100%;
-  height: clamp(220px, 38vh, 340px);
-  background: color-mix(in srgb, var(--lightgray) 38%, var(--light));
+  height: clamp(200px, 32vh, 300px);
+  background: color-mix(in srgb, var(--lightgray) 70%, var(--light));
   cursor: crosshair;
   flex-shrink: 0;
 }
 
-// ── Fourier: amplitude bars ────────────────────────────────────────────
+// ── Fourier: bars ─────────────────────────────────────────────────────
 
 .fourier-bars {
   display: flex;
-  gap: 5px;
-  padding: 0.65rem 0.9rem 0.75rem;
-  flex: 1;
+  gap: 4px;
+  padding: 0.45rem 1.1rem 0.4rem;
   align-items: stretch;
 }
 
@@ -390,22 +359,21 @@ body[data-slug="index"] {
   line-height: 11px;
   text-align: center;
   white-space: nowrap;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 .fb-track {
   flex: 1;
   width: 100%;
-  min-height: 100px;
+  min-height: 56px;
   position: relative;
-  background: color-mix(in srgb, var(--lightgray) 65%, var(--light));
-  border: 1px solid var(--lightgray);
+  background: color-mix(in srgb, var(--lightgray) 82%, var(--light));
   border-radius: 3px;
   cursor: ns-resize;
-  transition: border-color 120ms ease;
+  transition: background 140ms ease;
 
   &:hover {
-    border-color: color-mix(in srgb, var(--secondary) 45%, var(--lightgray));
+    background: color-mix(in srgb, var(--lightgray) 70%, var(--light));
   }
 }
 
@@ -417,7 +385,7 @@ body[data-slug="index"] {
   background: var(--gray);
   top: 50%;
   z-index: 1;
-  opacity: 0.35;
+  opacity: 0.2;
 }
 
 .fb-fill {
@@ -431,57 +399,98 @@ body[data-slug="index"] {
 .fb-n {
   font-size: 8px;
   color: var(--gray);
-  letter-spacing: 0.02em;
-  opacity: 0.55;
+  opacity: 0.4;
+}
+
+// ── Fourier: equation (bottom, wraps freely) ──────────────────────────
+
+.fourier-eq-bar {
+  padding: 0.28rem 1.1rem 0.4rem;
+}
+
+.fourier-eq {
+  font-size: 0.7rem;
+  color: var(--secondary);
+  line-height: 1.65;
+  white-space: normal;
+  overflow-wrap: break-word;
+  opacity: 0.88;
 }
 
 // ── GoL ────────────────────────────────────────────────────────────────
 
-.gol-meta {
-  font-size: 0.67rem;
+.gol-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.gol-gen {
+  font-size: 0.66rem;
   color: var(--gray);
-  letter-spacing: 0.03em;
+  opacity: 0.6;
+  font-family: var(--codeFont);
+}
+
+.gol-btn {
+  background: transparent;
+  border: none;
+  color: var(--gray);
+  font-family: var(--codeFont);
+  font-size: 0.66rem;
+  padding: 0.15rem 0.45rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 120ms ease;
+  opacity: 0.6;
+
+  &:hover {
+    background: color-mix(in srgb, var(--secondary) 12%, transparent);
+    color: var(--secondary);
+    opacity: 1;
+  }
 }
 
 .gol-canvas {
   display: block;
   width: 100%;
   height: clamp(200px, 32vh, 280px);
-  background: color-mix(in srgb, var(--lightgray) 38%, var(--light));
+  background: color-mix(in srgb, var(--lightgray) 70%, var(--light));
   cursor: crosshair;
   flex-shrink: 0;
 }
 
-.gol-footer {
+// ── GoL: named pattern presets ────────────────────────────────────────
+
+.gol-pats {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.45rem 1rem;
-  border-top: 1px solid var(--lightgray);
-  flex-shrink: 0;
+  gap: 0.15rem;
+  padding: 0 1.1rem 0.4rem;
 }
 
-.gol-gen {
-  font-size: 0.68rem;
-  color: var(--gray);
-  opacity: 0.75;
-}
-
-.gol-btn {
+.gol-pat {
   background: transparent;
-  border: 1px solid var(--lightgray);
+  border: none;
   border-radius: 5px;
   color: var(--gray);
   font-family: var(--codeFont);
-  font-size: 0.67rem;
-  padding: 0.2rem 0.65rem;
+  font-size: 0.66rem;
+  padding: 0.18rem 0.5rem;
   cursor: pointer;
-  transition: all 120ms ease;
+  transition: all 140ms ease;
+  opacity: 0.65;
 
   &:hover {
-    border-color: var(--secondary);
-    color: var(--secondary);
-    background: color-mix(in srgb, var(--secondary) 8%, transparent);
+    background: color-mix(in srgb, var(--tertiary) 12%, transparent);
+    color: var(--tertiary);
+    opacity: 1;
+  }
+
+  &.active {
+    background: color-mix(in srgb, var(--tertiary) 16%, transparent);
+    color: var(--tertiary);
+    opacity: 1;
+    font-weight: 600;
   }
 }
 

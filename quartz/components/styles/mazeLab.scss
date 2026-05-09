@@ -1,0 +1,91 @@
+.ml-wrap {
+  margin: 1.5rem 0 2.5rem;
+  font-family: var(--codeFont);
+}
+
+.ml-ctl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.05rem;
+  margin-bottom: 0.55rem;
+}
+
+.ml-group {
+  display: flex;
+  gap: 0.02rem;
+}
+
+.ml-btn {
+  background: none;
+  border: none;
+  font-family: var(--codeFont);
+  font-size: 0.68rem;
+  color: var(--gray);
+  cursor: pointer;
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  opacity: 0.4;
+  transition:
+    opacity 120ms ease,
+    color 120ms ease,
+    background 120ms ease;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    color: var(--secondary);
+  }
+
+  &.active {
+    opacity: 1;
+    color: var(--secondary);
+  }
+
+  &:disabled {
+    opacity: 0.18;
+    cursor: default;
+  }
+}
+
+.ml-act {
+  opacity: 0.55;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--secondary) 10%, transparent);
+    opacity: 1;
+  }
+}
+
+.ml-sep {
+  color: var(--gray);
+  opacity: 0.2;
+  font-size: 0.68rem;
+  padding: 0 0.25rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ml-status {
+  font-size: 0.64rem;
+  color: var(--gray);
+  opacity: 0.5;
+  margin-bottom: 0.45rem;
+  min-height: 1.1em;
+  transition: opacity 200ms ease;
+}
+
+.ml-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(340px, 60vh, 560px);
+  background: transparent;
+  cursor: crosshair;
+}
+
+.ml-info {
+  font-size: 0.62rem;
+  color: var(--gray);
+  opacity: 0.4;
+  margin-top: 0.4rem;
+  min-height: 1.1em;
+}

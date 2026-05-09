@@ -25,6 +25,8 @@ import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import HomeHero from "./HomeHero"
 import MazeLab from "./MazeLab"
+import FourierSeries from "./FourierSeries"
+import GameOfLife from "./GameOfLife"
 
 export {
   ArticleTitle,
@@ -54,4 +56,6 @@ export {
   ConditionalRender,
   HomeHero,
   MazeLab,
+  FourierSeries,
+  GameOfLife,
 }

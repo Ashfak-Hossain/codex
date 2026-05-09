@@ -1,0 +1,98 @@
+.gol-wrap {
+  background: color-mix(in srgb, var(--lightgray) 44%, var(--light));
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0 0 2rem;
+  font-family: var(--codeFont);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.gol-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1.1rem;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.gol-title {
+  font-size: 0.71rem;
+  font-weight: 500;
+  color: var(--dark);
+  opacity: 0.6;
+}
+
+.gol-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.gol-gen {
+  font-size: 0.66rem;
+  color: var(--gray);
+  opacity: 0.6;
+  font-family: var(--codeFont);
+}
+
+.gol-btn {
+  background: transparent;
+  border: none;
+  color: var(--gray);
+  font-family: var(--codeFont);
+  font-size: 0.66rem;
+  padding: 0.15rem 0.45rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 120ms ease;
+  opacity: 0.6;
+
+  &:hover {
+    background: color-mix(in srgb, var(--secondary) 12%, transparent);
+    color: var(--secondary);
+    opacity: 1;
+  }
+}
+
+.gol-pats {
+  display: flex;
+  gap: 0.15rem;
+  padding: 0 1.1rem 0.4rem;
+}
+
+.gol-pat {
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: var(--gray);
+  font-family: var(--codeFont);
+  font-size: 0.66rem;
+  padding: 0.18rem 0.5rem;
+  cursor: pointer;
+  transition: all 140ms ease;
+  opacity: 0.65;
+
+  &:hover {
+    background: color-mix(in srgb, var(--tertiary) 12%, transparent);
+    color: var(--tertiary);
+    opacity: 1;
+  }
+
+  &.active {
+    background: color-mix(in srgb, var(--tertiary) 16%, transparent);
+    color: var(--tertiary);
+    opacity: 1;
+    font-weight: 600;
+  }
+}
+
+.gol-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(260px, 45vh, 400px);
+  cursor: crosshair;
+  flex-shrink: 0;
+}

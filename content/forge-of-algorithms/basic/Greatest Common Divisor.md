@@ -1,82 +1,394 @@
 ---
-title: GCD (Greatest Common Divisor)
-description: Dive into the world of GCD. Explore gcd euclid's algorithm, why it works and how it works with perfect example and c++ code.
+title: GCD - 2300 Years old Algorithm
+description: GCD - from Euclid's ancient proof to key properties, LCM, coprimeness, and every competitive programming pattern you need to recognize.
 tags:
   - basic
   - math
 date: 2025-01-13
 ---
 
-**GCD** (Greatest Common Divisor) is also known as **HCF** (Highest Common Factor) or **GCF** (Greatest Common Factor). What is GCD ? GCD of two or more integers $(i \ne 0)$ is the largest int which divides both integers without leaving a reminder.
-For integers $a$ and $b$ , $gcd(a, b)$ denotes the largest positive integers $d$ such that $d \mid a$ and $d \mid b$ where $a \mid b$ means $a$ divides $b$.
+Around <font color="#4f81bd">300</font> BC, a Greek mathematician Euclid wrote _The Elements_ - 13 books that became the most influential mathematics text in history. Book VII contains something interesting: an algorithm to find the greatest common divisor of two numbers. 2300 years later, that same algorithm runs in every computer, inside cryptography libraries, compilers, and cp solutions.
 
-Example of **GCD** :
+---
+
+## What Is GCD?
+
+The **Greatest Common Divisor** of two integers $a$ and $b$. $\gcd(a, b)$, is the largest positive integer that divides both without remainder. Also called **HCF** (Highest Common Factor) or **GCF** (Greatest Common Factor).
+
+$$\gcd(a, b) = \max\{d \in \mathbb{Z}^+ : d \mid a \text{ and } d \mid b\}$$
+
+Let's find $\gcd(48, 18)$ - list all divisors, find the common ones:
 
 $$
-\begin{array}{cc}
-12 & \{1, 2, 3, {\color{red} 4}, 6, 12\} \\
-8 & \{1,2,{\color{red} 4},8\} \\
-\hline
-\gcd(12,8) & \max(12 \cap 8) = \color{red}{4}
+\begin{array}{cl}
+\text{Divisors of } 48\text{:} & \{{\color{royalblue}1},\ {\color{royalblue}2},\ {\color{royalblue}3},\ 4,\ {\color{crimson}\mathbf{6}},\ 8,\ 12,\ 16,\ 24,\ 48\} \\[6pt]
+\text{Divisors of } 18\text{:} & \{{\color{royalblue}1},\ {\color{royalblue}2},\ {\color{royalblue}3},\ {\color{crimson}\mathbf{6}},\ 9,\ 18\} \\[6pt]
+\hline\\[-8pt]
+\gcd(48,\ 18) & = \boxed{\ {\color{crimson}\mathbf{6}}\ }
 \end{array}
 $$
 
-### How can we find this mysterious common integer ?
+Simple. But what if the numbers are $10^{18}$? We need something efficient.
 
-One of the most efficient algorithms to find GCD is **Euclid's Algorithm**. The idea is based on the principle that the GCD of two numbers also divides their difference.
-The algorithm can be expressed as follows:
+### The Zeroth Convention
+
+$$\gcd(a,\ 0) = a \qquad \gcd(0,\ 0) = 0$$
+
+Zero is divisible by every integer, so every integer divides $(a, 0)$, making $a$ the greatest. This will be the base case of this algorithm.
+
+---
+
+## The Naive Approach
+
+Iterate from $\min(a, b)$ to 1 and return the first common divisor:
+
+```cpp
+auto gcd_naive = [](int a, int b) -> int {
+  for(int i = min(a, b); i >= 1; i--) {
+    if(a % i == 0 and b % i == 0) {
+      return i;
+    }
+  }
+  return 1;
+};
+```
+
+**Complexity:** $O(\min(a, b))$. If $a = 10^9$, that's a billion iterations. Useless for large inputs.
+
+---
+
+## Euclid's Algorithm
+
+Subtracting $b$ from $a$ doesn't change the GCD.
+
+$$
+\gcd({\color{royalblue}a},\ {\color{teal}b}) \;=\; \gcd({\color{royalblue}a} - {\color{teal}b},\ {\color{teal}b})
+$$
+
+Keep subtracting until 0. But doing this one step at a time is slow: if $a = 10^9$ and $b = 1$, that's a billion subtractions. Instead, skip all of them at once with a single modulo:
+
+$$
+\underbrace{{\color{royalblue}a} - {\color{teal}b} - {\color{teal}b} - \cdots - {\color{teal}b}}_{\lfloor a/b \rfloor \text{ times}} \;=\; {\color{darkorange}a \bmod b}
+$$
+
+That gives the algorithm:
+
+$$\boxed{\ \gcd(a,\ b) \ = \ \gcd(b,\ a \bmod b)\ }$$
+
+Keep reducing until the remainder hits zero:
+
+$$
+\gcd({\color{royalblue}a},\ {\color{teal}b})
+\;\longrightarrow\;
+\gcd({\color{teal}b},\ {\color{darkorange}r_1})
+\;\longrightarrow\;
+\gcd({\color{darkorange}r_1},\ r_2)
+\;\longrightarrow\;
+\cdots
+\;\longrightarrow\;
+\gcd(g,\ {\color{crimson}0}) = g
+$$
+
+### The Subtraction Form
+
+You don't need modulo to make gcd work. Subtraction works fine, just slower on bad inputs:
 
 ```cpp
 int gcd(int a, int b) {
-  if (b == 0)
-    return a;
-  return gcd(b, a % b);
+  while (a != b) {
+    if (a > b) a -= b;
+    else b -= a;
+  }
+  return a;
 }
 ```
 
-### Why does this algorithm work ?
 
-The algorithm works because of the properties of divisibility. If a number $d$ divides both $a$ and $b$, then it must also divide their difference $a - b$. This means that the GCD of $a$ and $b$ is the same as the GCD of $b$ and $a \mod b$. By repeatedly applying this process, we eventually reduce one of the numbers to zero, at which point the other number is the GCD.
+Tracing $\gcd({\color{royalblue}48},\ {\color{teal}18})$:
 
-### Example of Euclid's Algorithm in action:
+|                     $a$ |                  $b$ | step                                    |
+| ----------------------: | -------------------: | :-------------------------------------- |
+| ${\color{royalblue}48}$ |   ${\color{teal}18}$ | $a > b$, so $a \leftarrow 48 - 18 = 30$ |
+| ${\color{royalblue}30}$ |   ${\color{teal}18}$ | $a > b$, so $a \leftarrow 30 - 18 = 12$ |
+| ${\color{royalblue}12}$ |   ${\color{teal}18}$ | $b > a$, so $b \leftarrow 18 - 12 = 6$  |
+| ${\color{royalblue}12}$ |    ${\color{teal}6}$ | $a > b$, so $a \leftarrow 12 - 6 = 6$   |
+|    ${\color{crimson}6}$ | ${\color{crimson}6}$ | $a = b$                                 |
 
-Let's find the GCD of 48 and 18 using Euclid's Algorithm:
+4 subtractions. The modulo takes 3 steps by collapsing the first two into $48 \bmod 18 = 12$.
 
-1. Start with `gcd(48, 18)`.
-2. Since 18 is not zero, we calculate `gcd(18, 48 % 18)`.
-3. Calculate `48 % 18`, which gives us 12, so we now have `gcd(18, 12)`.
-4. Since 12 is not zero, we calculate `gcd(12, 18 % 12)`.
-5. Calculate `18 % 12`, which gives us 6, so we now have `gcd(12, 6)`.
-6. Since 6 is not zero, we calculate `gcd(6, 12 % 6)`.
-7. Calculate `12 % 6`, which gives us 0, so we now have `gcd(6, 0)`.
-8. Since 0 is zero, we return 6 as the GCD.
-9. Thus, `gcd(48, 18) = 6`.
+For $\gcd(10^9,\ 1)$ the subtraction version takes $10^9$ steps. Modulo: one.
 
-### Conclusion
+### Proof
 
-The GCD of two numbers can be efficiently calculated using Euclid's Algorithm, which is based on the principle of divisibility. This algorithm reduces the problem step by step until it reaches a base case, making it a powerful tool for finding the greatest common divisor of any two integers.
+#### Lemma (Linear Combination Closure)
+
+If $d \mid x$ and $d \mid y$, then for any integers $\alpha, \beta$:
+
+$$
+d \mid (\alpha x + \beta y)
+$$
+
+**Proof.** Let $x = dm$ and $y = dn$ for some $m, n \in \mathbb{Z}$. Then
+
+$$
+\alpha x + \beta y = \alpha(dm) + \beta(dn) = d(\alpha m + \beta n)
+$$
+
+which is an integer multiple of $d$. $\square$
+
+Given integers $a$ and $b$ with $b > 0$, the division algorithm guarantees unique integers $q$ (quotient) and $r$ (remainder) such that
+
+$$
+{\color{royalblue}a = q \cdot b + r}, \qquad 0 \le r < b
+$$
+
+#### Main Claim
+
+**Theorem.** The pairs $(a, b)$ and $(b, r)$ share an identical set of common divisors. Consequently:
+
+$$
+\gcd(a, b) = \gcd(b, r)
+$$
+
+**Proof.** We show both sets of common divisors coincide:
+
+$$
+{\color{royalblue}d \mid a}\ \text{ and }\ {\color{royalblue}d \mid b}
+\quad\Longleftrightarrow\quad
+{\color{teal}d \mid b}\ \text{ and }\ {\color{teal}d \mid r}
+$$
+
+#### Forward $(\Rightarrow)$
+
+Suppose ${\color{royalblue}d \mid a}$ and ${\color{royalblue}d \mid b}$. $a = dm$ and $b = dn$. Since $r = a - qb$ is a linear combination of $a$ and $b$:
+
+$$
+r = a - qb = dm - q(dn) = d(m - qn)
+$$
+
+The Lemma gives ${\color{teal}d \mid r}$. Together with ${\color{teal}d \mid b}$, every common divisor of $(a, b)$ is also a common divisor of $(b, r)$.
+
+#### Backward $(\Leftarrow)$
+
+Suppose ${\color{teal}d \mid b}$ and ${\color{teal}d \mid r}$. $b = dn$ and $r = dk$. Since $a = qb + r$ is a linear combination of $b$ and $r$:
+
+$$
+a = qb + r = q(dn) + dk = d(qn + k)
+$$
+
+The Lemma gives ${\color{royalblue}d \mid a}$. Together with ${\color{royalblue}d \mid b}$, every common divisor of $(b, r)$ is also a common divisor of $(a, b)$.
+
+#### Conclusion
+
+Both inclusions hold, so the two sets are equal:
+
+$$
+\bigl\{ d \in \mathbb{Z}^{+} : {\color{royalblue}d \mid a} \text{ and } {\color{royalblue}d \mid b} \bigr\} = \bigl\{ d \in \mathbb{Z}^{+} : {\color{teal}d \mid b} \text{ and } {\color{teal}d \mid r} \bigr\}
+$$
+
+Equal sets have equal maxima:
+
+$$
+\boxed{\ \gcd(a, b) = \gcd(b, r) \qquad \square\ }
+$$
+
+### The Algorithm
 
 ```cpp
-#include <iostream>
-using namespace std;
+// Recursive (std::function for self-reference)
+std::function<int(int, int)> gcd = [&](int a, int b) -> int {
+    return b ? gcd(b, a % b) : a;
+};
 
-int gcd(int a, int b) {
-  if (b == 0)
-    return a;
-  return gcd(b, a % b);
+// Iterative, no stack overflow risk
+auto gcd = [](int a, int b) -> int {
+  while(b) {
+    a %= b;
+    swap(a, b);
+  }
+  return a;
+};
+```
+
+### Debug: gcd(48, 18)
+
+| Step |                           $a$ | $b$ |              $a \bmod b$ |
+| :--: | ----------------------------: | --: | -----------------------: |
+|  1   |                            48 |  18 | ${\color{darkorange}12}$ |
+|  2   |                            18 |  12 |      ${\color{orange}6}$ |
+|  3   |                            12 |   6 |        ${\color{teal}0}$ |
+|  4   | ${\color{crimson}\mathbf{6}}$ |   0 |                        - |
+
+Remainder shrink to ${\color{teal}0}$. $a$ is the answer: ${\color{crimson}\mathbf{6}}$.
+
+---
+
+## Complexity
+
+### Lamé's Theorem (1844)
+
+The number of steps never exceeds five times the number of decimal digits of the smaller input:
+
+$$\text{steps} \leq 5 \cdot \lfloor\log_{10} \min(a, b)\rfloor + 1 \quad \Longrightarrow \quad O(\log (\min(a, b)))$$
+
+### The Worst Case: Fibonacci Numbers
+
+What makes Euclid's algorithm work the hardest? Consecutive Fibonacci numbers:
+
+$${\color{royalblue}F_{n+1}} \xrightarrow{\ \gcd\ } {\color{royalblue}F_n} \xrightarrow{\ \gcd\ } {\color{royalblue}F_{n-1}} \xrightarrow{\ \gcd\ } \cdots \xrightarrow{\ \gcd\ } {\color{teal}1}$$
+
+Because $F_{n+1} = {\color{crimson}1} \cdot F_n + F_{n-1}$, the quotient is always exactly ${\color{crimson}1}$ - the slowest possible reduction. Since $F_n \approx \phi^n / \sqrt{5}$ where $\phi \approx 1.618$:
+
+$$\text{steps} \leq \log_\phi N \approx 1.44 \log_2 N$$
+
+> $\gcd({\color{royalblue}89},\ {\color{royalblue}55}) = \gcd(F_{11},\ F_{10})$ takes exactly **10 steps**.
+
+> For $a, b \leq 10^{18}$, at most $\approx 87$ steps. Treat it as $O(1)$ in competitive programming.
+
+---
+
+## Properties
+
+### Fundamental
+
+$$
+\begin{array}{ll}
+\gcd(a, b) = \gcd(b, a) & \text{commutativity} \\[6pt]
+\gcd(a,\ \gcd(b, c)) = \gcd(\gcd(a, b),\ c) & \text{associativity} \\[6pt]
+{\color{royalblue}\gcd(ma, mb) = m \cdot \gcd(a, b)} & \text{scaling} \\[6pt]
+{\color{teal}\gcd(a + kb,\ b) = \gcd(a, b)} & \text{shift invariance}
+\end{array}
+$$
+
+The <font color="teal">last one</font> is exactly why Euclid's algorithm works - subtracting any multiple of $b$ from $a$ preserves the GCD.
+
+### Maybe you don't need these -\_-
+
+**Dividing by GCD gives coprime numbers:**
+
+$$\gcd(a, b) = d \quad\Longrightarrow\quad \gcd\!\left(\frac{a}{d},\ \frac{b}{d}\right) = 1$$
+
+**Coprime isolation:** If $\gcd(a, b) = 1$, then $b$ is completely invisible through $a$:
+
+$$\gcd(a, b) = 1 \quad\Longrightarrow\quad \gcd(a,\ bc) = \gcd(a,\ c)$$
+
+**Sequence identity:**
+
+$${\color{royalblue}\gcd(a^n - 1,\ a^m - 1) = a^{\gcd(n,m)} - 1}$$
+
+**GCD via differences** - a powerful trick:
+
+$$
+\gcd(\underbrace{a_1,\ a_2,\ \ldots,\ a_n}_{\text{array}}) = \gcd\!\Big({\color{royalblue}a_1},\ {\color{darkorange}a_2 - a_1},\ {\color{darkorange}a_3 - a_2},\ \ldots,\ {\color{darkorange}a_n - a_{n-1}}\Big)
+$$
+
+The GCD of an array equals the GCD of the first element and all consecutive differences.
+
+---
+
+## LCM - GCD's Twin
+
+The **Least Common Multiple** $\text{lcm}(a, b)$ is the smallest positive integer divisible by both.
+
+$$\text{lcm}(a, b) = \frac{a \cdot b}{\gcd(a, b)}$$
+
+**Why?** Look at the prime factorizations of $48$ and $18$:
+
+$$
+\begin{array}{rcccl}
+48 &=& 2^{\color{crimson}4} &\cdot& 3^{\color{royalblue}1} \\[4pt]
+18 &=& 2^{\color{crimson}1} &\cdot& 3^{\color{royalblue}2} \\[6pt]
+\hline\\[-8pt]
+\gcd &=& 2^{{\color{crimson}\min(4,1)}} &\cdot& 3^{{\color{royalblue}\min(1,2)}} \;=\; 2^1 \cdot 3^1 = {\color{teal}6} \\[4pt]
+\text{lcm} &=& 2^{{\color{crimson}\max(4,1)}} &\cdot& 3^{{\color{royalblue}\max(2,1)}} \;=\; 2^4 \cdot 3^2 = {\color{teal}144}
+\end{array}
+$$
+
+GCD takes $\min$ exponents, LCM takes $\max$. Since $\min(x,y) + \max(x,y) = x + y$:
+
+$${\color{teal}\gcd(a,b) \cdot \text{lcm}(a,b) = a \cdot b}$$
+
+### The Overflow Trap
+
+> <font color="crimson">**Warning:**</font> Never write `a * b / gcd(a, b)`.
+
+If $a = b = 10^9$, then $a \cdot b = 10^{18}$ - at the edge of int64_t overflow. Always divide first:
+
+```cpp
+int64_t lcm(int64_t a, int64_t b) {
+    return a / gcd(a, b) * b;
 }
+```
 
-int main() {
-  int x = 48, y = 18;
-  cout << "GCD of " << x << " and " << y << " is " << gcd(x, y) << endl;
-  return 0;
+Safe because $\gcd(a, b)$ always divides $a$.
+
+---
+
+## Coprimeness
+
+Two numbers are **coprime** if $\gcd(a, b) = 1$ - they share no prime factor.
+
+### A useless Fact
+
+Pick two positive integers at random. As their range grows:
+
+$$\boxed{\ P\!\left(\gcd(a, b) = 1\right) = \frac{6}{\pi^2} \approx {\color{crimson}60.79\%}\ }$$
+
+GCD connects to $\pi$ through the Basel series:
+
+$$\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} \quad\Longrightarrow\quad \prod_p \frac{1}{1 - p^{-2}} = \zeta(2) = \frac{\pi^2}{6} \quad\Longrightarrow\quad P(\text{coprime}) = \frac{1}{\zeta(2)} = \frac{6}{\pi^2}$$
+
+The intuition: the probability that a prime $p$ divides **both** random integers is $1/p^2$. The probability that **no** prime does is the product over all primes - which Euler showed equals $6/\pi^2$.
+
+Coprimeness is the foundation of **[[Euler's Totient Function]]** $\varphi(n)$, which counts integers in range $[1, n]$ that coprime to $n$.
+
+---
+
+## GCD of an Array
+
+By associativity, just fold left:
+
+```cpp
+int g = 0;
+for (int x : arr) {
+  g = gcd(g, x);
 }
 ```
 
-This code will output:
+Starting from $g = 0$ works because $\gcd(0, x) = x$.
 
-```
-GCD of 48 and 18 is 6
+**Early termination:** Once $g = 1$ it can never decrease again. Break immediately:
+
+```cpp
+int g = arr[0];
+for (int i = 1; i < n and g != 1; i++) {
+  g = gcd(g, arr[i]);
+}
 ```
 
-This implementation of Euclid's Algorithm efficiently computes the GCD of two integers, demonstrating the power of recursion and the properties of divisibility.
+**Structural insight:** As you extend a prefix, the GCD is non-increasing:
+
+$$g_1 \geq g_2 \geq g_3 \geq \cdots \geq g_n \quad\text{and each drop is by a factor} \geq 2$$
+
+So there are at most $O(\log \max a_i)$ **distinct** prefix GCD values.
+
+---
+
+## Edge Cases
+
+$$
+\begin{array}{ccc}
+\hline
+\textbf{Input} & \textbf{Result} & \textbf{Why} \\
+\hline\\[-8pt]
+\gcd(0,\ 0) & 0 & \text{convention} \\[4pt]
+\gcd(0,\ n) & n & \text{everything divides } 0 \\[4pt]
+\gcd(1,\ n) & 1 & \text{1 divides everything} \\[4pt]
+\gcd({\color{crimson}-a},\ b) & \gcd(|a|,\ b) & \text{take absolute values} \\[4pt]
+\hline
+\end{array}
+$$
+
+`std::gcd` handles negatives in C++17. If using `__gcd`, wrap with `abs()` yourself.
+
+$${\color{royalblue}\text{The ideas don't age.}}$$

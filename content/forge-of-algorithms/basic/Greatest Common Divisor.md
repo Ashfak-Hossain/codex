@@ -59,23 +59,23 @@ auto gcd_naive = [](int a, int b) -> int {
 
 ## Euclid's Algorithm
 
-Subtracting $b$ from $a$ doesn't change the GCD.
+Subtracting $b$ from $a$ doesn't change the GCD:
 
 $$
 \gcd({\color{royalblue}a},\ {\color{teal}b}) \;=\; \gcd({\color{royalblue}a} - {\color{teal}b},\ {\color{teal}b})
 $$
 
-Keep subtracting until 0. But doing this one step at a time is slow: if $a = 10^9$ and $b = 1$, that's a billion subtractions. Instead, skip all of them at once with a single modulo:
+Repeated subtraction is correct but slow — $\gcd(10^9,\ 1)$ takes $10^9$ steps. Modulo does all those subtractions into one shot:
 
 $$
-\underbrace{{\color{royalblue}a} - {\color{teal}b} - {\color{teal}b} - \cdots - {\color{teal}b}}_{\lfloor a/b \rfloor \text{ times}} \;=\; {\color{darkorange}a \bmod b}
+\underbrace{{\color{royalblue}a} - {\color{teal}b} - \cdots - {\color{teal}b}}_{\lfloor a/b \rfloor \text{ times}} \;=\; {\color{darkorange}a \bmod b}
 $$
 
-That gives the algorithm:
+$$
+\boxed{\ \gcd({\color{royalblue}a},\ {\color{teal}b}) \;=\; \gcd({\color{teal}b},\ {\color{darkorange}a \bmod b})\ }
+$$
 
-$$\boxed{\ \gcd(a,\ b) \ = \ \gcd(b,\ a \bmod b)\ }$$
-
-Keep reducing until the remainder hits zero:
+Repeat until the remainder is zero:
 
 $$
 \gcd({\color{royalblue}a},\ {\color{teal}b})
@@ -89,34 +89,16 @@ $$
 \gcd(g,\ {\color{crimson}0}) = g
 $$
 
-### The Subtraction Form
-
-You don't need modulo to make gcd work. Subtraction works fine, just slower on bad inputs:
+The subtraction form. Correct, no modulo, just slower:
 
 ```cpp
-int gcd(int a, int b) {
+auto gcd = [](int a, int b) -> int {
   while (a != b) {
-    if (a > b) a -= b;
-    else b -= a;
+    a > b ? a -= b : b -= a;
   }
   return a;
-}
+};
 ```
-
-
-Tracing $\gcd({\color{royalblue}48},\ {\color{teal}18})$:
-
-|                     $a$ |                  $b$ | step                                    |
-| ----------------------: | -------------------: | :-------------------------------------- |
-| ${\color{royalblue}48}$ |   ${\color{teal}18}$ | $a > b$, so $a \leftarrow 48 - 18 = 30$ |
-| ${\color{royalblue}30}$ |   ${\color{teal}18}$ | $a > b$, so $a \leftarrow 30 - 18 = 12$ |
-| ${\color{royalblue}12}$ |   ${\color{teal}18}$ | $b > a$, so $b \leftarrow 18 - 12 = 6$  |
-| ${\color{royalblue}12}$ |    ${\color{teal}6}$ | $a > b$, so $a \leftarrow 12 - 6 = 6$   |
-|    ${\color{crimson}6}$ | ${\color{crimson}6}$ | $a = b$                                 |
-
-4 subtractions. The modulo takes 3 steps by collapsing the first two into $48 \bmod 18 = 12$.
-
-For $\gcd(10^9,\ 1)$ the subtraction version takes $10^9$ steps. Modulo: one.
 
 ### Proof
 
@@ -392,3 +374,21 @@ $$
 `std::gcd` handles negatives in C++17. If using `__gcd`, wrap with `abs()` yourself.
 
 $${\color{royalblue}\text{The ideas don't age.}}$$
+
+---
+
+## References
+
+1. Euclid. _Elements_, Book VII, Propositions 1–2. c. 300 BC. — The original algorithm, stated in terms of repeated subtraction of line segments.
+
+2. Lamé, G. "Note sur la limite du nombre des divisions dans la recherche du plus grand commun diviseur entre deux nombres entiers." _Comptes Rendus de l'Académie des Sciences_, vol. 19, 1844, pp. 867–869. — First proof that the number of steps is bounded by $5 \log_{10} \min(a, b)$.
+
+3. Cesàro, E. "Question 75 (solution)." Mathesis, vol. 3, 1885, p. 224. — First published proof that the probability of two random integers being coprime is $6/\pi^2$.
+
+4. Euler, L. "De summis serierum reciprocarum." Commentarii Academiae Scientiarum Petropolitanae_, vol. 7, 1740, pp. 123–134. — Solution to the Basel problem: $\sum 1/n^2 = \pi^2/6$, which underlies the coprimeness probability.
+
+5. Knuth, D. E. _The Art of Computer Programming_, Vol. 2: _Seminumerical Algorithms_, 3rd ed. Addison-Wesley, 1997. §4.5.2 — Detailed analysis of the Euclidean algorithm including the Fibonacci worst case and step-count bounds.
+
+6. Cormen, T. H., Leiserson, C. E., Rivest, R. L., Stein, C. _Introduction to Algorithms_, 4th ed. MIT Press, 2022. §31.2 — GCD, extended GCD, and their role in modular arithmetic.
+
+7. [CP Algorithms](https://cp-algorithms.com/algebra/euclid-algorithm.html#practice-problems)

@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz", //! have to change
+    baseUrl: "ashfak-hossain.github.io/codex",
     ignorePatterns: ["private", "template", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {

@@ -11,6 +11,13 @@ export default ((opts?: Options) => {
   const Footer: QuartzComponent = ({ displayClass, cfg }: QuartzComponentProps) => {
     const year = new Date().getFullYear()
     const links = opts?.links ?? []
+    const baseDir = new URL(`https://${cfg.baseUrl ?? "example.com"}`).pathname.replace(/\/$/, "")
+    const resolvedLinks = Object.fromEntries(
+      Object.entries(links).map(([text, link]) => [
+        text,
+        link.startsWith("/") ? `${baseDir}${link}` : link,
+      ]),
+    )
     return (
       <footer class={`${displayClass ?? ""}`}>
         <p>
@@ -18,7 +25,7 @@ export default ((opts?: Options) => {
           <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a> © {year}
         </p>
         <ul>
-          {Object.entries(links).map(([text, link]) => (
+          {Object.entries(resolvedLinks).map(([text, link]) => (
             <li>
               <a href={link}>{text}</a>
             </li>

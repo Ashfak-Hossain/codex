@@ -9,6 +9,8 @@ export const sharedPageComponents: SharedLayout = {
   footer: Component.ConditionalRender({
     component: Component.Footer({
       links: {
+        About: "/About",
+        Privacy: "/Privacy",
         GitHub: "https://github.com/Ashfak-Hossain",
       },
     }),
@@ -17,7 +19,7 @@ export const sharedPageComponents: SharedLayout = {
 }
 
 // components for pages that display a single page (e.g. a single note)
-export const defaultContentPageLayout: PageLayout = {
+export const defaultContentPageLayout = {
   beforeBody: [
     Component.ConditionalRender({
       component: Component.HomeHero(),
@@ -83,7 +85,7 @@ export const defaultContentPageLayout: PageLayout = {
       condition: (page) => page.fileData.slug === "math-canvas/game-of-life",
     }),
   ],
-}
+} as PageLayout
 
 // components for pages that display lists of pages  (e.g. tags or folders)
 export const defaultListPageLayout: PageLayout = {

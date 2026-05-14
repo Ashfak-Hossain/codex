@@ -436,11 +436,11 @@ function initBioAnimation() {
 
   const phrases = [
     "CS undergrad · AIUB",
-    "algorithms explorer",
-    "proof enthusiast",
-    "competitive programmer",
-    "math notebook keeper",
-    "quiet thinker",
+    "convinced P ≠ NP but can't prove it",
+    "epsilon-close to enlightenment",
+    "proof by contradiction: I'm not lost",
+    "one WA away from a clean solution",
+    "believes in strong induction",
   ]
 
   let phraseIdx = 0

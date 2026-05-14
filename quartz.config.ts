@@ -13,7 +13,8 @@ const config: QuartzConfig = {
     enableSPA: true,
     enablePopovers: true,
     analytics: {
-      provider: "plausible",
+      provider: "google",
+      tagId: "G-GWWKFYRCX9",
     },
     locale: "en-US",
     baseUrl: "ashfak-hossain.github.io/codex",

@@ -2,7 +2,7 @@
 
 A personal digital garden covering mathematics, algorithms, competitive programming, and quiet thinking — built with [Quartz v4](https://quartz.jzhao.xyz/) and written in Obsidian.
 
-**Live site:** <!-- add your domain here -->
+**Live site:** [https://ashfak-hossain.github.io/codex/](https://ashfak-hossain.github.io/codex/)
 
 ## Running Locally
 

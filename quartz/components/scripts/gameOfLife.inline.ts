@@ -273,5 +273,5 @@ function initGameOfLife() {
 // ── Entry ──────────────────────────────────────────────────────────────
 
 document.addEventListener("nav", () => {
-  if (document.body.dataset.slug === "math-canvas/game-of-life") initGameOfLife()
+  if (document.body.dataset.slug === "canvas/game-of-life") initGameOfLife()
 })

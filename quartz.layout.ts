@@ -74,15 +74,15 @@ export const defaultContentPageLayout = {
   afterBody: [
     Component.ConditionalRender({
       component: Component.MazeLab(),
-      condition: (page) => page.fileData.slug === "math-canvas/maze-lab",
+      condition: (page) => page.fileData.slug === "canvas/maze-lab",
     }),
     Component.ConditionalRender({
       component: Component.FourierSeries(),
-      condition: (page) => page.fileData.slug === "math-canvas/fourier-series",
+      condition: (page) => page.fileData.slug === "canvas/fourier-series",
     }),
     Component.ConditionalRender({
       component: Component.GameOfLife(),
-      condition: (page) => page.fileData.slug === "math-canvas/game-of-life",
+      condition: (page) => page.fileData.slug === "canvas/game-of-life",
     }),
   ],
 } as PageLayout

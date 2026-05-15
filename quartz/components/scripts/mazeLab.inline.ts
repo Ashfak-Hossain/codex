@@ -671,5 +671,5 @@ function initMazeLab() {
 }
 
 document.addEventListener("nav", () => {
-  if (document.body.dataset.slug === "math-canvas/maze-lab") initMazeLab()
+  if (document.body.dataset.slug === "canvas/maze-lab") initMazeLab()
 })

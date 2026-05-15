@@ -121,10 +121,7 @@ function initTerminal() {
   const history: string[] = []
   let histIdx = -1
 
-  const NOTEBOOKS: Record<string, string> = {
-    "forge-of-algorithms": "./forge-of-algorithms/",
-    "math-canvas": "./math-canvas/",
-  }
+  const NOTEBOOKS = new Set(["forge-of-algorithms", "canvas"])
 
   function out(html: string, cls = "iterm-out") {
     const d = document.createElement("div")
@@ -158,7 +155,7 @@ algorithms · proofs · competitive programming<br>
 
     ls: () =>
       out(
-        `<span class="c-dir">forge-of-algorithms/</span>  <span class="c-dir">math-canvas/</span>`,
+        `<span class="c-dir">forge-of-algorithms/</span>  <span class="c-dir">canvas/</span>`,
       ),
 
     cat: (args) => {
@@ -181,10 +178,12 @@ a parking lot for half-formed thoughts and quiet "wait — does this work?" mome
         out(`<span class="c-dim">already home</span>`)
       } else if (dest === "..") {
         out(`<span class="c-dim">already at root</span>`)
-      } else if (NOTEBOOKS[dest]) {
+      } else if (NOTEBOOKS.has(dest)) {
         out(`<span class="c-dim">→ <span class="c-accent">${dest}/</span></span>`)
         setTimeout(() => {
-          window.location.href = NOTEBOOKS[dest]
+          const { origin, pathname } = window.location
+          const base = pathname.endsWith("/") ? pathname : pathname + "/"
+          window.location.href = origin + base + dest + "/"
         }, 350)
       } else {
         out(

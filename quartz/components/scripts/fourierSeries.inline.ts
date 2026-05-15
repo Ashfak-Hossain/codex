@@ -77,7 +77,6 @@ function fsUpdateBar(bar: FsBar, amp: number, secondary: string, tertiary: strin
 function fsDrawGrid(
   ctx: CanvasRenderingContext2D,
   W: number,
-  H: number,
   cy: number,
   sc: number,
   light: boolean,
@@ -209,19 +208,19 @@ function initFourierSeries() {
 
   function resize() {
     const dpr = window.devicePixelRatio || 1
-    canvas.width = canvas.offsetWidth * dpr
-    canvas.height = canvas.offsetHeight * dpr
+    canvas!.width = canvas!.offsetWidth * dpr
+    canvas!.height = canvas!.offsetHeight * dpr
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }
 
   function frame() {
-    const W = canvas.offsetWidth,
-      H = canvas.offsetHeight
+    const W = canvas!.offsetWidth,
+      H = canvas!.offsetHeight
     const cy = H / 2,
       sc = (H * 0.44) / peakAmp
     const { secondary, light } = getTheme()
     ctx.clearRect(0, 0, W, H)
-    fsDrawGrid(ctx, W, H, cy, sc, light)
+    fsDrawGrid(ctx, W, cy, sc, light)
     fsDrawLabels(ctx, cy, sc, peakAmp, light)
     fsDrawHarmonics(ctx, amps, W, cy, sc, tOff, light)
     fsDrawWave(ctx, amps, W, cy, sc, tOff, secondary, light)
@@ -310,5 +309,5 @@ function initFourierSeries() {
 // ── Entry ──────────────────────────────────────────────────────────────
 
 document.addEventListener("nav", () => {
-  if (document.body.dataset.slug === "math-canvas/fourier-series") initFourierSeries()
+  if (document.body.dataset.slug === "canvas/fourier-series") initFourierSeries()
 })

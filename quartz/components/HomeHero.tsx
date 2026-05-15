@@ -13,9 +13,8 @@ const HomeHero: QuartzComponent = () => {
           <div class="hero-name">Ashfak Hossain</div>
           <div class="hero-role">CS undergrad · AIUB</div>
           <p class="hero-bio">
-            Tracing proofs, algorithms, and ideas that <em>almost</em> make sense. A parking lot for
-            half-formed thoughts, math that sometimes behaves, and quiet "wait — does this work?"
-            moments.
+            Notes on proofs, algorithms, and ideas that <em>almost</em> make sense — written mostly
+            to find out whether they do.
           </p>
         </div>
 

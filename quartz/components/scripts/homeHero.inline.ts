@@ -124,8 +124,6 @@ function initTerminal() {
   const NOTEBOOKS: Record<string, string> = {
     "forge-of-algorithms": "./forge-of-algorithms/",
     "math-canvas": "./math-canvas/",
-    "scribble-vault": "./scribble-vault/",
-    "reading-log": "./reading-log/",
   }
 
   function out(html: string, cls = "iterm-out") {
@@ -140,51 +138,38 @@ function initTerminal() {
     help: () =>
       out(`<table class="iterm-help">
         <tr><td class="c-accent">whoami</td><td>who I am</td></tr>
-        <tr><td class="c-accent">ls</td><td>list notebooks</td></tr>
-        <tr><td class="c-accent">cat about</td><td>read my bio</td></tr>
-        <tr><td class="c-accent">cat now</td><td>what I'm studying</td></tr>
-        <tr><td class="c-warm">cd &lt;notebook&gt;</td><td>navigate there</td></tr>
-        <tr><td class="c-accent">pwd</td><td>current path</td></tr>
-        <tr><td class="c-accent">date</td><td>today's date</td></tr>
-        <tr><td class="c-dim">── math ──────────────────────────</td><td></td></tr>
+        <tr><td class="c-accent">ls</td><td>list sections</td></tr>
+        <tr><td class="c-accent">cat about</td><td>bio</td></tr>
+        <tr><td class="c-accent">cat now</td><td>what I'm working on</td></tr>
+        <tr><td class="c-warm">cd &lt;section&gt;</td><td>navigate</td></tr>
         <tr><td class="c-accent">euler</td><td>the most beautiful equation</td></tr>
-        <tr><td class="c-accent">fib [n]</td><td>fibonacci sequence</td></tr>
+        <tr><td class="c-accent">fib [n]</td><td>fibonacci</td></tr>
         <tr><td class="c-accent">prime [n]</td><td>first n primes</td></tr>
-        <tr><td class="c-accent">gcd a b</td><td>euclidean algorithm with steps</td></tr>
-        <tr><td class="c-accent">collatz n</td><td>3n+1 conjecture sequence</td></tr>
+        <tr><td class="c-accent">gcd a b</td><td>euclidean algorithm, step by step</td></tr>
+        <tr><td class="c-accent">collatz n</td><td>3n+1 sequence</td></tr>
         <tr><td class="c-accent">factor n</td><td>prime factorization</td></tr>
-        <tr><td class="c-accent">pi</td><td>Leibniz convergence demo</td></tr>
-        <tr><td class="c-accent">det a b c d</td><td>2×2 matrix determinant</td></tr>
-        <tr><td class="c-accent">tree</td><td>directory tree</td></tr>
-        <tr><td class="c-accent">neofetch</td><td>system info</td></tr>
-        <tr><td class="c-accent">echo &lt;text&gt;</td><td>echo text</td></tr>
-        <tr><td class="c-accent">clear</td><td>clear screen</td></tr>
+        <tr><td class="c-accent">clear</td><td>clear</td></tr>
       </table>`),
 
     whoami: () =>
-      out(`<span class="c-accent">ashfak-hossain</span> — CS undergrad @ AIUB<br>
-interests: algorithms · proofs · competitive programming<br>
-writing at: <span class="c-warm">the hilbert notebooks</span>`),
+      out(`<span class="c-accent">ashfak-hossain</span><br>
+algorithms · proofs · competitive programming<br>
+<span class="c-warm">the hilbert notebooks</span>`),
 
     ls: () =>
       out(
-        `<span class="c-dir">forge-of-algorithms/</span>  <span class="c-dir">math-canvas/</span>  <span class="c-dir">scribble-vault/</span>  <span class="c-dir">reading-log/</span>`,
+        `<span class="c-dir">forge-of-algorithms/</span>  <span class="c-dir">math-canvas/</span>`,
       ),
-
-    pwd: () => out(`<span class="c-dim">/home/ashfak/hilbert-notebooks</span>`),
-
-    date: () => out(`<span class="c-dim">${new Date().toLocaleString()}</span>`),
 
     cat: (args) => {
       const f = args.trim().replace(/\.txt$/, "")
       if (f === "about" || f === "bio" || f === "me") {
-        out(`Tracing proofs, algorithms, and ideas that <em>almost</em> make sense.<br>
-A CS undergrad @ AIUB. This blog is a parking lot for half-formed thoughts,
-math that sometimes behaves, and quiet "wait — does this work?" moments.`)
+        out(`proofs, algorithms, ideas that <em>almost</em> make sense.<br>
+a parking lot for half-formed thoughts and quiet "wait — does this work?" moments.`)
       } else if (f === "now") {
-        out(`<span class="c-warm">▸ now:</span> studying greedy proofs &amp; segment trees`)
-      } else if (f === "mission") {
-        out(`make the hard stuff legible. one proof at a time.`)
+        out(
+          `<span class="c-warm">▸</span> number theory — modular inverses, linear congruences, CRT`,
+        )
       } else {
         out(`<span class="c-err">cat: ${f}: no such file</span>`)
       }
@@ -197,29 +182,27 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
       } else if (dest === "..") {
         out(`<span class="c-dim">already at root</span>`)
       } else if (NOTEBOOKS[dest]) {
-        out(`<span class="c-dim">→ navigating to <span class="c-accent">${dest}/</span></span>`)
+        out(`<span class="c-dim">→ <span class="c-accent">${dest}/</span></span>`)
         setTimeout(() => {
           window.location.href = NOTEBOOKS[dest]
         }, 350)
       } else {
         out(
-          `<span class="c-err">cd: ${dest}: no such notebook</span><br><span class="c-dim">try: <span class="c-warm">ls</span></span>`,
+          `<span class="c-err">cd: ${dest}: not found</span> — try <span class="c-warm">ls</span>`,
         )
       }
     },
 
     euler: () =>
       out(`<span class="c-accent" style="font-size:1.1em;letter-spacing:.04em">e<sup>iπ</sup> + 1 = 0</span>
-<span class="c-dim">five constants: e, i, π, 1, 0 — one equation.</span>
-<span class="c-dim">Euler's identity, 1748. still unreasonably beautiful.</span>`),
+<span class="c-dim">five constants. one equation. Euler, 1748.</span>`),
 
     fib: (args) => {
       const n = Math.min(Math.max(parseInt(args) || 10, 1), 30)
       const seq: number[] = [0, 1]
       while (seq.length < n) seq.push(seq[seq.length - 1] + seq[seq.length - 2])
-      const nums = seq.slice(0, n).join(", ")
-      out(`<span class="c-dim">F(0..${n - 1}):</span> <span class="c-accent">${nums}</span>
-<span class="c-dim">golden ratio φ ≈ F(n+1)/F(n) → ${(seq[n - 1] / seq[n - 2]).toFixed(8)}</span>`)
+      out(`<span class="c-accent">${seq.slice(0, n).join(", ")}</span>
+<span class="c-dim">φ ≈ ${(seq[n - 1] / seq[n - 2]).toFixed(8)}</span>`)
     },
 
     prime: (args) => {
@@ -228,8 +211,8 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
       for (let c = 2; primes.length < n; c++) {
         if (primes.every((p) => c % p !== 0)) primes.push(c)
       }
-      out(`<span class="c-dim">first ${n} primes:</span> <span class="c-accent">${primes.join(", ")}</span>
-<span class="c-dim">p(${n}) = ${primes[primes.length - 1]} &nbsp;·&nbsp; by prime number theorem: ~${n} · ln(${primes[primes.length - 1]}) ≈ ${Math.round(n * Math.log(primes[primes.length - 1]))}</span>`)
+      out(`<span class="c-accent">${primes.join(", ")}</span>
+<span class="c-dim">p(${n}) = ${primes[primes.length - 1]}</span>`)
     },
 
     gcd: (args) => {
@@ -246,15 +229,13 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
         ;[x, y] = [y, x % y]
       }
       steps.push(`gcd(${x}, 0) = <span class="c-warm">${x}</span>`)
-      out(
-        `<span class="c-dim">euclidean algorithm:</span><br>${steps.map((s) => `  ${s}`).join("<br>")}`,
-      )
+      out(steps.map((s) => `  ${s}`).join("<br>"))
     },
 
     collatz: (args) => {
       const n0 = parseInt(args)
       if (!n0 || isNaN(n0) || n0 < 1) {
-        out(`<span class="c-err">usage: collatz &lt;n&gt;  (positive integer)</span>`)
+        out(`<span class="c-err">usage: collatz &lt;n&gt;</span>`)
         return
       }
       const seq: number[] = [n0]
@@ -265,19 +246,15 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
         seq.push(c)
         steps++
       }
-      const peak = Math.max(...seq)
-      const display =
-        seq.length <= 24
-          ? seq.join(" → ")
-          : seq.slice(0, 12).join(" → ") + ` → … → ${seq[seq.length - 1]}`
+      const display = seq.length <= 24 ? seq.join(" → ") : seq.slice(0, 12).join(" → ") + ` → … → 1`
       out(`<span class="c-dim">${display}</span>
-<span class="c-dim">steps: <span class="c-accent">${steps}</span> &nbsp;·&nbsp; peak: <span class="c-warm">${peak}</span> &nbsp;·&nbsp; ${steps < 500 ? "reached 1 ✓" : "limit hit"}</span>`)
+<span class="c-dim">steps: <span class="c-accent">${steps}</span>  peak: <span class="c-warm">${Math.max(...seq)}</span></span>`)
     },
 
     factor: (args) => {
       const n = Math.abs(Math.floor(parseFloat(args)))
       if (!n || isNaN(n) || n < 2) {
-        out(`<span class="c-err">usage: factor &lt;n&gt;  (integer ≥ 2)</span>`)
+        out(`<span class="c-err">usage: factor &lt;n&gt;</span>`)
         return
       }
       if (n > 1e9) {
@@ -306,56 +283,6 @@ math that sometimes behaves, and quiet "wait — does this work?" moments.`)
         `<span class="c-dim">${n} =</span> <span class="c-accent">${display}</span>${factors.length === 1 ? ' <span class="c-dim">(prime)</span>' : ""}`,
       )
     },
-
-    pi: () => {
-      let sum = 0
-      const terms: string[] = []
-      for (let i = 0; i < 8; i++) {
-        const sign = i % 2 === 0 ? 1 : -1
-        sum += sign / (2 * i + 1)
-        terms.push(`${sign > 0 ? "+" : "−"}1/${2 * i + 1}`)
-      }
-      out(`<span class="c-dim">Leibniz: π/4 = 1 − 1/3 + 1/5 − 1/7 + …</span>
-<span class="c-dim">8 terms: ${terms.join(" ")} + …</span>
-<span class="c-dim">× 4 ≈ </span><span class="c-accent">${(sum * 4).toFixed(8)}</span>
-<span class="c-dim">actual: ${Math.PI.toFixed(8)}  · needs ~10⁶ terms for 6 correct digits</span>`)
-    },
-
-    det: (args) => {
-      const nums = args
-        .trim()
-        .split(/[\s,]+/)
-        .map(Number)
-      if (nums.length !== 4 || nums.some(isNaN)) {
-        out(
-          `<span class="c-err">usage: det a b c d</span><br><span class="c-dim">  |a b|  →  ad − bc</span><br><span class="c-dim">  |c d|</span>`,
-        )
-        return
-      }
-      const [a, b, c, d] = nums
-      const det = a * d - b * c
-      out(`<span class="c-dim">  |<span class="c-accent">${a}</span> <span class="c-accent">${b}</span>|</span>
-<span class="c-dim">  |<span class="c-accent">${c}</span> <span class="c-accent">${d}</span>|  →  ${a}×${d} − ${b}×${c} = </span><span class="c-warm">${det}</span>
-<span class="c-dim">${det === 0 ? "singular — not invertible" : "invertible ✓  (det ≠ 0)"}</span>`)
-    },
-
-    tree: () =>
-      out(`<span class="c-dim">/hilbert-notebooks</span>
-<span class="c-dir">  ├── forge-of-algorithms/</span>  <span class="c-dim">algorithms & proofs</span>
-<span class="c-dir">  ├── math-canvas/</span>         <span class="c-dim">pure mathematics</span>
-<span class="c-dir">  ├── scribble-vault/</span>      <span class="c-dim">loose thoughts</span>
-<span class="c-dir">  └── reading-log/</span>         <span class="c-dim">books & papers</span>`),
-
-    neofetch: () =>
-      out(`<span class="c-accent"> █ █  </span>  <span class="c-warm">ashfak</span><span class="c-dim">@</span><span class="c-accent">hilbert-notebooks</span>
-<span class="c-accent"> █ █  </span>  <span class="c-dim">──────────────────────────────</span>
-<span class="c-accent"> █████</span>  <span class="c-dim">role  </span><span class="c-accent">CS undergrad</span><span class="c-dim"> @ AIUB</span>
-<span class="c-accent"> █ █  </span>  <span class="c-dim">focus </span><span class="c-warm">algorithms · proofs · CP</span>
-<span class="c-accent"> █ █  </span>  <span class="c-dim">tools </span>obsidian · vim · c++ · python
-       <span class="c-dim">lang  </span><span class="c-accent">math</span> (<span class="c-warm">first</span>) · code (second)
-       <span class="c-dim">now   </span>greedy proofs &amp; segment trees`),
-
-    echo: (args) => out(`<span class="c-dim">${args.replace(/</g, "&lt;") || ""}</span>`),
 
     clear: () => {
       log!.innerHTML = ""

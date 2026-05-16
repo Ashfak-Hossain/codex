@@ -23,7 +23,7 @@ $$
 
 Find that one number and division becomes multiplication again. This page is about finding it — when it exists, and the five standard ways to compute it.
 
-_Prereqs: [[Greatest Common Divisor]] · [[Extended Euclidean Algorithm]] · basic modular arithmetic._
+_Prereqs: [[Greatest Common Divisor]] · [[Extended Euclidean Algorithm]] · [[Modular Arithmetic|basic modular arithmetic]]._
 
 ---
 
@@ -378,20 +378,6 @@ $$
 - **Overflow.** For $m$ near $10^9$, a product $a \cdot b$ reaches $10^{18}$ — fine in `int64_t`, but declare _everything_ (`a, b, result, x, y`) as `int64_t`. For $m$ near $10^{18}$, the product overflows and you need `__int128` or a `mulmod`.
 - **Normalize the input first.** Pass `a % m` (made non-negative) into `mod_inverse`, not a raw huge or negative `a`.
 - **Always check existence** when the modulus is not guaranteed prime — return a sentinel like $-1$ rather than silently emitting garbage.
-
----
-
-## What It Unlocks
-
-The modular inverse is the gateway from "$+,-,\times$ only" arithmetic to a full field of operations:
-
-**[[Linear Congruences]]** — solving $a x \equiv b \pmod m$. When $\gcd(a, m) = 1$ the unique solution is $x \equiv b\,a^{-1}$; the general case scales by the GCD.
-
-**[[Chinese Remainder Theorem]]** — reconstructing a number from its residues uses an inverse for each modulus to build the "indicator" terms.
-
-**[[Modular Combinatorics]]** — $\binom{n}{r}$, Catalan numbers, Lucas' theorem, and inclusion–exclusion mod $p$ all rest on inverse factorials.
-
-**Hashing & cryptography** — RSA key generation derives the private exponent as the modular inverse of the public exponent modulo $\varphi(n)$; rolling-hash deletion multiplies by the inverse of the base.
 
 ---
 

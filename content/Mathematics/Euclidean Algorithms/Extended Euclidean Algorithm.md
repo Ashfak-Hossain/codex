@@ -15,7 +15,7 @@ $$
 
 Same runtime as plain GCD ($O(\log \min(a, b))$), but those two extra integers are the missing ingredient behind **modular inverses**, **Diophantine equations**, and the **Chinese Remainder Theorem**.
 
-_Prereqs: [[Greatest Common Divisor]] · basic modular arithmetic._
+_Prereqs: [[Greatest Common Divisor]] · [[Modular Arithmetic|basic modular arithmetic]]._
 
 ---
 
@@ -139,7 +139,7 @@ _Base case_ ($b = 0$). The function returns $(a, 1, 0)$. Indeed $\gcd(a, 0) = a$
 
 _Inductive step_ ($b > 0$). Assume the recursive call `ext_gcd(b, a mod b)` is correct: it returns $(g, x_1, y_1)$ with $g = \gcd(b, a \bmod b)$ and $b x_1 + (a \bmod b) y_1 = g$.
 
-From [[Greatest Common Divisor |plain Euclid]], $\gcd(b, a \bmod b) = \gcd(a, b)$, so the returned $g$ is correct. The derivation in the previous section shows the new coefficients $(y_1,\ x_1 - \lfloor a/b \rfloor \cdot y_1)$ satisfy $a x + b y = g$.
+From [[Greatest Common Divisor|plain Euclid]], $\gcd(b, a \bmod b) = \gcd(a, b)$, so the returned $g$ is correct. The derivation in the previous section shows the new coefficients $(y_1,\ x_1 - \lfloor a/b \rfloor \cdot y_1)$ satisfy $a x + b y = g$.
 
 **Termination.** Since $0 \le a \bmod b < b$, the second argument strictly decreases on each call. Eventually it hits $0$ and the base case triggers.
 
@@ -258,18 +258,6 @@ The double-mod handles the C/C++ convention where `%` of a negative can return a
 ### Bridge to linear congruences
 
 The same machinery solves $a x \equiv b \pmod m$: it has a solution iff $g = \gcd(a, m) \mid b$, in which case there are exactly $g$ distinct solutions modulo $m$, all obtained from one Bézout pair. Full treatment in its own page — [[Linear Congruences]].
-
----
-
-## What It Unlocks
-
-The Bézout pair $(x, y)$ is the key ingredient for several topics, each covered fully in its own page:
-
-**[[Modular Inverse]]** — when $\gcd(a, m) = 1$, `ext_gcd(a, m, x, y)` returns $x$ satisfying $a x + m y = 1$, which is exactly $a x \equiv 1 \pmod{m}$. Normalize $x$ to $[0, m)$ and you have $a^{-1} \bmod m$. If $\gcd(a, m) > 1$, the Bézout sum is always a multiple of the GCD and can never equal $1$ — no inverse exists.
-
-**[[Linear Diophantine Equations]]** — $a x + b y = c$ has integer solutions iff $\gcd(a, b) \mid c$. When it does, scale the Bézout pair by $c / g$ and apply the general-solution family above.
-
-**[[Chinese Remainder Theorem]]** — merging $x \equiv r_1 \pmod{m_1}$ and $x \equiv r_2 \pmod{m_2}$ reduces to solving a linear Diophantine equation, which uses this algorithm at its heart.
 
 ---
 

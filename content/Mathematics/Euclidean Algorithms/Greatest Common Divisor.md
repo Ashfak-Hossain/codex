@@ -1,13 +1,13 @@
 ---
-title: GCD - 2300 Years old Algorithm
-description: GCD - from Euclid's ancient proof to key properties, LCM, coprimeness, and every competitive programming pattern you need to recognize.
+title: Greatest Common Divisor
+description: The greatest common divisor of two integers — Euclid's 2300-year-old algorithm, the modulo recurrence and its O(log n) bound, a proof via shared divisor sets, Lamé's Fibonacci worst case, the LCM relation, and coprimeness with its 6/π² density.
 tags:
-  - basic
+  - number-theory
   - math
 date: 2025-01-13
 ---
 
-Around <font color="#4f81bd">300</font> BC, a Greek mathematician Euclid wrote _The Elements_ - 13 books that became the most influential mathematics text in history. Book VII contains something interesting: an algorithm to find the greatest common divisor of two numbers. 2300 years later, that same algorithm runs in every computer, inside cryptography libraries, compilers, and cp solutions.
+Around <font color="#4f81bd">300</font> BC, the Greek mathematician Euclid wrote _The Elements_ — 13 books that became the most influential mathematics text in history. Book VII records an algorithm for the greatest common divisor of two numbers. 2300 years later, that same algorithm still runs in every computer — inside cryptography libraries, compilers, and competitive-programming solutions.
 
 ---
 
@@ -192,7 +192,7 @@ auto gcd = [](int a, int b) -> int {
 };
 ```
 
-### Debug: gcd(48, 18)
+### Trace: `gcd(48, 18)`
 
 | Step |                           $a$ | $b$ |              $a \bmod b$ |
 | :--: | ----------------------------: | --: | -----------------------: |
@@ -201,7 +201,9 @@ auto gcd = [](int a, int b) -> int {
 |  3   |                            12 |   6 |        ${\color{teal}0}$ |
 |  4   | ${\color{crimson}\mathbf{6}}$ |   0 |                        - |
 
-Remainder shrink to ${\color{teal}0}$. $a$ is the answer: ${\color{crimson}\mathbf{6}}$.
+The remainder shrinks to ${\color{teal}0}$; $a$ holds the answer: ${\color{crimson}\mathbf{6}}$.
+
+> **Going further.** Carry two extra coefficients through this same recursion and it returns not just $\gcd(a, b)$ but integers $x, y$ with $a x + b y = \gcd(a, b)$ — Bézout's identity. That is the [[Extended Euclidean Algorithm]], the engine behind modular inverses.
 
 ---
 
@@ -244,7 +246,7 @@ $$
 
 The <font color="teal">last one</font> is exactly why Euclid's algorithm works - subtracting any multiple of $b$ from $a$ preserves the GCD.
 
-### Maybe you don't need these -\_-
+### Further Identities
 
 **Dividing by GCD gives coprime numbers:**
 
@@ -310,7 +312,7 @@ Safe because $\gcd(a, b)$ always divides $a$.
 
 Two numbers are **coprime** if $\gcd(a, b) = 1$ - they share no prime factor.
 
-### A useless Fact
+### Aside — Coprime Density
 
 Pick two positive integers at random. As their range grows:
 
@@ -383,9 +385,9 @@ $${\color{royalblue}\text{The ideas don't age.}}$$
 
 2. Lamé, G. "Note sur la limite du nombre des divisions dans la recherche du plus grand commun diviseur entre deux nombres entiers." _Comptes Rendus de l'Académie des Sciences_, vol. 19, 1844, pp. 867–869. — First proof that the number of steps is bounded by $5 \log_{10} \min(a, b)$.
 
-3. Cesàro, E. "Question 75 (solution)." Mathesis, vol. 3, 1885, p. 224. — First published proof that the probability of two random integers being coprime is $6/\pi^2$.
+3. Cesàro, E. "Question 75 (solution)." _Mathesis_, vol. 3, 1885, p. 224. — First published proof that the probability of two random integers being coprime is $6/\pi^2$.
 
-4. Euler, L. "De summis serierum reciprocarum." Commentarii Academiae Scientiarum Petropolitanae_, vol. 7, 1740, pp. 123–134. — Solution to the Basel problem: $\sum 1/n^2 = \pi^2/6$, which underlies the coprimeness probability.
+4. Euler, L. "De summis serierum reciprocarum." _Commentarii Academiae Scientiarum Petropolitanae_, vol. 7, 1740, pp. 123–134. — Solution to the Basel problem: $\sum 1/n^2 = \pi^2/6$, which underlies the coprimeness probability.
 
 5. Knuth, D. E. _The Art of Computer Programming_, Vol. 2: _Seminumerical Algorithms_, 3rd ed. Addison-Wesley, 1997. §4.5.2 — Detailed analysis of the Euclidean algorithm including the Fibonacci worst case and step-count bounds.
 

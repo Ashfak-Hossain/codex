@@ -1,6 +1,6 @@
 ---
 title: Greatest Common Divisor
-description: The greatest common divisor of two integers — Euclid's 2300-year-old algorithm, the modulo recurrence and its O(log n) bound, a proof via shared divisor sets, Lamé's Fibonacci worst case, the LCM relation, and coprimeness with its 6/π² density.
+description: The greatest common divisor of two integers - Euclid's 2300-year-old algorithm, the modulo recurrence and its O(log n) bound, a proof via shared divisor sets, Lamé's Fibonacci worst case, the LCM relation, and coprimeness with its 6/π² density.
 tags:
   - number-theory
   - math
@@ -65,7 +65,7 @@ $$
 \gcd({\color{royalblue}a},\ {\color{teal}b}) \;=\; \gcd({\color{royalblue}a} - {\color{teal}b},\ {\color{teal}b})
 $$
 
-Repeated subtraction is correct but slow — $\gcd(10^9,\ 1)$ takes $10^9$ steps. Modulo does all those subtractions into one shot:
+Repeated subtraction is correct but slow - $\gcd(10^9,\ 1)$ takes $10^9$ steps. Modulo does all those subtractions into one operation:
 
 $$
 \underbrace{{\color{royalblue}a} - {\color{teal}b} - \cdots - {\color{teal}b}}_{\lfloor a/b \rfloor \text{ times}} \;=\; {\color{darkorange}a \bmod b}

@@ -32,7 +32,7 @@ I write here partly to teach, partly to learn, and partly to leave a paper trail
 
 This site is built with **[Quartz](https://quartz.jzhao.xyz/)** (a fast static-site generator for digital gardens), authored in **[Obsidian](https://obsidian.md/)**, math rendered by **KaTeX**, syntax highlighting by **Shiki**, hosted on **GitHub Pages**. Source is open at [github.com/Ashfak-Hossain/codex](https://github.com/Ashfak-Hossain/codex) — fork it, copy from it, file issues, send corrections.
 
-Typography: _Proza Libre_ for headings, _Bricolage Grotesque_ for body, _IBM Plex Mono_ for code.
+Typography: _Fraunces_ for headings, _Atkinson Hyperlegible Next_ for body, _JetBrains Mono_ for code.
 
 ---
 

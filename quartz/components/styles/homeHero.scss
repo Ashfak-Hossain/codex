@@ -288,7 +288,7 @@
   margin: 0 auto;
   font-family: var(--codeFont);
   font-size: 0.74rem;
-  color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.03em;
 }
 
@@ -315,7 +315,7 @@
 }
 
 .iterm-welcome {
-  color: rgba(180, 198, 218, 0.45);
+  color: rgba(180, 198, 218, 0.65);
 }
 .iterm-echo {
   color: #e6edf3;
@@ -354,7 +354,7 @@
   caret-color: #28c840;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.55);
   }
 }
 
@@ -373,7 +373,7 @@
   color: #8aa9f5;
 }
 .c-dim {
-  color: rgba(180, 198, 218, 0.4);
+  color: rgba(180, 198, 218, 0.65);
 }
 .c-err {
   color: #ff7b72;
@@ -390,7 +390,7 @@
       min-width: 130px;
     }
     &:last-child {
-      color: rgba(180, 198, 218, 0.45);
+      color: rgba(180, 198, 218, 0.65);
     }
   }
 }

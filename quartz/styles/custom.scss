@@ -1,6 +1,49 @@
 @use "./base.scss";
 
 // ─────────────────────────────────────────────────────────────────────
+// Track colours: one accent per track, for path bars, map lines and index pages.
+// `-ink` is for text on a tint of the accent, where the accent alone drops below 4.5:1.
+// ─────────────────────────────────────────────────────────────────────
+
+:root {
+  --track-networking: #0d7a6d;
+  --track-system-design: #6a43cf;
+  --track-mathematics: #9e5a00;
+  --track-networking-ink: color-mix(in srgb, var(--track-networking) 85%, #000);
+  --track-system-design-ink: color-mix(in srgb, var(--track-system-design) 85%, #000);
+  --track-mathematics-ink: color-mix(in srgb, var(--track-mathematics) 85%, #000);
+
+  // JetBrains Mono's code ligatures live in `calt`. Turning them off keeps `!=` and `->` as the
+  // characters a reader would type. Ordinary fi/fl ligatures in body text are unaffected.
+  font-variant-ligatures: no-contextual;
+}
+
+:root[saved-theme="dark"] {
+  --track-networking: #41c6b2;
+  --track-system-design: #ab90ff;
+  --track-mathematics: #f0a73b;
+  --track-networking-ink: color-mix(in srgb, var(--track-networking) 85%, #fff);
+  --track-system-design-ink: color-mix(in srgb, var(--track-system-design) 85%, #fff);
+  --track-mathematics-ink: color-mix(in srgb, var(--track-mathematics) 85%, #fff);
+}
+
+// github-light-default's comment colour is 4.36:1 on this paper; use the theme's own stronger grey
+code span[style*="--shiki-light:#6E7781"] {
+  --shiki-light: #59636e !important;
+}
+
+// Each track's index and chapter pages wear its colour in the title
+body[data-slug^="Networking/"][data-slug$="/index"] .article-title {
+  color: var(--track-networking);
+}
+body[data-slug^="System-Design/"][data-slug$="/index"] .article-title {
+  color: var(--track-system-design);
+}
+body[data-slug^="Mathematics/"][data-slug$="/index"] .article-title {
+  color: var(--track-mathematics);
+}
+
+// ─────────────────────────────────────────────────────────────────────
 // Typography refinements
 // ─────────────────────────────────────────────────────────────────────
 

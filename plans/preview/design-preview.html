@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P1.0 Design decisions · The Hilbert Notebooks</title>
+    <!-- Same font requests Quartz would make (quartz/util/theme.ts): headers 400/700,
+         body 400/600 with italics, code 400/600. What you see here is what P1.1 ships. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;600&family=Literata:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Mono:wght@400;600&family=Bricolage+Grotesque:wght@400;600;700&family=Inter:ital,wght@0,400;0,600;1,400;1,600&family=Proza+Libre:wght@400;700&display=swap"
+    />
+    <style>
+      /* Colours copied from quartz.config.ts and notebookWidgets.scss */
+      [data-theme="light"] {
+        --light: #fbfaf7;
+        --lightgray: #e7e4dd;
+        --gray: #6b7079;
+        --darkgray: #2b2f36;
+        --dark: #16191d;
+        --secondary: #1f5f99;
+        --tertiary: #9a531c;
+        --highlight: rgba(31, 95, 153, 0.08);
+        --net: #0d7a6d;
+        --sys: #6a43cf;
+        --math: #a35d00;
+        --inkbar: #24272d;
+        --inkbar-text: #e8e6e0;
+        --pip-line: #4a3423;
+        --ink-mix: #000;
+        color-scheme: light;
+      }
+      [data-theme="dark"] {
+        --light: #16181c;
+        --lightgray: #262a30;
+        --gray: #8f959e;
+        --darkgray: #d3d6dc;
+        --dark: #eef0f3;
+        --secondary: #8fbbe8;
+        --tertiary: #e3a574;
+        --highlight: rgba(143, 187, 232, 0.1);
+        --net: #41c6b2;
+        --sys: #ab90ff;
+        --math: #f0a73b;
+        --inkbar: #0e1013;
+        --inkbar-text: #d3d6dc;
+        --pip-line: #c9a77a;
+        --ink-mix: #fff;
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--light);
+        color: var(--darkgray);
+        font:
+          16px/1.55 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      :focus-visible {
+        outline: 2px solid var(--secondary);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      /* Page chrome stays in the system font so it doesn't compete with the specimens */
+      .wrap {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 0 1.25rem 4rem;
+      }
+      .top {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--light);
+        border-bottom: 1px solid var(--lightgray);
+      }
+      .top-in {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 0.6rem 1.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+      }
+      .top strong {
+        color: var(--dark);
+      }
+      .top nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.9rem;
+        font-size: 0.9rem;
+      }
+      .top a {
+        color: var(--secondary);
+      }
+      .seg {
+        margin-left: auto;
+        display: inline-flex;
+        border: 1px solid var(--lightgray);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .seg button {
+        font: inherit;
+        font-size: 0.875rem;
+        padding: 0.3rem 0.75rem;
+        min-height: 2.25rem;
+        background: transparent;
+        color: var(--darkgray);
+        border: 0;
+        cursor: pointer;
+      }
+      .seg button[aria-pressed="true"] {
+        background: var(--dark);
+        color: var(--light);
+      }
+      @media (max-width: 600px) {
+        .top nav {
+          display: none;
+        }
+      }
+      section.q {
+        padding-top: 2.25rem;
+        scroll-margin-top: 3.5rem;
+      }
+      .q > h2 {
+        font-size: 1.35rem;
+        color: var(--dark);
+        margin: 0 0 0.25rem;
+      }
+      .q > p {
+        margin: 0 0 1rem;
+        max-width: 46rem;
+      }
+      .rec {
+        color: var(--dark);
+        font-weight: 600;
+      }
+      .tag {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-bottom: 0.75rem;
+      }
+      .tag b {
+        color: var(--dark);
+      }
+
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 38rem), 1fr));
+      }
+      .pair {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+      }
+      .paper {
+        background: var(--light);
+        color: var(--darkgray);
+        border: 1px solid var(--lightgray);
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        min-width: 0;
+      }
+
+      /* ─── Specimen: mirrors custom.scss + base.scss article styles ─── */
+      .s {
+        font-family: var(--b);
+        line-height: 1.7;
+      }
+      .a {
+        --h: "Fraunces", serif;
+        --b: "Atkinson Hyperlegible Next", sans-serif;
+        --c: "JetBrains Mono", monospace;
+      }
+      .b {
+        --h: "Fraunces", serif;
+        --b: "Literata", serif;
+        --c: "IBM Plex Mono", monospace;
+      }
+      .c {
+        --h: "Bricolage Grotesque", sans-serif;
+        --b: "Inter", sans-serif;
+        --c: "IBM Plex Mono", monospace;
+      }
+      .t {
+        --h: "Proza Libre", sans-serif;
+        --b: "Bricolage Grotesque", sans-serif;
+        --c: "IBM Plex Mono", monospace;
+      }
+      .s h3.title,
+      .s h4.sub {
+        font-family: var(--h);
+        font-weight: 700;
+        color: var(--dark);
+      }
+      .s h3.title {
+        font-size: clamp(2rem, 4vw, 2.6rem);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 1rem;
+      }
+      .s h4.sub {
+        font-size: 1.4rem;
+        line-height: 1.3;
+        margin: 1.75rem 0 0.5rem;
+      }
+      .s p {
+        margin: 1rem 0;
+      }
+      .s strong {
+        font-weight: 600;
+        color: var(--dark);
+      }
+      .s ul {
+        padding-left: 1.25rem;
+        margin: 0.75rem 0;
+      }
+      .s li {
+        margin: 0.35rem 0;
+      }
+      .s code {
+        font-family: var(--c);
+        font-variant-ligatures: none;
+        border: 1px solid var(--lightgray);
+        border-radius: 4px;
+        padding: 0.1em 0.35em;
+        font-size: 0.88em;
+      }
+      .s pre {
+        font-family: var(--c);
+        font-variant-ligatures: none;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        letter-spacing: -0.01em;
+        border: 1px solid var(--lightgray);
+        border-radius: 8px;
+        padding: 1rem 1.1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+      }
+      .s a {
+        color: var(--secondary);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .glyphs {
+        border-top: 1px dashed var(--lightgray);
+        margin-top: 1.25rem;
+        padding-top: 0.5rem;
+      }
+
+      /* ─── Track colours ─── */
+      .swatch-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+      }
+      .sw {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .dot {
+        width: 0.9rem;
+        height: 0.9rem;
+        border-radius: 50%;
+        background: var(--k);
+        display: inline-block;
+      }
+      .pathbar {
+        --tint: color-mix(in srgb, var(--k) 9%, transparent);
+        background: var(--tint);
+        border-left: 4px solid var(--k);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        margin: 0.6rem 0;
+        font-size: 0.9rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.2rem 0.75rem;
+      }
+      .pathbar b {
+        color: color-mix(in srgb, var(--k) 85%, var(--ink-mix));
+      }
+      .pathbar .nav {
+        margin-left: auto;
+        color: color-mix(in srgb, var(--k) 85%, var(--ink-mix));
+        font-weight: 600;
+      }
+      .ihead {
+        font-weight: 700;
+        color: var(--k);
+        font-size: 1.15rem;
+        margin: 1rem 0 0.1rem;
+      }
+      .link-sample {
+        font-size: 0.9rem;
+        margin: 0.75rem 0 0;
+      }
+      .link-sample a {
+        color: var(--secondary);
+        font-weight: 600;
+      }
+      .link-sample span {
+        color: var(--tertiary);
+        font-weight: 600;
+      }
+
+      /* ─── Callout mock ─── */
+      .plain {
+        border: 1px solid color-mix(in srgb, var(--net) 40%, transparent);
+        background: color-mix(in srgb, var(--net) 8%, transparent);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        margin: 0.75rem 0;
+      }
+      .plain .ttl {
+        font-weight: 600;
+        color: color-mix(in srgb, var(--net) 85%, var(--ink-mix));
+        margin-bottom: 0.15rem;
+      }
+      .plain svg {
+        flex: none;
+      }
+      .plain p {
+        margin: 0;
+      }
+      .sizes {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 1rem 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+      figure {
+        margin: 0;
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--gray);
+      }
+      figure svg {
+        display: block;
+        margin: 0 auto 0.2rem;
+      }
+
+      /* ─── Home mocks ─── */
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+        gap: 1rem;
+        align-items: center;
+        padding: 0.75rem 0;
+      }
+      .hero .name {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--dark);
+        line-height: 1.15;
+      }
+      .hero .role {
+        font-size: 0.8rem;
+        color: var(--gray);
+        margin: 0.15rem 0 0.4rem;
+      }
+      .hero .bio {
+        font-size: 0.9rem;
+        margin: 0;
+      }
+      .term {
+        background: var(--inkbar);
+        color: var(--inkbar-text);
+        border-radius: 10px;
+        font:
+          0.78rem/1.5 "IBM Plex Mono",
+          monospace;
+        overflow: hidden;
+      }
+      .term .bar {
+        padding: 0.35rem 0.6rem;
+        opacity: 0.8;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .term .body {
+        padding: 0.5rem 0.6rem 0.75rem;
+      }
+      .map {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .map text {
+        font:
+          600 12px system-ui,
+          sans-serif;
+      }
+      .cont {
+        display: inline-block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.3rem 0.7rem;
+        border-radius: 8px;
+        color: var(--light);
+        background: var(--net);
+        margin-top: 0.5rem;
+      }
+      footer {
+        margin-top: 2.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--lightgray);
+        color: var(--gray);
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Pip's parts live once and are reused at every size -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <g id="pip-body">
+          <path
+            d="M38 87v6M62 87v6"
+            stroke="var(--pip-line)"
+            stroke-width="5"
+            stroke-linecap="round"
+          />
+          <rect
+            x="17"
+            y="26"
+            width="66"
+            height="62"
+            rx="13"
+            fill="#e9c89b"
+            stroke="var(--pip-line)"
+            stroke-width="3.5"
+          />
+          <path d="M18.5 42h63" stroke="var(--pip-line)" stroke-width="2.5" opacity="0.45" />
+          <path d="M44 27.5h12V42H44z" fill="#f6e7cf" />
+          <path
+            d="M50 26c-4-9-15-11-16-5s9 7 16 5c7 2 17 1 16-5s-12-4-16 5z"
+            fill="#0d7a6d"
+            stroke="var(--pip-line)"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+          />
+          <circle cx="29" cy="70" r="4.5" fill="#e58e73" opacity="0.7" />
+          <circle cx="71" cy="70" r="4.5" fill="#e58e73" opacity="0.7" />
+        </g>
+        <g id="pip-hello">
+          <use href="#pip-body" />
+          <circle cx="38" cy="60" r="4.5" fill="#2a1d12" />
+          <circle cx="62" cy="60" r="4.5" fill="#2a1d12" />
+          <path
+            d="M43 69q7 7 14 0"
+            fill="none"
+            stroke="#2a1d12"
+            stroke-width="3.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M83 58q10-5 11-16"
+            fill="none"
+            stroke="var(--pip-line)"
+            stroke-width="5"
+            stroke-linecap="round"
+          />
+        </g>
+        <g id="pip-think">
+          <use href="#pip-body" />
+          <circle cx="38" cy="60" r="4.5" fill="#2a1d12" />
+          <circle cx="62" cy="57" r="4.5" fill="#2a1d12" />
+          <path
+            d="M45 72h10"
+            fill="none"
+            stroke="#2a1d12"
+            stroke-width="3.5"
+            stroke-linecap="round"
+          />
+          <circle cx="89" cy="30" r="2.5" fill="#6b7079" />
+          <circle cx="94" cy="20" r="3.5" fill="#6b7079" />
+        </g>
+        <g id="pip-lost">
+          <use href="#pip-body" />
+          <path
+            d="M33 55l9 9m0-9l-9 9M58 55l9 9m0-9l-9 9"
+            stroke="#2a1d12"
+            stroke-width="3.2"
+            stroke-linecap="round"
+          />
+          <path
+            d="M43 74q7-6 14 0"
+            fill="none"
+            stroke="#2a1d12"
+            stroke-width="3.5"
+            stroke-linecap="round"
+          />
+        </g>
+      </defs>
+    </svg>
+
+    <div class="top">
+      <div class="top-in">
+        <strong>P1.0 · Four decisions</strong>
+        <nav aria-label="Decisions">
+          <a href="#type">1 Typography</a>
+          <a href="#colour">2 Track colours</a>
+          <a href="#pip">3 Pip</a>
+          <a href="#home">4 Home page</a>
+        </nav>
+        <div class="seg" role="group" aria-label="Theme">
+          <button type="button" data-set="light" aria-pressed="true">Light</button>
+          <button type="button" data-set="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="wrap">
+      <section class="q" id="type">
+        <h2>1 · Typography: A, B or C?</h2>
+        <p>
+          The same real text from <em>Layers and Encapsulation</em> in each pairing, with today's
+          fonts last for comparison. Fonts load exactly as Quartz would load them. Use the Light /
+          Dark switch above. <span class="rec">Suggestion: A.</span>
+        </p>
+        <div class="grid">
+          <!-- SPECIMENS: filled from one template by the script below, so all four match exactly -->
+          <article
+            class="paper"
+            data-specimen="a"
+            data-label="<b>A · Cosy</b> · Fraunces / Atkinson Hyperlegible Next / JetBrains Mono"
+          ></article>
+          <article
+            class="paper"
+            data-specimen="b"
+            data-label="<b>B · Bookish</b> · Fraunces / Literata / IBM Plex Mono"
+          ></article>
+          <article
+            class="paper"
+            data-specimen="c"
+            data-label="<b>C · Clean</b> · Bricolage Grotesque / Inter / IBM Plex Mono"
+          ></article>
+          <article
+            class="paper"
+            data-specimen="t"
+            data-label="<b>Today</b> · Proza Libre / Bricolage Grotesque / IBM Plex Mono"
+          ></article>
+        </div>
+      </section>
+
+      <section class="q" id="colour">
+        <h2>2 · Track colours: teal, violet, amber?</h2>
+        <p>
+          Each track gets one accent for its path bar, map line and index heading. Both themes are
+          shown side by side, with each colour's contrast against the page measured live.
+          <span class="rec">Suggestion: yes.</span> One catch: these are the same hues as the
+          widgets' layer colours, so teal also means "network layer" inside a widget. Layer colours
+          only appear inside widgets, so I think that's fine, but it's your call.
+        </p>
+        <div class="pair" id="colour-pair"></div>
+      </section>
+
+      <section class="q" id="pip">
+        <h2>3 · Mascot Pip: yes or no?</h2>
+        <p>
+          An original parcel with a face and a ribbon bow, in the notebook's post-office world. At
+          most 2–3 appearances per page. Shown with and without, so you can judge the
+          <code>plain</code> callout both ways.
+          <span class="rec"
+            >Suggestion: yes, but only in plain callouts, the home map and the 404 page.</span
+          >
+        </p>
+        <div class="pair" id="pip-pair"></div>
+      </section>
+
+      <section class="q" id="home">
+        <h2>4 · Home page: keep the terminal hero, or replace it?</h2>
+        <p>
+          Rough layouts only, showing what goes where. The real map comes in P1.4.
+          <span class="rec">Suggestion: keep the hero and add the map below,</span> since the
+          terminal is the most personal thing on the site.
+        </p>
+        <div class="pair">
+          <div class="paper">
+            <span class="tag"><b>Option 1 · Keep hero, map below</b></span>
+            <div class="hero">
+              <div>
+                <div class="name">Ashfak Hossain</div>
+                <div class="role">CS undergrad · AIUB</div>
+                <p class="bio">
+                  Notes on proofs, algorithms, and ideas that <em>almost</em> make sense — written
+                  mostly to find out whether they do.
+                </p>
+              </div>
+              <div class="term">
+                <div class="bar">ashfak@epsilon: ~</div>
+                <div class="body">Type help to see available commands.<br />❯ type a command…</div>
+              </div>
+            </div>
+            <div data-map></div>
+          </div>
+          <div class="paper">
+            <span class="tag"><b>Option 2 · Map replaces hero</b></span>
+            <div class="name" style="font-weight: 700; font-size: 1.5rem; color: var(--dark)">
+              The Hilbert Notebooks
+            </div>
+            <p style="margin: 0.25rem 0 0.5rem; font-size: 0.9rem">
+              Pick a line and start at any station.
+            </p>
+            <div data-map></div>
+            <span class="cont">Continue where you left off →</span>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Not published: Quartz only builds <code>content/</code>. Station counts come from the
+        roadmap (20 Networking, 12 System Design) and the 15 Mathematics pages that exist today;
+        filled stations are example progress. Tell Claude your four answers, and they get recorded
+        in plans/DESIGN.md.
+      </footer>
+    </main>
+
+    <template id="specimen">
+      <span class="tag" data-slot="label"></span>
+      <div class="s">
+        <h3 class="title">Layers and Encapsulation</h3>
+        <p>
+          You write one line of code: <code>fetch("https://ashfak.dev")</code>. Your program never
+          mentions Wi-Fi radio frequencies, routing tables across the Bay of Bengal, lost packets,
+          or encryption keys. Yet all of those happen, correctly, every time. Your code can stay
+          that simple because the work is split into <strong>layers</strong>, and each layer does
+          exactly one job while trusting the layer below it to do the rest.
+        </p>
+        <p>
+          This page is the map for the whole Networking track. Every later page, from
+          <a href="#type">DHCP</a> to TLS, is a zoom into one box on this map.
+        </p>
+        <p><em>Prereqs: none. This is the starting point of the Networking track.</em></p>
+        <h4 class="sub">TL;DR</h4>
+        <pre>
+ sender                                       receiver
+┌──────────────────┐                          ┌──────────────────┐
+│ Application HTTP │──────── meaning ─────────│ Application HTTP │
+│ Security    TLS  │─── privacy, identity ────│ Security    TLS  │
+│ Transport   TCP  │───── right program ──────│ Transport   TCP  │
+│ Network     IP   │──── path across nets ────│ Network     IP   │
+│ Link       Wi-Fi │────── next machine ──────│ Link       Wi-Fi │
+└─────────┬────────┘                          └─────────▲────────┘
+          └────────── bits on a wire or radio ──────────┘</pre
+        >
+        <ul>
+          <li>
+            <strong>Each layer has one job</strong> and trusts the layer below for everything else.
+          </li>
+          <li>
+            <strong>Going down</strong>, each layer wraps the data in its own header: an envelope
+            inside an envelope. This is <strong>encapsulation</strong>.
+          </li>
+          <li>
+            <strong>Each layer has its own address</strong>: a MAC address for the link, an IP
+            address for the network, a port for transport, a name for the application.
+          </li>
+        </ul>
+        <div class="glyphs">
+          <p>
+            Il1 O0 · 192.168.0.12/24 · 60 ms · 10 Gbps · RFC 2131 §3.1 ·
+            <code>ip route | grep -v l1 0O {}[] =&gt; != -&gt;</code>
+          </p>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      const clone = (id) => document.getElementById(id).content.cloneNode(true)
+
+      // ── Typography specimens ──
+      document.querySelectorAll("[data-specimen]").forEach((card) => {
+        const frag = clone("specimen")
+        frag.querySelector('[data-slot="label"]').innerHTML = card.dataset.label
+        frag.querySelector(".s").classList.add(card.dataset.specimen)
+        card.append(frag)
+      })
+
+      // ── Contrast, measured from the resolved colours (WCAG 2 formula) ──
+      const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+      const lum = (hex) => {
+        const [r, g, b] = rgb(hex).map((c) =>
+          c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4,
+        )
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+      }
+      const contrast = (a, b) => {
+        const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p)
+        return (x + 0.05) / (y + 0.05)
+      }
+
+      // ── Track colours, both themes at once ──
+      const TRACKS = {
+        light: { page: "#fbfaf7", net: "#0d7a6d", sys: "#6a43cf", math: "#a35d00" },
+        dark: { page: "#16181c", net: "#41c6b2", sys: "#ab90ff", math: "#f0a73b" },
+      }
+      const swatch = (t, key, name) =>
+        `<span class="sw" style="--k:var(--${key})"><span class="dot"></span>${name} ${TRACKS[t][key]} · ${contrast(TRACKS[t][key], TRACKS[t].page).toFixed(1)}:1</span>`
+
+      document.getElementById("colour-pair").innerHTML = ["light", "dark"]
+        .map(
+          (t) => `
+        <div class="paper" data-theme="${t}">
+          <span class="tag"><b>${t === "light" ? "Light" : "Dark"}</b></span>
+          <div class="swatch-row">${swatch(t, "net", "Teal")}${swatch(t, "sys", "Violet")}${swatch(t, "math", "Amber")}</div>
+          <div class="pathbar" style="--k:var(--net)"><b>Networking</b><span>Stage 1 · Step 3 of 20</span><span class="nav">← Journey · DHCP →</span></div>
+          <div class="pathbar" style="--k:var(--sys)"><b>System Design</b><span>Step 2 of 12</span><span class="nav">← Previous · Next →</span></div>
+          <div class="ihead" style="--k:var(--net)">Networking</div>
+          <div class="ihead" style="--k:var(--sys)">System Design</div>
+          <div class="ihead" style="--k:var(--math)">Mathematics</div>
+          <p class="link-sample">Beside the site's own colours: <a href="#colour">a link</a> and <span>a hovered link</span>.</p>
+        </div>`,
+        )
+        .join("")
+
+      // ── Pip, both themes at once ──
+      const pip = (name, size, label) =>
+        `<svg width="${size}" height="${size}" viewBox="0 0 100 100" role="img" aria-label="${label}"><use href="#pip-${name}"/></svg>`
+      const PLAIN =
+        "The work is split into layers. Each layer does one job and trusts the layer below it to do the rest."
+
+      document.getElementById("pip-pair").innerHTML = ["light", "dark"]
+        .map(
+          (t) => `
+        <div class="paper" data-theme="${t}">
+          <span class="tag"><b>${t === "light" ? "Light" : "Dark"}</b></span>
+          <div class="sizes">
+            <figure>${pip("hello", 112, "Pip waving")}Hello</figure>
+            <figure>${pip("think", 112, "Pip thinking")}Thinking</figure>
+            <figure>${pip("lost", 112, "Pip lost, with crossed eyes")}Lost (404)</figure>
+            <figure>${pip("hello", 48, "Pip, small")}48 px</figure>
+            <figure>${pip("hello", 24, "Pip, tiny")}24 px</figure>
+          </div>
+          <div class="plain">${pip("hello", 52, "Pip")}<div><div class="ttl">In plain words</div><p>${PLAIN}</p></div></div>
+          <div class="plain"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--net)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><div><div class="ttl">In plain words (no Pip)</div><p>${PLAIN}</p></div></div>
+        </div>`,
+        )
+        .join("")
+
+      // ── Subway-map sketch: one line per track, one station per page ──
+      function line(y, n, read, cssVar, name) {
+        const x0 = 16
+        const x1 = 624
+        const xs = Array.from({ length: n }, (_, i) => x0 + (i * (x1 - x0)) / (n - 1))
+        const dots = xs
+          .map(
+            (x, i) =>
+              `<circle cx="${x.toFixed(1)}" cy="${y}" r="6" fill="${i < read ? `var(${cssVar})` : "var(--light)"}" stroke="var(${cssVar})" stroke-width="3"/>`,
+          )
+          .join("")
+        return `<text x="${x0 - 6}" y="${y - 14}" fill="var(${cssVar})">${name}</text><path d="M${x0} ${y}H${x1}" stroke="var(${cssVar})" stroke-width="4"/>${dots}`
+      }
+      const MAP = `<svg class="map" viewBox="0 0 640 170" role="img" aria-label="Learning map sketch with three lines: Networking, System Design and Mathematics">${line(38, 20, 5, "--net", "Networking")}${line(92, 12, 2, "--sys", "System Design")}${line(146, 15, 9, "--math", "Mathematics")}</svg>`
+      document.querySelectorAll("[data-map]").forEach((el) => (el.innerHTML = MAP))
+
+      // ── Theme switch (panels with their own data-theme stay as they are) ──
+      const root = document.documentElement
+      const buttons = document.querySelectorAll(".seg button")
+      function setTheme(t) {
+        root.dataset.theme = t
+        buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.set === t)))
+      }
+      buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.set)))
+      const requested = new URLSearchParams(location.search).get("theme")
+      setTheme(
+        requested === "dark" || requested === "light"
+          ? requested
+          : matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light",
+      )
+    </script>
+  </body>
+</html>

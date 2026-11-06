@@ -24,16 +24,16 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Proza Libre",
-        body: "Bricolage Grotesque",
-        code: "IBM Plex Mono",
+        header: "Fraunces",
+        body: "Atkinson Hyperlegible Next",
+        code: "JetBrains Mono",
       },
       colors: {
         lightMode: {
           // Reading palette: near-white warm paper, every text colour ≥ 4.5:1 (WCAG AA)
           light: "#fbfaf7",
           lightgray: "#e7e4dd",
-          gray: "#6b7079",
+          gray: "#666b74",
           darkgray: "#2b2f36",
           dark: "#16191d",
           secondary: "#1f5f99",
@@ -64,8 +64,8 @@ const config: QuartzConfig = {
       }),
       Plugin.SyntaxHighlighting({
         theme: {
-          light: "github-light",
-          dark: "github-dark",
+          light: "github-light-default",
+          dark: "github-dark-default",
         },
         keepBackground: false,
       }),

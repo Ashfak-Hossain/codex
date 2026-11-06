@@ -16,7 +16,7 @@ Task IDs are stable. Never renumber; add new tasks with the next free number. St
 
 Goal: the site looks and feels like one cosy, well-made notebook. See [DESIGN.md](DESIGN.md).
 
-- **P1.0 Design decisions (gate).** Show Ashfak 2–3 typography pairings, the track colours and the mascot sketch on a draft preview page, rendered in light and dark mode. Record his choices in DESIGN.md → Decisions. _Done when every item in DESIGN.md → Decisions needed is answered._
+- **P1.0 Design decisions (gate).** Show Ashfak 2–3 typography pairings, the track colours and the mascot sketch on a draft preview page (`plans/preview/design-preview.html`, never published), rendered in light and dark mode. Record his choices in DESIGN.md → Decisions. _Done when every item in DESIGN.md → Decisions needed is answered._
 - **P1.1 Typography and palette.** Apply the chosen fonts and the track accent colours in `quartz.config.ts` and `quartz/styles/custom.scss`. _Done when all text passes 4.5:1 contrast in both themes and nothing in Mathematics looks broken._
 - **P1.2 Callout set.** Custom callout types with their own colour and icon: `plain` (in plain words), `analogy`, `aha` (key idea), `pitfall`, `try` (try it yourself), `deeper` (collapsible "go deeper"), plus the existing `question` for check-yourself. _Done when a draft demo page shows all of them in both themes._
 - **P1.3 Learning path bar.** A component at the top of every track page: track name and colour, stage, "step 3 of 14", previous and next buttons. Driven by front matter (`track`, `stage`, `step`). _Done when every Networking and System Design page shows it correctly, and pages without `track` show nothing._
@@ -98,7 +98,7 @@ Stage 4  15 IPv6  16 Load Balancers  17 CDNs & Anycast
 
 ## Phase 9 · Polish
 
-- **P9.1** Accessibility audit (keyboard, screen reader, contrast, reduced motion).
+- **P9.1** Accessibility audit (keyboard, screen reader, contrast, reduced motion). Proposed addition, pending Ashfak's OK: canvas control contrast (see PROGRESS.md → Open questions).
 - **P9.2** Performance (page weight, font loading, widget scripts only where used).
 - **P9.3** Link and reference check across the site.
 - **P9.4** Fix the pre-existing TypeScript errors and Prettier warnings so `npm run check` passes.

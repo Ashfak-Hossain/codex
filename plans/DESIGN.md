@@ -17,7 +17,7 @@
 
 ### Typography
 
-Current: headers Proza Libre, body Bricolage Grotesque, code IBM Plex Mono. Bricolage has character but is tiring for long reading. Options to show side by side on a draft page:
+Chosen 2026-11-06: option A, applied in P1.1. Replaced Proza Libre, Bricolage Grotesque and IBM Plex Mono. The options were:
 
 | Option      | Headings                       | Body                       | Code           | Feel                             |
 | ----------- | ------------------------------ | -------------------------- | -------------- | -------------------------------- |
@@ -25,7 +25,7 @@ Current: headers Proza Libre, body Bricolage Grotesque, code IBM Plex Mono. Bric
 | B · Bookish | Fraunces                       | Literata                   | IBM Plex Mono  | A real book; best for long reads |
 | C · Clean   | Bricolage Grotesque (keep)     | Inter                      | IBM Plex Mono  | Modern, closest to today         |
 
-Check each font is available on Google Fonts before proposing it.
+All of these fonts are on Google Fonts (checked 2026-11-06). Compare them in `plans/preview/design-preview.html`.
 
 ### Track colours
 
@@ -65,13 +65,28 @@ Prefer **no new dependencies**. Already available: Quartz's popovers, callouts, 
 - Phone first: check every page and widget at about 380 px wide.
 - Don't break the Mathematics pages or the `canvas/` visualizations.
 
+## Notes for P1.1 onward (from the P1.0 preview)
+
+- **Code ligatures off (done in P1.1):** `font-variant-ligatures: no-contextual` on `:root`. JetBrains Mono otherwise draws `!=` as `≠` and `->` as an arrow, so readers see characters they can't type.
+- **Text on a tint:** teal and amber fall below 4.5:1 on a 9% tint in light mode. Use `var(--track-*-ink)` from `custom.scss` for text on tinted bars and callouts, never the plain accent.
+- **Amber changed:** the light amber is now `#9e5a00` (track and `--nbw-tcp`), so widget labels pass 4.5:1 on their tint.
+- **Slashed zero:** Atkinson Hyperlegible Next slashes its zero everywhere, including prose and dates ("300 BC"). That's a font trait, not a bug.
+- **Fraunces:** Quartz requests it without the optical size axis, so large headings use the default cut. The preview shows this as it would ship. Changing it means changing `formatFontSpecification` in `quartz/util/theme.ts`.
+- **Amber vs hover:** the amber accent sits close to the site's hover colour (`tertiary`). Check this if Mathematics pages look confusing.
+- **Home map on phones:** the sketch's labels are unreadable at 380 px, so P1.4 needs a separate phone layout, likely vertical.
+
 ## Decisions needed (P1.0)
 
-- [ ] Typography: option A, B or C (or another)?
-- [ ] Track colours: teal / violet / amber, OK?
-- [ ] Mascot Pip: yes or no? If yes, approve the sketch.
-- [ ] Home page: keep the terminal hero and add the map below, or replace the hero?
+- [x] Typography: option A, B or C (or another)?
+- [x] Track colours: teal / violet / amber, OK?
+- [x] Mascot Pip: yes or no? If yes, approve the sketch.
+- [x] Home page: keep the terminal hero and add the map below, or replace the hero?
 
 ## Decisions
 
-_Record each decision here with its date once Ashfak answers._
+| Date       | Decision                                                                                                  |
+| ---------- | --------------------------------------------------------------------------------------------------------- |
+| 2026-11-06 | Typography: **A · Cosy**. Fraunces headings, Atkinson Hyperlegible Next body, JetBrains Mono code         |
+| 2026-11-06 | Track colours: Networking teal, System Design violet, Mathematics amber                                   |
+| 2026-11-06 | Mascot: **yes**, Pip as sketched in `plans/preview/design-preview.html`, at most 2–3 appearances per page |
+| 2026-11-06 | Home page: keep the terminal hero and add the learning map below it                                       |

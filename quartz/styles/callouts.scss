@@ -148,7 +148,8 @@
   align-items: flex-start;
   gap: 5px;
   padding: 1rem 0;
-  color: var(--color);
+  // Title text leans toward the page's text colour so it stays >= 4.5:1; the icon keeps the pure hue
+  color: color-mix(in srgb, var(--color) 45%, var(--dark));
 
   --icon-size: 18px;
 
@@ -160,7 +161,7 @@
   }
 
   & > .callout-title-inner > p {
-    color: var(--color);
+    color: color-mix(in srgb, var(--color) 45%, var(--dark));
     margin: 0;
   }
 

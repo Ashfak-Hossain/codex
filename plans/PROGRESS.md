@@ -9,7 +9,7 @@ _Last updated: 2026-11-07, session 2 (Claude Code)._
 - **Phase:** 1 · Design system
 - **Current task:** none in progress (P1.1 finished; most is in 5319e8e, the last part is uncommitted)
 - **Next task:** P1.2 Callout set
-- **Waiting on Ashfak:** look over P1.1 at `localhost:8080`; settle the voice question under Open questions before Phase 3
+- **Waiting on Ashfak:** go-ahead for P1.2; look over P1.1 at `localhost:8080`
 
 ## Status board
 
@@ -86,6 +86,7 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 - Looked at desktop (home, GCD, Extended Euclidean, Networking index, Fourier) and phone width (Layers and Encapsulation, GCD). KaTeX, code and the Fourier canvas render fine. An Open Graph image renders in the new fonts.
 - Build succeeds. `tsc` shows the same 4 baseline errors; Prettier warns on 10 files, the same count as before this work.
 - Not covered by the audit: hover states, widget states after clicking, generated terminal output, and CSS-generated text such as code line numbers. Not every Mathematics page was looked at by eye.
+- Voice settled: "you" on both tracks, in plain short words, with hands-on labs kept (STYLE_GUIDE.md updated).
 - Ashfak's answers: change the Math colours; canvas waits for P9.1; "yes" on cursive dates, read as keep them; remove repeated titles.
 
 **Files:** `quartz.config.ts`, `quartz/styles/custom.scss`, `quartz/styles/callouts.scss`, `quartz/components/styles/` (`homeHero`, `notebookWidgets`, `toc`, `footer`, `listPage`, `recentNotes`), `quartz/components/scripts/explorer.inline.ts`, `content/About.md`, 13 `index.md` files, `plans/`.
@@ -156,18 +157,19 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 
 ## Decisions
 
-| Date       | Decision                                                                            |
-| ---------- | ----------------------------------------------------------------------------------- |
-| 2026-11-06 | Evergreen notebook notes, second-person teacher voice, scenario-led intros          |
-| 2026-11-06 | Reading palette: warm near-white / off-black, all text ≥ 4.5:1                      |
-| 2026-11-06 | Plans live in `plans/` (unpublished); progress saved in this file                   |
-| 2026-11-06 | P1.0: typography A, teal/violet/amber, Pip yes, keep hero with map below            |
-| 2026-11-07 | Note colours via CSS per theme, note text untouched; canvas contrast waits for P9.1 |
-| 2026-11-07 | Keep the cursive date font; index pages carry no body `# Title`                     |
+| Date       | Decision                                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| 2026-11-06 | Evergreen notebook notes, second-person teacher voice, scenario-led intros                 |
+| 2026-11-06 | Reading palette: warm near-white / off-black, all text ≥ 4.5:1                             |
+| 2026-11-06 | Plans live in `plans/` (unpublished); progress saved in this file                          |
+| 2026-11-06 | P1.0: typography A, teal/violet/amber, Pip yes, keep hero with map below                   |
+| 2026-11-07 | Note colours via CSS per theme, note text untouched; canvas contrast waits for P9.1        |
+| 2026-11-07 | Keep the cursive date font; index pages carry no body `# Title`                            |
+| 2026-11-07 | Voice: \"you\" and one skeleton on Networking and System Design; Mathematics keeps its own |
 
 ## Open questions
 
-- Voice: STYLE_GUIDE.md says "you" and one skeleton for every track. Claude's older saved notes say System Design pages avoid I/we/you, and Networking pages use a different section flow (Why It Exists, On the Wire, See It Yourself). Claude proposed following the style guide; Ashfak hasn't confirmed. Settle before Phase 3, then update those notes.
+- None right now.
 
 ## Known issues
 

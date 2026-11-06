@@ -4,6 +4,8 @@
 
 **The reader:** curious, can use a computer, knows a little programming. Not necessarily a CS student. Assume nothing else.
 
+**Scope:** this guide covers the Networking and System Design tracks. Mathematics keeps its own style, including the playful voice in Combinatorics.
+
 ---
 
 ## The three-level ladder
@@ -62,6 +64,8 @@ _Next: [[Page]] — one sentence on why it's the natural next step._
 - **One analogy world per track.** Networking uses the **parcel and post office** world (letter, locked box, numbered boxes and receipts, address label, vehicle). Don't mix in new metaphors when the existing world can stretch.
 - **Banned words:** simply, just, obviously, easy, trivial, of course. They make a confused reader feel stupid.
 - **Warm, a little playful, never childish.** Jokes are welcome if they also teach.
+- **Plain and small, never formal.** Common words, short pages, no padding. Nothing that reads like a research paper, or like it was copied or written by an AI.
+- **Keep it hands-on.** Real commands with sample output, what you'd see on the wire, and symptom-to-cause troubleshooting. These live in `try` callouts and normal sections, not in a fixed section order.
 
 ## The no-google checklist
 

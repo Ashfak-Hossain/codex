@@ -3,8 +3,6 @@ title: Mathematics
 description: Mathematics notes for competitive programming and interviews — a complete number-theory track across three chapters, plus a complete combinatorics chapter.
 ---
 
-# Mathematics
-
 Notes on the mathematics behind algorithms and competitive programming. The material so far is a full **number-theory track** (three chapters, read in order — each assumes the one before it), plus a complete **combinatorics chapter**.
 
 ## 1 · Euclidean Algorithms

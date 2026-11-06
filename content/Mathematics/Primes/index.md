@@ -3,8 +3,6 @@ title: Primes
 description: The building blocks of the integers — sieving them, testing primality, factoring, and counting coprimes with Euler's totient.
 ---
 
-# Primes
-
 Primes are the atoms of multiplication. This chapter covers finding them in bulk, testing a single number, breaking a number apart, and the multiplicative function that counts coprimes.
 
 1. [[Sieve of Eratosthenes]] — every prime up to $N$ by crossing out composites, in $O(N \log\log N)$.

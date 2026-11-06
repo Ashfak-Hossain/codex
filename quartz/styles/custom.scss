@@ -32,6 +32,43 @@ code span[style*="--shiki-light:#6E7781"] {
   --shiki-light: #59636e !important;
 }
 
+// Colours written into notes: `<font color>` and KaTeX `\color{}`. No single value reaches 4.5:1 on
+// both the light and dark paper, so each hue gets one shade per theme. The notes stay as written.
+:root {
+  --note-blue: #3258c4;
+  --note-teal: #0b7273;
+  --note-red: #c0183c;
+  --note-orange: #a85400;
+}
+
+:root[saved-theme="dark"] {
+  --note-blue: #86a8f7;
+  --note-teal: #3fc4b8;
+  --note-red: #ff8096;
+  --note-orange: #f0a23a;
+}
+
+font[color="#4f81bd" i],
+.katex [style*="color:royalblue"] {
+  color: var(--note-blue) !important;
+}
+
+font[color="teal" i],
+.katex [style*="color:teal"] {
+  color: var(--note-teal) !important;
+}
+
+font[color="#c0504d" i],
+font[color="crimson" i],
+.katex [style*="color:crimson"] {
+  color: var(--note-red) !important;
+}
+
+.katex [style*="color:darkorange"],
+.katex [style*="color:orange"] {
+  color: var(--note-orange) !important;
+}
+
 // Each track's index and chapter pages wear its colour in the title
 body[data-slug^="Networking/"][data-slug$="/index"] .article-title {
   color: var(--track-networking);

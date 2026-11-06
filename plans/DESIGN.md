@@ -70,6 +70,7 @@ Prefer **no new dependencies**. Already available: Quartz's popovers, callouts, 
 - **Code ligatures off (done in P1.1):** `font-variant-ligatures: no-contextual` on `:root`. JetBrains Mono otherwise draws `!=` as `≠` and `->` as an arrow, so readers see characters they can't type.
 - **Text on a tint:** teal and amber fall below 4.5:1 on a 9% tint in light mode. Use `var(--track-*-ink)` from `custom.scss` for text on tinted bars and callouts, never the plain accent.
 - **Amber changed:** the light amber is now `#9e5a00` (track and `--nbw-tcp`), so widget labels pass 4.5:1 on their tint.
+- **Colours inside notes:** use only `royalblue`, `teal`, `crimson` or `darkorange` in KaTeX `\color{}`. `custom.scss` maps those to `--note-*`, one shade per theme. Any other colour bypasses this and may fail 4.5:1 in one theme.
 - **Slashed zero:** Atkinson Hyperlegible Next slashes its zero everywhere, including prose and dates ("300 BC"). That's a font trait, not a bug.
 - **Fraunces:** Quartz requests it without the optical size axis, so large headings use the default cut. The preview shows this as it would ship. Changing it means changing `formatFontSpecification` in `quartz/util/theme.ts`.
 - **Amber vs hover:** the amber accent sits close to the site's hover colour (`tertiary`). Check this if Mathematics pages look confusing.

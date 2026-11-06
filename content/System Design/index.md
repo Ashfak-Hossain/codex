@@ -3,8 +3,6 @@ title: System Design
 description: "Designing systems that stay fast and correct when the network isn't - a feel for latency, the ways networks fail, delivery guarantees and idempotency, and a six-question method for understanding any new system."
 ---
 
-# System Design
-
 Notes on designing backend systems that stay fast and correct in a world where the network is slow, unreliable and occasionally hostile. Read the [[Networking/index|Networking]] foundations first; this track assumes you know what a round trip, TCP and TLS are.
 
 ```text

@@ -3,8 +3,6 @@ title: Networking
 description: "How machines talk to each other - the layer model and one request's full journey, then the protocols a host needs the moment it joins a network (DHCP and ARP), and a layer-by-layer method for debugging any connection."
 ---
 
-# Networking
-
 Notes on computer networks: the protocols, addressing and machinery that move data from one program to another across the world. The material is organized by **the problem each protocol solves**, not by OSI layer, so related ideas sit together. Read it in order the first time; each page lists its prerequisites at the top and the next page at the bottom.
 
 ```text

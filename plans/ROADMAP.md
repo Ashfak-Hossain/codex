@@ -98,7 +98,7 @@ Stage 4  15 IPv6  16 Load Balancers  17 CDNs & Anycast
 
 ## Phase 9 · Polish
 
-- **P9.1** Accessibility audit (keyboard, screen reader, contrast, reduced motion). Proposed addition, pending Ashfak's OK: canvas control contrast (see PROGRESS.md → Open questions).
+- **P9.1** Accessibility audit (keyboard, screen reader, contrast, reduced motion). Includes the canvas controls on Fourier Series, Game of Life and Maze Lab, which measure 1.26–4.42:1.
 - **P9.2** Performance (page weight, font loading, widget scripts only where used).
 - **P9.3** Link and reference check across the site.
 - **P9.4** Fix the pre-existing TypeScript errors and Prettier warnings so `npm run check` passes.

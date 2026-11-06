@@ -3,8 +3,6 @@ title: Reliability
 description: Staying correct over an unreliable network - the six failure modes, delivery guarantees, and idempotency in practice.
 ---
 
-# Reliability
-
 The network can lose, delay, duplicate and reorder anything you send. These pages explain why, and how real systems stay correct anyway.
 
 1. [[Network Failure Modes]] — lost, late, twice, out of order, gone, exposed; the defence for each, and a hands-on TCP simulator.

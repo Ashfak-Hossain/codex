@@ -7,9 +7,9 @@ _Last updated: 2026-11-07, session 2 (Claude Code)._
 ## Now
 
 - **Phase:** 1 · Design system
-- **Current task:** **P1.1 Typography and palette**: 👀 applied and audited, uncommitted; two contrast exceptions need Ashfak's call
+- **Current task:** none in progress (P1.1 finished; most is in 5319e8e, the last part is uncommitted)
 - **Next task:** P1.2 Callout set
-- **Waiting on Ashfak:** review P1.1 at `localhost:8080`; answer the open questions below (inline colours, Explorer scroll, cursive dates, duplicate index titles, voice)
+- **Waiting on Ashfak:** look over P1.1 at `localhost:8080`; settle the voice question under Open questions before Phase 3
 
 ## Status board
 
@@ -19,7 +19,7 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | ---- | ------------------------------------ | ------ | ---------------------------------------------------- |
 | P0.1 | Plan and progress system             | ✅     | This folder, `/notebook` commands, CLAUDE.md section |
 | P1.0 | Design decisions (gate)              | ✅     | Answers in DESIGN.md → Decisions                     |
-| P1.1 | Typography and palette               | 👀     | Applied; canvas and 4 Math notes still under 4.5:1   |
+| P1.1 | Typography and palette               | ✅     | Canvas controls moved to P9.1 by agreement           |
 | P1.2 | Callout set                          | ⬜     |                                                      |
 | P1.3 | Learning path bar                    | ⬜     |                                                      |
 | P1.4 | Home learning map                    | ⬜     | Depends on P2.1 for filled stations                  |
@@ -59,7 +59,7 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P8.7 | Consensus (Raft)                     | ⬜     |                                                      |
 | P8.8 | Observability                        | ⬜     |                                                      |
 | P8.9 | API Design                           | ⬜     |                                                      |
-| P9.1 | Accessibility audit                  | ⬜     |                                                      |
+| P9.1 | Accessibility audit                  | ⬜     | Includes canvas control contrast (1.26–4.42:1)       |
 | P9.2 | Performance                          | ⬜     |                                                      |
 | P9.3 | Link and reference check             | ⬜     |                                                      |
 | P9.4 | Make `npm run check` pass            | ⬜     | See Known issues                                     |
@@ -68,22 +68,27 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
 
-### 2026-11-07 · session 2 (continued) · Claude Code · P1.0 done, P1.1 applied
+### 2026-11-07 · session 2 (continued) · Claude Code · P1.0 and P1.1 done
 
 **Done**
 
 - P1.0: recorded Ashfak's answers in DESIGN.md (typography A, teal/violet/amber, Pip yes, keep hero with map below).
 - P1.1: Fraunces, Atkinson Hyperlegible Next and JetBrains Mono in `quartz.config.ts`; track colours as `--track-*` and `--track-*-ink` in `custom.scss`; track colour on index and chapter page titles; code ligatures off site-wide (`calt` only, so fi/fl stay); updated the font credit in `content/About.md`.
 - Contrast fixes found by auditing every page: light `gray` to `#666b74`; amber to `#9e5a00` (track and `--nbw-tcp`); syntax themes to `github-*-default`, plus a stronger light comment colour; callout titles mixed toward the text colour; hero terminal dim text; table of contents, footer and list dates less transparent.
+- Note colours: `--note-blue`, `--note-teal`, `--note-red` and `--note-orange` in `custom.scss`, one shade per theme, mapped onto the notes' `<font color>` tags and KaTeX `\color{}`. No note text changed. No single value can reach 4.5:1 on both papers.
+- Explorer no longer scrolls the page past its title on load: added `block: "nearest"` in `explorer.inline.ts`, a local patch to upstream Quartz code.
+- Removed the repeated `# Title` from 13 index pages (5 Mathematics, 5 Networking, 3 System Design).
 
 **Verified**
 
-- Audit of 46 pages (tag pages excluded) in both themes, 92 runs, counting CSS opacity: 78 clean. The other 14 are the two exceptions under Open questions.
+- Audit of 46 pages (tag pages excluded) in both themes, 92 runs, counting CSS opacity and KaTeX text: 86 clean. The other 6 are the three canvas pages, moved to P9.1 by agreement.
+- Explorer fix measured in Chrome over DevTools, in real time: on desktop, four long pages opened at scrollY 324–375 with the title off screen; now scrollY 0 with the title visible and the active item in view. Phone width was unaffected before and after.
 - Looked at desktop (home, GCD, Extended Euclidean, Networking index, Fourier) and phone width (Layers and Encapsulation, GCD). KaTeX, code and the Fourier canvas render fine. An Open Graph image renders in the new fonts.
 - Build succeeds. `tsc` shows the same 4 baseline errors; Prettier warns on 10 files, the same count as before this work.
 - Not covered by the audit: hover states, widget states after clicking, generated terminal output, and CSS-generated text such as code line numbers. Not every Mathematics page was looked at by eye.
+- Ashfak's answers: change the Math colours; canvas waits for P9.1; "yes" on cursive dates, read as keep them; remove repeated titles.
 
-**Files:** `quartz.config.ts`, `quartz/styles/custom.scss`, `quartz/styles/callouts.scss`, `quartz/components/styles/` (`homeHero`, `notebookWidgets`, `toc`, `footer`, `listPage`, `recentNotes`), `content/About.md`, `plans/`.
+**Files:** `quartz.config.ts`, `quartz/styles/custom.scss`, `quartz/styles/callouts.scss`, `quartz/components/styles/` (`homeHero`, `notebookWidgets`, `toc`, `footer`, `listPage`, `recentNotes`), `quartz/components/scripts/explorer.inline.ts`, `content/About.md`, 13 `index.md` files, `plans/`.
 
 **Problems**
 
@@ -92,7 +97,7 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 
 **Next**
 
-- Ashfak reviews P1.1 and answers the open questions, then P1.2 Callout set.
+- P1.2 Callout set.
 
 ### 2026-11-06 · session 2 · Claude Code · P1.0 preview
 
@@ -151,21 +156,17 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 
 ## Decisions
 
-| Date       | Decision                                                                   |
-| ---------- | -------------------------------------------------------------------------- |
-| 2026-11-06 | Evergreen notebook notes, second-person teacher voice, scenario-led intros |
-| 2026-11-06 | Reading palette: warm near-white / off-black, all text ≥ 4.5:1             |
-| 2026-11-06 | Plans live in `plans/` (unpublished); progress saved in this file          |
-| 2026-11-06 | P1.0: typography A, teal/violet/amber, Pip yes, keep hero with map below   |
-| 2026-11-07 | Mathematics note text left untouched; canvas contrast proposed for P9.1    |
+| Date       | Decision                                                                            |
+| ---------- | ----------------------------------------------------------------------------------- |
+| 2026-11-06 | Evergreen notebook notes, second-person teacher voice, scenario-led intros          |
+| 2026-11-06 | Reading palette: warm near-white / off-black, all text ≥ 4.5:1                      |
+| 2026-11-06 | Plans live in `plans/` (unpublished); progress saved in this file                   |
+| 2026-11-06 | P1.0: typography A, teal/violet/amber, Pip yes, keep hero with map below            |
+| 2026-11-07 | Note colours via CSS per theme, note text untouched; canvas contrast waits for P9.1 |
+| 2026-11-07 | Keep the cursive date font; index pages carry no body `# Title`                     |
 
 ## Open questions
 
-- Inline colours in 4 Mathematics notes (Counting Principles, Inclusion–Exclusion, Permutations and Combinations, Greatest Common Divisor) measure 3.56–4.47:1. They're written into the notes, which are off limits unless Ashfak asks. Change them, or accept them as an exception?
-- Canvas controls on Fourier Series, Game of Life and Maze Lab measure 1.26–4.42:1 because they're deliberately dim. Proposal: move this to P9.1 rather than restyle three toys in P1.1. OK?
-- Explorer: `activeElement.scrollIntoView({ behavior: "smooth" })` in `explorer.inline.ts` scrolls the whole page on load when nothing is saved in `sessionStorage` (scrollY of 2–165 px measured in headless Chrome, with a blank band at the top in captures). Upstream Quartz code, not caused by the font change. Not yet confirmed in a real browser. Possible fix: add `block: "nearest"`.
-- Dates use `font-family: cursive` (`contentMeta.scss`, a local customisation), so they don't use the chosen fonts. Keep the personality, or switch to the body font?
-- 12 index pages have a `# Title` in the body as well as the page title, so the title shows twice. Remove the body headings? Mathematics indexes would need his OK.
 - Voice: STYLE_GUIDE.md says "you" and one skeleton for every track. Claude's older saved notes say System Design pages avoid I/we/you, and Networking pages use a different section flow (Why It Exists, On the Wire, See It Yourself). Claude proposed following the style guide; Ashfak hasn't confirmed. Settle before Phase 3, then update those notes.
 
 ## Known issues

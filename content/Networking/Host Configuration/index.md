@@ -9,4 +9,4 @@ A freshly connected host knows nothing: no address, no gateway, no DNS. It canno
 
 1. [[DHCP]] — the Dynamic Host Configuration Protocol: the four-message DORA handshake, time-bounded leases with their renewal timers, relay agents that carry the conversation across routers, and the trust assumptions an attacker can abuse.
 
-_Pairs with the [[Address Resolution]] chapter — once DHCP hands you an IP, [[ARP]] maps it to hardware._
+_Builds on [[Layers and Encapsulation]] and [[A Packet's Journey]]. Next chapter: Address Resolution — once DHCP hands you an IP, [[ARP]] maps it to hardware._

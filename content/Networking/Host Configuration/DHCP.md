@@ -8,9 +8,11 @@ tags:
 date: 2026-05-16
 ---
 
-A laptop joins a Wi-Fi network and a second later it can browse the web — yet a moment before, it had no IP address, no subnet mask, no gateway, no DNS server. It could not have *asked* a server for these: asking by name needs DNS, reaching a server needs a gateway, and using the link needs an address. Every prerequisite depends on the thing being requested.
+A laptop joins a Wi-Fi network and a second later it can browse the web — yet a moment before, it had no IP address, no subnet mask, no gateway, no DNS server. It could not have _asked_ a server for these: asking by name needs DNS, reaching a server needs a gateway, and using the link needs an address. Every prerequisite depends on the thing being requested.
 
 The **Dynamic Host Configuration Protocol** (DHCP) breaks that cycle the only way possible — with **broadcasts**. A host with no address can still shout a frame to everyone on the link, and a DHCP server listening there shouts back a complete network identity.
+
+_Prereqs: [[Layers and Encapsulation]] (what an IP address, a MAC address and a broadcast are) · [[A Packet's Journey]] (where DHCP fits in the big picture: it runs before everything else)._
 
 ---
 
@@ -45,16 +47,16 @@ Client (no IP yet)                               DHCP Server
 
 A host joining a network needs, at minimum:
 
-| It needs…           | …so that it can…                              |
-| ------------------- | --------------------------------------------- |
-| an **IP address**   | be addressed on the network                   |
-| a **subnet mask**   | tell which addresses are local vs. remote     |
-| a **default gateway** | reach anything outside its own network      |
-| **DNS servers**     | resolve names like `example.com`               |
+| It needs…             | …so that it can…                          |
+| --------------------- | ----------------------------------------- |
+| an **IP address**     | be addressed on the network               |
+| a **subnet mask**     | tell which addresses are local vs. remote |
+| a **default gateway** | reach anything outside its own network    |
+| **DNS servers**       | resolve names like `example.com`          |
 
 Assigning all of this by hand does not scale, and it does not survive mobility — a laptop hopping between networks would need reconfiguring at every stop. DHCP makes it **dynamic**: addresses come from a pool, are leased for a bounded time, and return for reuse when a device leaves or powers off.
 
-The hard part is the bootstrap: the client needs this configuration *before* it has any usable address. That is why the whole conversation runs over broadcasts.
+The hard part is the bootstrap: the client needs this configuration _before_ it has any usable address. That is why the whole conversation runs over broadcasts.
 
 ---
 
@@ -69,22 +71,22 @@ With no address of its own, the client cannot name a server or even know one exi
 Every DHCP server that hears the DISCOVER picks a free address from its pool and offers it — the proposed address travels in the `yiaddr` ("your IP address") field, alongside the mask, gateway, DNS, and lease time. If several servers exist, the client receives several offers.
 
 **Step 3 — REQUEST (client broadcasts).**
-The client picks one offer (usually the first to arrive) and broadcasts a REQUEST. This is **broadcast on purpose**: it names the chosen server inside a *server identifier* option, so every server learns the outcome at once — the chosen one commits the lease, and the others see their offer was declined and return their tentative address to the pool.
+The client picks one offer (usually the first to arrive) and broadcasts a REQUEST. This is **broadcast on purpose**: it names the chosen server inside a _server identifier_ option, so every server learns the outcome at once — the chosen one commits the lease, and the others see their offer was declined and return their tentative address to the pool.
 
 **Step 4 — ACK (server confirms).**
 The chosen server commits the binding and replies with an ACK carrying the final, confirmed configuration. The client then adopts the address — typically after one safety check that nobody else is using it (a gratuitous [[ARP]] for the address; if someone answers, it sends a DECLINE and restarts).
 
-> **Why two round trips, not one?** The OFFER alone could assign an address — but DISCOVER is a broadcast that *every* server answers. Without the explicit REQUEST naming a single winner, every server would think its offer was taken and the pool would drain instantly. REQUEST/ACK is the commit step of a two-phase handshake.
+> **Why two round trips, not one?** The OFFER alone could assign an address — but DISCOVER is a broadcast that _every_ server answers. Without the explicit REQUEST naming a single winner, every server would think its offer was taken and the pool would drain instantly. REQUEST/ACK is the commit step of a two-phase handshake.
 
 ### The lease
 
 A DHCP address is **leased, not given** — valid only for the lease time, then it returns to the pool. That is what keeps a finite pool usable as devices come and go. The client renews well before expiry, governed by two timers set when the lease is granted:
 
-| Timer  | Fires at        | The client then…                                                       |
-| ------ | --------------- | ----------------------------------------------------------------------- |
-| **T1** | 50% of lease    | **unicasts** a REQUEST to its own server to extend the lease.            |
-| **T2** | 87.5% of lease  | gives up on that server and **broadcasts** a REQUEST to any server.      |
-| expiry | 100%            | drops the address and starts over from DISCOVER.                         |
+| Timer  | Fires at       | The client then…                                                    |
+| ------ | -------------- | ------------------------------------------------------------------- |
+| **T1** | 50% of lease   | **unicasts** a REQUEST to its own server to extend the lease.       |
+| **T2** | 87.5% of lease | gives up on that server and **broadcasts** a REQUEST to any server. |
+| expiry | 100%           | drops the address and starts over from DISCOVER.                    |
 
 A renewal is just a REQUEST/ACK pair — no DISCOVER needed, since the client already holds a working address. T1 tries the cheap path (its own server, by unicast); T2 widens the search only if that fails — a graceful fallback for when the original server has gone down.
 
@@ -94,32 +96,32 @@ A renewal is just a REQUEST/ACK pair — no DISCOVER needed, since the client al
 
 DHCP is built on the older **BOOTP** format: a fixed header followed by a variable list of **options**. Key header fields:
 
-| Field    | Meaning                                                          |
-| -------- | ---------------------------------------------------------------- |
-| `op`     | request (client→server) or reply (server→client).               |
-| `xid`    | Transaction ID — random, binds the four messages of one handshake. |
-| `ciaddr` | Client IP — filled only on renewal, when the client already has one. |
-| `yiaddr` | "Your" IP — the address the server is assigning.                 |
-| `chaddr` | Client hardware address — the MAC identifying the client.        |
-| `giaddr` | Gateway/relay IP — stamped by a relay agent (see below).         |
-| `options`| Variable list of typed values — the real payload.               |
+| Field     | Meaning                                                              |
+| --------- | -------------------------------------------------------------------- |
+| `op`      | request (client→server) or reply (server→client).                    |
+| `xid`     | Transaction ID — random, binds the four messages of one handshake.   |
+| `ciaddr`  | Client IP — filled only on renewal, when the client already has one. |
+| `yiaddr`  | "Your" IP — the address the server is assigning.                     |
+| `chaddr`  | Client hardware address — the MAC identifying the client.            |
+| `giaddr`  | Gateway/relay IP — stamped by a relay agent (see below).             |
+| `options` | Variable list of typed values — the real payload.                    |
 
 The message type itself (DISCOVER, OFFER, …) is just **option 53** — structurally, DHCP is BOOTP plus a rich options block. The options you will see most:
 
-| Option | Name              | Carries                                              |
-| -----: | ----------------- | ---------------------------------------------------- |
-|      1 | Subnet mask       | Which addresses are on-link.                         |
-|      3 | Router            | Default gateway(s).                                  |
-|      6 | DNS servers       | Name resolvers.                                      |
-|     51 | Lease time        | How long the binding is valid, in seconds.           |
-|     53 | Message type      | DISCOVER / OFFER / REQUEST / ACK / NAK …             |
+| Option | Name              | Carries                                                 |
+| -----: | ----------------- | ------------------------------------------------------- |
+|      1 | Subnet mask       | Which addresses are on-link.                            |
+|      3 | Router            | Default gateway(s).                                     |
+|      6 | DNS servers       | Name resolvers.                                         |
+|     51 | Lease time        | How long the binding is valid, in seconds.              |
+|     53 | Message type      | DISCOVER / OFFER / REQUEST / ACK / NAK …                |
 |     54 | Server identifier | Which server — the field that decides REQUEST's winner. |
 
 ### Crossing routers: the relay agent
 
 DHCP depends on broadcasts, and **routers do not forward broadcasts** — so a DISCOVER cannot leave its own network. Putting a server on every network would be wasteful.
 
-The fix is a **DHCP relay agent** (an "IP helper"), usually the router itself. It catches DHCP broadcasts on a network and forwards them as **unicast** to a central server, stamping its own address into the `giaddr` field. That field does double duty: it tells the central server *which network the client is on* (so it picks from the right address pool) and gives it an address to reply to. One central server can then cover an entire organisation.
+The fix is a **DHCP relay agent** (an "IP helper"), usually the router itself. It catches DHCP broadcasts on a network and forwards them as **unicast** to a central server, stamping its own address into the `giaddr` field. That field does double duty: it tells the central server _which network the client is on_ (so it picks from the right address pool) and gives it an address to reply to. One central server can then cover an entire organisation.
 
 ---
 
@@ -176,16 +178,32 @@ The defences live on the switch:
 
 ## Troubleshooting
 
-| Symptom                                              | Likely cause                                                                       |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Device has a `169.254.x.x` address                   | No DHCP server answered — it fell back to link-local (APIPA). Server down or unreachable. |
-| Clients on one network get addresses, another doesn't| Missing or misconfigured **relay agent** on that network's router.                  |
-| Two devices end up with the same IP                  | A pool address collides with a static address — the post-ACK [[ARP]] check should catch it and DECLINE. |
-| Server hands out addresses from the wrong subnet     | The server is ignoring `giaddr` from the relay, or the relay isn't stamping it.     |
-| Pool exhausted, new clients get nothing              | Lease time too long for the churn, or a **DHCP starvation** attack.                 |
-| Client loses connectivity exactly at mid-lease       | Renewal (T1) is failing — server unreachable; watch it limp to T2's broadcast.      |
+| Symptom                                               | Likely cause                                                                                            |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Device has a `169.254.x.x` address                    | No DHCP server answered — it fell back to link-local (APIPA). Server down or unreachable.               |
+| Clients on one network get addresses, another doesn't | Missing or misconfigured **relay agent** on that network's router.                                      |
+| Two devices end up with the same IP                   | A pool address collides with a static address — the post-ACK [[ARP]] check should catch it and DECLINE. |
+| Server hands out addresses from the wrong subnet      | The server is ignoring `giaddr` from the relay, or the relay isn't stamping it.                         |
+| Pool exhausted, new clients get nothing               | Lease time too long for the churn, or a **DHCP starvation** attack.                                     |
+| Client loses connectivity exactly at mid-lease        | Renewal (T1) is failing — server unreachable; watch it limp to T2's broadcast.                          |
 
 > **Key idea:** a `169.254.x.x` address is the universal "DHCP didn't work" signal — the client is on the wire but never got a lease.
+
+---
+
+## Check yourself
+
+> [!question]- A brand-new laptop has no IP address. How can it possibly send a DHCP DISCOVER?
+> It sends from source `0.0.0.0` to the broadcast address `255.255.255.255`, inside a link-layer broadcast frame. Every host on the link receives it, so the DHCP server hears it without either side needing an address.
+
+> [!question]- Why does the client broadcast its REQUEST instead of sending it only to the server it chose?
+> So that every server that made an offer learns the outcome at once. The chosen server commits the lease; the others return their tentative addresses to the pool.
+
+> [!question]- A lease is 24 hours. When does the client first try to renew it, and how?
+> At T1, 12 hours (50%), by unicasting a REQUEST to its own server. Only at T2 (87.5%) does it fall back to broadcasting to any server.
+
+> [!question]- Which four pieces of configuration does a typical DHCP ACK give a host, and which later step of [[A Packet's Journey]] needs each one?
+> An IP address (the source of every packet), a subnet mask (deciding what is local), a default gateway (where [[ARP]] must resolve a MAC for internet traffic) and a DNS server (where the name lookup is sent).
 
 ---
 
@@ -197,6 +215,8 @@ The defences live on the switch:
 - A **relay agent** carries the broadcast-based conversation across routers to a central server.
 - It has **no authentication**, exposing it to **rogue servers** and **starvation**; defend with DHCP snooping and port security.
 - DHCP gives a host its IP — and [[ARP]] then maps that IP to hardware so frames can actually be delivered.
+
+_Next: [[ARP]]: DHCP gave the host an IP address and a gateway, but frames are delivered by MAC address. ARP finds the gateway's MAC._
 
 ### References
 

@@ -12,6 +12,8 @@ A host wants to send an IP packet to `192.168.1.7` on its own network. It knows 
 
 The **Address Resolution Protocol** (ARP) bridges that gap with the simplest exchange possible: shout the question to everyone on the link, and let the one host that owns the address answer.
 
+_Prereqs: [[Layers and Encapsulation]] (why the link layer needs a MAC address while IP uses an IP address) · [[DHCP]] (where the host's IP address and default gateway come from)._
+
 ---
 
 ## TL;DR
@@ -42,19 +44,19 @@ Host A (192.168.1.4)                          Host B (192.168.1.7)
 
 IP and Ethernet are two independent addressing systems, and neither knows about the other:
 
-| Layer        | Address  | Looks like          | Assigned by                  |
-| ------------ | -------- | ------------------- | ----------------------------- |
-| 3 — Network  | IP       | `192.168.1.7`       | configuration or [[DHCP]]      |
-| 2 — Link     | MAC      | `b8:27:eb:0a:1c:55` | the hardware manufacturer      |
+| Layer       | Address | Looks like          | Assigned by               |
+| ----------- | ------- | ------------------- | ------------------------- |
+| 3 — Network | IP      | `192.168.1.7`       | configuration or [[DHCP]] |
+| 2 — Link    | MAC     | `b8:27:eb:0a:1c:55` | the hardware manufacturer |
 
 To put a packet on the wire you need **both**: the IP to identify the destination logically, and the MAC to actually address the Ethernet frame. Knowing one tells you nothing about the other — so something has to translate. That something is ARP.
 
 When a host sends a packet, IP routing first asks _is the destination on my own network?_
 
 - **Same network** → the destination is a direct neighbour; the frame needs the destination's own MAC.
-- **Different network** → the packet goes to the **default gateway**; the frame needs the *gateway's* MAC, even though the IP header still names the far-away final destination.
+- **Different network** → the packet goes to the **default gateway**; the frame needs the _gateway's_ MAC, even though the IP header still names the far-away final destination.
 
-Either way the sender needs the MAC of *some IP on the local link*. That lookup is ARP's entire job.
+Either way the sender needs the MAC of _some IP on the local link_. That lookup is ARP's entire job.
 
 ---
 
@@ -63,13 +65,13 @@ Either way the sender needs the MAC of *some IP on the local link*. That lookup 
 Host **A** = `192.168.1.4` (MAC `aa:aa:aa:aa:aa:aa`) wants to reach **B** = `192.168.1.7`.
 
 **Step 1 — A broadcasts the question.**
-The Ethernet frame's destination is `ff:ff:ff:ff:ff:ff`, the broadcast address, so every network card on the link receives it. The message means: *"Whoever owns 192.168.1.7, tell me your MAC."*
+The Ethernet frame's destination is `ff:ff:ff:ff:ff:ff`, the broadcast address, so every network card on the link receives it. The message means: _"Whoever owns 192.168.1.7, tell me your MAC."_
 
 **Step 2 — Everyone checks, only B matches.**
-Every host compares the requested IP to its own. All but B discard the packet. Many of them, before discarding it, still *record* A's IP-and-MAC pairing — A volunteered it in the request, so it is free knowledge.
+Every host compares the requested IP to its own. All but B discard the packet. Many of them, before discarding it, still _record_ A's IP-and-MAC pairing — A volunteered it in the request, so it is free knowledge.
 
 **Step 3 — B replies directly to A.**
-B already knows A's MAC (it was inside the request), so the answer is a **unicast** straight back to A, not another broadcast. The reply says: *"192.168.1.7 is at b8:27:eb:0a:1c:55."*
+B already knows A's MAC (it was inside the request), so the answer is a **unicast** straight back to A, not another broadcast. The reply says: _"192.168.1.7 is at b8:27:eb:0a:1c:55."_
 
 **Step 4 — A caches and sends.**
 A stores `192.168.1.7 → b8:27:eb:0a:1c:55` in its **ARP cache**, then finally sends the IP packet it was holding, wrapped in a frame addressed to B's MAC.
@@ -82,7 +84,7 @@ The cache is a short-lived table of IP → MAC mappings. Entries **expire on pur
 
 ### Useful variants
 
-- **Gratuitous ARP** — a host announces *its own* mapping without being asked. Used to detect duplicate addresses on boot, and to update everyone's cache fast after a failover (so traffic swings to the new MAC immediately).
+- **Gratuitous ARP** — a host announces _its own_ mapping without being asked. Used to detect duplicate addresses on boot, and to update everyone's cache fast after a failover (so traffic swings to the new MAC immediately).
 - **Proxy ARP** — a router answers on behalf of hosts on another segment, making two networks look like one. Mostly legacy today.
 
 ---
@@ -91,17 +93,17 @@ The cache is a short-lived table of IP → MAC mappings. Entries **expire on pur
 
 ARP rides directly inside an Ethernet frame (EtherType `0x0806`) — not over IP, since resolving IP is its whole job. For IPv4-over-Ethernet the payload is 28 bytes:
 
-| Field    | Value (IPv4 / Ethernet)  | Meaning                                         |
-| -------- | ------------------------ | ----------------------------------------------- |
-| `HTYPE`  | `1`                      | Hardware type — Ethernet.                       |
-| `PTYPE`  | `0x0800`                 | Protocol type — IPv4.                           |
-| `HLEN`   | `6`                      | Hardware (MAC) address length, bytes.           |
-| `PLEN`   | `4`                      | Protocol (IP) address length, bytes.            |
-| `OPER`   | `1` request / `2` reply  | Which half of the exchange this is.             |
-| `SHA`    | sender's MAC             | The asker's / answerer's own MAC.               |
-| `SPA`    | sender's IP              | The asker's / answerer's own IP.                |
-| `THA`    | target's MAC             | **Blank (zeros)** in a request — the reply fills it in. |
-| `TPA`    | target's IP              | The IP being resolved.                          |
+| Field   | Value (IPv4 / Ethernet) | Meaning                                                 |
+| ------- | ----------------------- | ------------------------------------------------------- |
+| `HTYPE` | `1`                     | Hardware type — Ethernet.                               |
+| `PTYPE` | `0x0800`                | Protocol type — IPv4.                                   |
+| `HLEN`  | `6`                     | Hardware (MAC) address length, bytes.                   |
+| `PLEN`  | `4`                     | Protocol (IP) address length, bytes.                    |
+| `OPER`  | `1` request / `2` reply | Which half of the exchange this is.                     |
+| `SHA`   | sender's MAC            | The asker's / answerer's own MAC.                       |
+| `SPA`   | sender's IP             | The asker's / answerer's own IP.                        |
+| `THA`   | target's MAC            | **Blank (zeros)** in a request — the reply fills it in. |
+| `TPA`   | target's IP             | The IP being resolved.                                  |
 
 The whole exchange exists to learn `THA` for a given `TPA`. A request leaves `THA` as zeros; the reply is just the same packet with that blank filled and `OPER` flipped to `2`.
 
@@ -153,7 +155,7 @@ In Wireshark, the display filter is simply `arp`. You can also probe a host dire
 
 ## Security
 
-ARP has **no authentication at all**. A reply is believed simply because it arrived — nothing proves the sender actually owns the IP it claims. Hosts even accept *unsolicited* replies that overwrite existing cache entries. That is the whole vulnerability.
+ARP has **no authentication at all**. A reply is believed simply because it arrived — nothing proves the sender actually owns the IP it claims. Hosts even accept _unsolicited_ replies that overwrite existing cache entries. That is the whole vulnerability.
 
 **ARP spoofing (poisoning).** An attacker on the network broadcasts forged replies:
 
@@ -174,16 +176,32 @@ This flaw is structural — a 1982 protocol built for a trusted LAN — so it ca
 
 ## Troubleshooting
 
-| Symptom                                              | Likely cause                                                                              |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Can't reach a host on the **same** network           | ARP request gets no reply — host is down, or a wrong **subnet mask** makes the IP look off-link. |
-| Can't reach **anything** beyond the network          | The *gateway's* MAC isn't resolving — check `ip neigh` for the gateway's entry.            |
-| Connection works, then breaks after a few minutes    | Stale cache entry — a host changed its MAC (NIC swap, failover) with no gratuitous ARP.    |
-| Intermittent, flapping connectivity                  | Duplicate IP address — two hosts answer ARP, the cache flaps between their MACs.           |
-| `ip neigh` shows the gateway with an unexpected MAC  | Possible ARP spoofing — the gateway's IP is pointing at an attacker.                       |
-| First packet to a new host is lost                   | Normal — that packet waited on the ARP round trip; most stacks queue only one and drop the rest. |
+| Symptom                                             | Likely cause                                                                                     |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Can't reach a host on the **same** network          | ARP request gets no reply — host is down, or a wrong **subnet mask** makes the IP look off-link. |
+| Can't reach **anything** beyond the network         | The _gateway's_ MAC isn't resolving — check `ip neigh` for the gateway's entry.                  |
+| Connection works, then breaks after a few minutes   | Stale cache entry — a host changed its MAC (NIC swap, failover) with no gratuitous ARP.          |
+| Intermittent, flapping connectivity                 | Duplicate IP address — two hosts answer ARP, the cache flaps between their MACs.                 |
+| `ip neigh` shows the gateway with an unexpected MAC | Possible ARP spoofing — the gateway's IP is pointing at an attacker.                             |
+| First packet to a new host is lost                  | Normal — that packet waited on the ARP round trip; most stacks queue only one and drop the rest. |
 
-> **Key idea:** ARP works only *within* one network. If a problem involves crossing a router, ARP is resolving the gateway, not the far host — check the gateway's cache entry first.
+> **Key idea:** ARP works only _within_ one network. If a problem involves crossing a router, ARP is resolving the gateway, not the far host — check the gateway's cache entry first.
+
+---
+
+## Check yourself
+
+> [!question]- Your laptop sends a packet to a server in Singapore. Whose MAC address does it ARP for?
+> The default gateway's. The server is not on the local link, so the frame goes to the router; the IP header still names the server.
+
+> [!question]- Why is the ARP request broadcast but the reply unicast?
+> The asker doesn't yet know who owns the IP, so it has to ask everyone. The owner knows exactly who asked (the request carries the asker's MAC and IP), so it answers directly.
+
+> [!question]- Does ARP ever cross a router? Why or why not?
+> No. ARP runs inside link-layer broadcast frames, and routers do not forward link-layer broadcasts. Each router resolves MAC addresses only on its own links, which is why the frame is rebuilt at every hop in [[A Packet's Journey]].
+
+> [!question]- What makes ARP spoofing possible?
+> ARP has no authentication: a host accepts replies, even unsolicited ones, and updates its cache. An attacker can claim to own the gateway's IP and receive its traffic.
 
 ---
 
@@ -193,7 +211,9 @@ This flaw is structural — a 1982 protocol built for a trusted LAN — so it ca
 - It is one **broadcast request** and one **unicast reply**, with the result kept in a short-lived **cache**.
 - It works **only within a single network** and **only for IPv4** — IPv6 uses Neighbor Discovery instead.
 - It has **no authentication**, which makes **ARP spoofing** easy; defend with DHCP-aware switches (DAI) and encryption above layer 2.
-- Next: ARP gives you the MAC for an IP — but where did the IP itself come from? See [[DHCP]].
+- ARP runs right after [[DHCP]] when a host joins a network: DHCP supplies the IP and the gateway, ARP supplies the gateway's MAC.
+
+_Next: [[Connectivity Debug Ladder]]: when a connection fails, use the layer model, from your own address and ARP up to the application, to find out exactly where._
 
 ### References
 

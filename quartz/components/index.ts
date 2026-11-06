@@ -27,6 +27,7 @@ import HomeHero from "./HomeHero"
 import MazeLab from "./MazeLab"
 import FourierSeries from "./FourierSeries"
 import GameOfLife from "./GameOfLife"
+import NotebookWidgets from "./NotebookWidgets"
 
 export {
   ArticleTitle,
@@ -58,4 +59,5 @@ export {
   MazeLab,
   FourierSeries,
   GameOfLife,
+  NotebookWidgets,
 }

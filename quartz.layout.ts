@@ -55,7 +55,37 @@ export const defaultContentPageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      // Chapters and pages in reading order; anything not listed sorts alphabetically after.
+      // This function is serialized and run in the browser, so it must stay self-contained.
+      sortFn: (a, b) => {
+        const order = [
+          "Foundations",
+          "Host Configuration",
+          "Address Resolution",
+          "Troubleshooting",
+          "Reliability",
+          "Layers and Encapsulation",
+          "A Packet's Journey",
+          "Latency Numbers",
+          "Reading Any System",
+          "Network Failure Modes",
+          "Delivery Guarantees and Idempotency",
+        ]
+        if (a.isFolder !== b.isFolder) return a.isFolder ? -1 : 1
+        const ia = order.indexOf(a.displayName)
+        const ib = order.indexOf(b.displayName)
+        if (ia !== -1 || ib !== -1) {
+          if (ia === -1) return 1
+          if (ib === -1) return -1
+          return ia - ib
+        }
+        return a.displayName.localeCompare(b.displayName, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        })
+      },
+    }),
   ],
   right: [
     Component.ConditionalRender({
@@ -72,6 +102,8 @@ export const defaultContentPageLayout = {
     }),
   ],
   afterBody: [
+    // Mounts interactive widgets on any note containing <div class="nbw" data-widget="...">
+    Component.NotebookWidgets(),
     Component.ConditionalRender({
       component: Component.MazeLab(),
       condition: (page) => page.fileData.slug === "canvas/maze-lab",
@@ -102,7 +134,37 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      // Chapters and pages in reading order; anything not listed sorts alphabetically after.
+      // This function is serialized and run in the browser, so it must stay self-contained.
+      sortFn: (a, b) => {
+        const order = [
+          "Foundations",
+          "Host Configuration",
+          "Address Resolution",
+          "Troubleshooting",
+          "Reliability",
+          "Layers and Encapsulation",
+          "A Packet's Journey",
+          "Latency Numbers",
+          "Reading Any System",
+          "Network Failure Modes",
+          "Delivery Guarantees and Idempotency",
+        ]
+        if (a.isFolder !== b.isFolder) return a.isFolder ? -1 : 1
+        const ia = order.indexOf(a.displayName)
+        const ib = order.indexOf(b.displayName)
+        if (ia !== -1 || ib !== -1) {
+          if (ia === -1) return 1
+          if (ib === -1) return -1
+          return ia - ib
+        }
+        return a.displayName.localeCompare(b.displayName, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        })
+      },
+    }),
   ],
   right: [],
 }

@@ -22,7 +22,7 @@ Goal: the site looks and feels like one cosy, well-made notebook. See [DESIGN.md
 - **P1.3 Learning path bar.** A component at the top of every track page: track name and colour, stage, "step 3 of 14", previous and next buttons. Driven by front matter (`track`, `stage`, `step`). _Done when every Networking and System Design page shows it correctly, and pages without `track` show nothing._
 - **P1.4 Home learning map.** Replace or extend the home hero with a "subway map" of the tracks: one line per track, one station per page, stations filled when read (uses P2.1). _Done when it renders on desktop and phone and links to every track page._
 - **P1.5 Mascot (only if approved in P1.0).** An original, simple SVG character (proposal: "Pip", a small parcel-shaped packet) used in `plain` callouts and on the home map. At most 2–3 appearances per page.
-- **P1.6 Design review (gate).** Ashfak reviews the draft preview page plus two real pages. Fix what he flags. Delete the draft preview page afterwards.
+- **P1.6 Design review (gate).** Ashfak reviews the draft preview page plus two real pages. Fix what he flags. Delete `plans/preview/` afterwards.
 
 ## Phase 2 · Reader engine
 

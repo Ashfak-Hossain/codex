@@ -5,6 +5,14 @@ function toggleCallout(this: HTMLElement) {
   if (!content) return
   const collapsed = outerBlock.classList.contains("is-collapsed")
   content.style.gridTemplateRows = collapsed ? "0fr" : "1fr"
+  this.setAttribute("aria-expanded", String(!collapsed))
+}
+
+function onTitleKey(this: HTMLElement, e: KeyboardEvent) {
+  // Leave keys alone when focus is on a link inside the title
+  if (e.target !== this || (e.key !== "Enter" && e.key !== " ")) return
+  e.preventDefault()
+  toggleCallout.call(this)
 }
 
 function setupCallout() {
@@ -17,10 +25,17 @@ function setupCallout() {
     if (!title || !content) continue
 
     title.addEventListener("click", toggleCallout)
-    window.addCleanup(() => title.removeEventListener("click", toggleCallout))
+    title.addEventListener("keydown", onTitleKey)
+    window.addCleanup(() => {
+      title.removeEventListener("click", toggleCallout)
+      title.removeEventListener("keydown", onTitleKey)
+    })
 
     const collapsed = div.classList.contains("is-collapsed")
     content.style.gridTemplateRows = collapsed ? "0fr" : "1fr"
+    title.setAttribute("role", "button")
+    title.setAttribute("tabindex", "0")
+    title.setAttribute("aria-expanded", String(!collapsed))
   }
 }
 

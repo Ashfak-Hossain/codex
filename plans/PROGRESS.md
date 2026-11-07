@@ -7,9 +7,9 @@ _Last updated: 2026-11-07, session 2 (Claude Code)._
 ## Now
 
 - **Phase:** 1 · Design system
-- **Current task:** none in progress (P1.1 finished; most is in 5319e8e, the last part is uncommitted)
-- **Next task:** P1.2 Callout set
-- **Waiting on Ashfak:** go-ahead for P1.2; look over P1.1 at `localhost:8080`
+- **Current task:** none in progress (P1.2 finished, uncommitted)
+- **Next task:** P1.3 Learning path bar
+- **Waiting on Ashfak:** look over the callout demo (command in the session log); go-ahead for P1.3
 
 ## Status board
 
@@ -20,7 +20,7 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P0.1 | Plan and progress system             | ✅     | This folder, `/notebook` commands, CLAUDE.md section |
 | P1.0 | Design decisions (gate)              | ✅     | Answers in DESIGN.md → Decisions                     |
 | P1.1 | Typography and palette               | ✅     | Canvas controls moved to P9.1 by agreement           |
-| P1.2 | Callout set                          | ⬜     |                                                      |
+| P1.2 | Callout set                          | ✅     | Demo in `plans/preview/callouts/`, deleted at P1.6   |
 | P1.3 | Learning path bar                    | ⬜     |                                                      |
 | P1.4 | Home learning map                    | ⬜     | Depends on P2.1 for filled stations                  |
 | P1.5 | Mascot                               | ⬜     | Approved in P1.0                                     |
@@ -67,6 +67,32 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-07 · session 2 (continued) · Claude Code · P1.2 done
+
+**Done**
+
+- Added callouts `plain`, `analogy`, `aha`, `pitfall`, `try` and `deeper`, each with its own colour per theme and icon (`quartz/styles/callouts.scss`), and default titles (`quartz/plugins/transformers/ofm.ts`).
+- Moved `question` from gold to blue so it doesn't blur into `aha`. This changes all 44 existing check-yourself callouts.
+- Collapsible callouts now work with the keyboard: `role="button"`, `tabindex`, `aria-expanded`, Enter and Space (`callout.inline.ts`). Links inside a closed callout are out of the Tab order. Fold motion is off under `prefers-reduced-motion`.
+- Rules added to STYLE_GUIDE.md → Callouts. Demo page at `plans/preview/callouts/demo.md`.
+
+**Preview the demo:** `npx quartz build --serve -d plans/preview/callouts --port 8081 --wsPort 3002 -o /tmp/callout-demo`, then open `localhost:8081/demo`.
+
+**Verified**
+
+- Audit with every collapsed callout opened first: demo clean in both themes; site 86 of 92 runs clean, and the other 6 are the canvas pages left for P9.1.
+- Keyboard tested in Chrome over DevTools: Enter and Space toggle, Tab skips a closed callout's link and reaches it once open.
+- Looked at desktop in both themes and 380 px (no page overflow), before tuning `try` to a yellower green. The change is colour only.
+
+**Decisions**
+
+- `analogy` uses a parcel icon, matching the Networking analogy world. It may need changing when System Design gets its own analogies.
+- `plain` uses a speech bubble until Pip arrives in P1.5.
+
+**Next**
+
+- P1.3 Learning path bar.
 
 ### 2026-11-07 · session 2 (continued) · Claude Code · P1.0 and P1.1 done
 

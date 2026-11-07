@@ -60,6 +60,16 @@ const defaultOptions: Options = {
   disableBrokenWikilinks: false,
 }
 
+// Default titles for the notebook's teaching callouts (see plans/STYLE_GUIDE.md)
+const calloutDefaultTitles: Record<string, string> = {
+  plain: "In plain words",
+  analogy: "Think of it like this",
+  aha: "The key idea",
+  pitfall: "Watch out",
+  try: "Try it yourself",
+  deeper: "Go deeper",
+}
+
 const calloutMapping = {
   note: "note",
   abstract: "abstract",
@@ -444,7 +454,8 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
                     {
                       type: "text",
                       value: useDefaultTitle
-                        ? capitalize(typeString).replace(/-/g, " ")
+                        ? (calloutDefaultTitles[calloutType] ??
+                          capitalize(typeString).replace(/-/g, " "))
                         : titleContent + " ",
                     },
                     ...restOfTitle,

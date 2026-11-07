@@ -79,6 +79,22 @@ Before a page is done, every box must be true:
 - [ ] Every "see X" points to a page in this notebook, not to an outside site, unless it's a reference.
 - [ ] Commands work on macOS and Linux, or both versions are given.
 
+## Callouts
+
+Seven types, each with one job. The title is optional; leave it off to get the default.
+
+| Type       | Job                                         | Default title         |
+| ---------- | ------------------------------------------- | --------------------- |
+| `plain`    | The idea in one or two jargon-free lines    | In plain words        |
+| `analogy`  | The idea in the track's analogy world       | Think of it like this |
+| `aha`      | The one thing to remember                   | The key idea          |
+| `pitfall`  | A common mistake and how to avoid it        | Watch out             |
+| `try`      | A command or experiment, and what to notice | Try it yourself       |
+| `deeper`   | Optional detail; always write `[!deeper]-`  | Go deeper             |
+| `question` | Check yourself; always write `[!question]-` | Question              |
+
+Add `-` after the bracket to start a callout collapsed, as in `> [!deeper]- Why 1460 bytes?`. Don't stack more than two callouts in a row.
+
 ## Interactives
 
 - A page whose concept has a **moving part** (a handshake, a table filling up, a calculation) gets an interactive. Static concepts get a good diagram instead.

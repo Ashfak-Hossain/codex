@@ -28,6 +28,10 @@ export const defaultContentPageLayout = {
       condition: (page) => page.fileData.slug === "index",
     }),
     Component.ConditionalRender({
+      component: Component.LearningMap(),
+      condition: (page) => page.fileData.slug === "index",
+    }),
+    Component.ConditionalRender({
       component: Component.Breadcrumbs(),
       condition: (page) => page.fileData.slug !== "index",
     }),

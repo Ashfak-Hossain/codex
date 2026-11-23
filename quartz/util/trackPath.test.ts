@@ -1,7 +1,7 @@
 import test, { describe } from "node:test"
 import assert from "node:assert"
 import { QuartzPluginData } from "../plugins/vfile"
-import { getTrackPosition } from "./trackPath"
+import { getTrackPages, getTrackPosition } from "./trackPath"
 
 const page = (slug: string, frontmatter: Record<string, unknown>) =>
   ({ slug, frontmatter: { title: slug, ...frontmatter } }) as unknown as QuartzPluginData
@@ -42,5 +42,18 @@ describe("getTrackPosition", () => {
     const bad = page("bad", { track: "networking", step: "3" })
     assert.strictEqual(getTrackPosition(bad, [...all, bad]), undefined)
     assert.strictEqual(getTrackPosition(a, [...all, bad])!.total, 3)
+  })
+})
+
+describe("getTrackPages", () => {
+  test("lists one track in step order and skips everything else", () => {
+    assert.deepStrictEqual(
+      getTrackPages(all, "networking").map((f) => f.slug),
+      ["a", "b", "c"],
+    )
+  })
+
+  test("an unknown track is empty", () => {
+    assert.deepStrictEqual(getTrackPages(all, "mathematics"), [])
   })
 })

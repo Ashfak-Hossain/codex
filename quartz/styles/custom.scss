@@ -81,7 +81,7 @@ font[color="crimson" i],
   }
 }
 
-:root[saved-theme="dark"] .pip-lost .pl {
+:root[saved-theme="dark"] :is(.pip-lost, .lm-pip) .pl {
   stroke: #c9a77a;
 }
 

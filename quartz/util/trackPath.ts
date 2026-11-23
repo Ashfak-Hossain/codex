@@ -15,6 +15,13 @@ function stepOf(file: QuartzPluginData): number | undefined {
   return typeof step === "number" && Number.isFinite(step) ? step : undefined
 }
 
+/** A track's pages in reading order (by `step`, then slug). Pages without a numeric step are left out. */
+export function getTrackPages(allFiles: QuartzPluginData[], track: string): QuartzPluginData[] {
+  return allFiles
+    .filter((f) => f.frontmatter?.track === track && stepOf(f) !== undefined)
+    .sort((a, b) => stepOf(a)! - stepOf(b)! || (a.slug ?? "").localeCompare(b.slug ?? ""))
+}
+
 /**
  * Where a page sits in its learning track, or undefined if it isn't on one.
  * `step` in front matter only sets the order, so a track can have planned gaps
@@ -27,9 +34,7 @@ export function getTrackPosition(
   const track = file.frontmatter?.track
   if (typeof track !== "string" || stepOf(file) === undefined) return undefined
 
-  const pages = allFiles
-    .filter((f) => f.frontmatter?.track === track && stepOf(f) !== undefined)
-    .sort((a, b) => stepOf(a)! - stepOf(b)! || (a.slug ?? "").localeCompare(b.slug ?? ""))
+  const pages = getTrackPages(allFiles, track)
 
   const index = pages.findIndex((f) => f.slug === file.slug)
   if (index === -1) return undefined

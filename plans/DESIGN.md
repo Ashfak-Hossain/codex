@@ -11,7 +11,7 @@
 - **Palette** in `quartz.config.ts`: warm near-white paper (`#fbfaf7`) / off-black (`#16181c`); every text colour ≥ 4.5:1 contrast in both themes.
 - **Layer colours** (widgets, used identically everywhere): application violet, security pink, transport amber, network teal, link blue. Defined as `--nbw-*` in `quartz/components/styles/notebookWidgets.scss`.
 - **Interactives** via `NotebookWidgets`: `packet-journey`, `tcp-sim`, `latency-scale`.
-- **Explorer** sorted by reading order (`order` list in `quartz.layout.ts`).
+- **Explorer** sorted by reading order (`order` list in `quartz.layout.ts`), restyled in P1.7 in a VS Code / Notion style: arrow and folder icon for folders, page icon for pages, top-level folder icons in track colours, the current page in a tinted pill, keyboard-usable folder arrows.
 
 ## Proposals (need Ashfak's decision in P1.0)
 

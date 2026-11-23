@@ -7,9 +7,9 @@ _Last updated: 2026-11-23, session 5 (Claude Code)._
 ## Now
 
 - **Phase:** 1 · Design system
-- **Current task:** none in progress (P1.5 finished; P1.3, P1.5 and the AI Engineering section are uncommitted)
-- **Next task:** P1.4 Home learning map, then P1.6 Design review
-- **Waiting on Ashfak:** commit the pending work; go-ahead for P1.4
+- **Current task:** none in progress (P1.3, P1.4, P1.5, P1.7 and the AI Engineering section are uncommitted)
+- **Next task:** P1.6 Design review (gate), now including the new sidebar
+- **Waiting on Ashfak:** look over the new sidebar and home map; commit the pending work; go-ahead for P1.6
 
 ## Status board
 
@@ -22,9 +22,10 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P1.1 | Typography and palette               | ✅     | Canvas controls moved to P9.1 by agreement           |
 | P1.2 | Callout set                          | ✅     | Demo in `plans/preview/callouts/`, deleted at P1.6   |
 | P1.3 | Learning path bar                    | ✅     | Shows real position; `step` is a sort key            |
-| P1.4 | Home learning map                    | ⬜     | Depends on P2.1 for filled stations                  |
+| P1.4 | Home learning map                    | ✅     | Filled stations and "continue" wait for P2.1         |
 | P1.5 | Mascot                               | ✅     | First `plain` callout and 404 page; home map in P1.4 |
 | P1.6 | Design review (gate)                 | ⬜     |                                                      |
+| P1.7 | Sidebar (Explorer) redesign          | ✅     | VS Code / Notion style; review in P1.6               |
 | P2.1 | Reading progress                     | ⬜     |                                                      |
 | P2.2 | Glossary                             | ⬜     |                                                      |
 | P2.3 | Quiz widget                          | ⬜     |                                                      |
@@ -67,6 +68,63 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-23 · session 5 (continued) · Claude Code · P1.7 round 2: VS Code / Notion style
+
+**Why:** Ashfak's feedback: files and folders looked the same. Wanted something like the Notion or VS Code sidebar.
+
+**Done** (replaces round 1's look; the keyboard arrows stay)
+
+- Folders: arrow on the left, then a folder icon that switches to an open folder when expanded, then the name in semibold.
+- Pages: a page icon, indented past the arrow column so it lines up under folder icons; regular weight.
+- Top-level folder icons are tinted with the track colour (teal, violet, amber; grey otherwise), replacing round 1's dots.
+- Rows are compact (about 30 px; 42 px in the phone menu). The current page sits in a tinted pill, and its icon takes the track colour. VS Code-style guide lines, with the active branch coloured.
+- Icons are Lucide-style SVGs used as CSS masks, so they take any colour and follow the theme. All in the "Notebook sidebar" block of `styles/explorer.scss`.
+
+**Verified**
+
+- Desktop light and dark on Networking and Mathematics pages; phone menu at 380 px. Contrast clean on 3 pages in both themes. `npm test` and `tsc` unchanged.
+
+**Notes**
+
+- Long page titles wrap onto two lines rather than being cut off with "…", so every title stays readable.
+
+### 2026-11-23 · session 5 (continued) · Claude Code · P1.7 sidebar redesign done
+
+**Done** (asked by Ashfak mid-session; added to the roadmap as P1.7)
+
+- New look for the "Living Archive" sidebar, as an override block at the end of `quartz/components/styles/explorer.scss`:
+  - "Living Archive" is now a small spaced label.
+  - Top-level sections get a coloured dot (teal, violet, amber; grey for the rest), with the arrow on the right.
+  - Every row has a soft rounded hover and is at least 32 px tall (about 42 px in the phone menu).
+  - The current page sits in a pill tinted with its track colour, and the guide line of its branch takes that colour.
+  - About, Home and Privacy sit below a divider.
+- The folder arrows now work with the keyboard: focusable, `role="button"`, `aria-label` and `aria-expanded`, toggled with Enter or Space (`quartz/components/scripts/explorer.inline.ts`). This is a local patch to Quartz code, like the earlier scroll fix.
+
+**Verified**
+
+- On Quartz's dev server in Chrome: desktop light and dark on Networking, System Design and Mathematics pages, the right dot colours and active pill; Tab reaches every row with a focus ring; Enter and Space toggle a folder and update `aria-expanded`; the page doesn't scroll. Phone menu at 380 px: arrows inside the screen edge. Contrast clean on 3 pages in both themes. `npm test` 80 of 80, `tsc` the same 4 baseline errors.
+
+**Notes**
+
+- Folder paths in the Explorer end in `/index` (for example `Networking/index`), so colour selectors use `[data-folderpath^="Networking/"]`.
+- The bottom of the list fades out when it overflows. That's Quartz's OverflowList, unchanged.
+
+### 2026-11-23 · session 5 (continued) · Claude Code · P1.4 done
+
+**Done**
+
+- `quartz/components/LearningMap.tsx` + `styles/learningMap.scss`: below the hero on the home page, one line per track (Networking, System Design), one station per page, built from the same front matter as the path bar (`getTrackPages` in `util/trackPath.ts`, with tests). Pip greets the reader in the heading.
+- Horizontal line when there's room, vertical when the map is narrower than 44rem (a container query, so tablets with the sidebar open also get the vertical line).
+- Each station link has `data-slug`, and `a.is-read .lm-dot` is already styled filled, so P2.1 only has to add the class. The "continue where you left off" button also waits for P2.1.
+
+**Decisions**
+
+- Mathematics has no line yet: its pages have no `track`/`step`, and adding them means touching Mathematics notes, so that's Ashfak's call. Adding a line later is front matter plus one entry in `TRACKS`.
+
+**Verified**
+
+- Built output: both lines, every station linked to the right page, map only on the home page. In Chrome at 1400, 900 and 380 px in both themes: no page overflow, no sideways scrolling, Tab reaches each station with a focus ring. Home page contrast clean in both themes. `npm test` 80 of 80.
 
 ### 2026-11-23 · session 5 · Claude Code · P1.5 Mascot done
 

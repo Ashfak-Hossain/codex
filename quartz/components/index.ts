@@ -29,6 +29,7 @@ import FourierSeries from "./FourierSeries"
 import GameOfLife from "./GameOfLife"
 import NotebookWidgets from "./NotebookWidgets"
 import LearningPath from "./LearningPath"
+import LearningMap from "./LearningMap"
 
 export {
   ArticleTitle,
@@ -62,4 +63,5 @@ export {
   GameOfLife,
   NotebookWidgets,
   LearningPath,
+  LearningMap,
 }

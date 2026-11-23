@@ -280,3 +280,222 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     }
   }
 }
+
+// ═════════════════════════════════════════════════════════════════════
+// Notebook sidebar (P1.7), in the spirit of VS Code and Notion:
+// folders = arrow + folder icon (opens with the folder), pages = page icon, lined up underneath.
+// Top-level folders are tinted with their track colour; the current page sits in a tinted pill.
+// Overrides the Quartz defaults above; the markup and behaviour are Quartz's own.
+// ═════════════════════════════════════════════════════════════════════
+
+.explorer {
+  --ex-arrow: 12px; // width of the folder arrow
+  --ex-gap: 6px; // space between arrow, icon and name
+  --ex-icon: 16px;
+  --ex-row: 1.9rem;
+
+  // Section colours: the three tracks, everything else neutral
+  --ex-accent: var(--secondary);
+  --ex-ink: var(--secondary);
+  --ex-tint: var(--gray);
+
+  --ex-folder: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>');
+  --ex-folder-open: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>');
+  --ex-page: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>');
+
+  .explorer-ul > li:has(> .folder-container[data-folderpath^="Networking/"]) {
+    --ex-accent: var(--track-networking);
+    --ex-ink: var(--track-networking-ink);
+    --ex-tint: var(--track-networking);
+  }
+
+  .explorer-ul > li:has(> .folder-container[data-folderpath^="System-Design/"]) {
+    --ex-accent: var(--track-system-design);
+    --ex-ink: var(--track-system-design-ink);
+    --ex-tint: var(--track-system-design);
+  }
+
+  .explorer-ul > li:has(> .folder-container[data-folderpath^="Mathematics/"]) {
+    --ex-accent: var(--track-mathematics);
+    --ex-ink: var(--track-mathematics-ink);
+    --ex-tint: var(--track-mathematics);
+  }
+}
+
+// "Living Archive": a small label, like the home page kickers
+button.desktop-explorer h2 {
+  font-family: var(--codeFont);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+button.desktop-explorer .fold {
+  color: var(--gray);
+}
+
+.explorer-content {
+  margin-top: 0.6rem;
+
+  & ul li {
+    margin: 0;
+  }
+
+  // Pages: page icon, indented past the arrow column so icons line up with folder icons
+  & ul li > a {
+    display: flex;
+    align-items: center;
+    gap: var(--ex-gap);
+    min-height: var(--ex-row);
+    padding: 0 0.5rem 0 calc(0.4rem + var(--ex-arrow) + var(--ex-gap));
+    border-radius: 6px;
+    color: var(--darkgray);
+    opacity: 1;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: background-color 0.12s ease;
+
+    &::before {
+      content: "";
+      flex: none;
+      width: var(--ex-icon);
+      height: var(--ex-icon);
+      background: var(--gray);
+      mask: var(--ex-page) center / contain no-repeat;
+    }
+
+    &:hover {
+      background: var(--highlight);
+      color: var(--dark);
+    }
+
+    &.active {
+      background: color-mix(in srgb, var(--ex-accent) 13%, transparent);
+      color: var(--ex-ink);
+      font-weight: 600;
+
+      &::before {
+        background: var(--ex-ink);
+      }
+    }
+  }
+
+  // Nesting guides, like VS Code's; the branch holding the current page takes the section colour
+  .folder-outer > ul {
+    margin-left: calc(0.4rem + var(--ex-arrow) / 2);
+    padding-left: 0.35rem;
+    border-left: 1px solid var(--lightgray);
+  }
+
+  li:has(a.active) > .folder-outer > ul {
+    border-left-color: color-mix(in srgb, var(--ex-accent) 55%, transparent);
+  }
+
+  // About, Home, Privacy: below a divider, after the folders
+  .explorer-ul > li:has(> .folder-container) + li:not(:has(> .folder-container)) {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--lightgray);
+  }
+}
+
+// Folders: arrow, folder icon, name
+.folder-container {
+  gap: var(--ex-gap);
+  min-height: var(--ex-row);
+  padding: 0 0.5rem 0 0.4rem;
+  border-radius: 6px;
+  transition: background-color 0.12s ease;
+
+  &:hover {
+    background: var(--highlight);
+  }
+
+  .folder-icon {
+    order: 0;
+    flex: none;
+    width: var(--ex-arrow);
+    height: var(--ex-arrow);
+    margin: 0;
+    color: var(--gray);
+  }
+
+  .folder-icon:hover {
+    color: var(--dark);
+  }
+
+  &::before {
+    content: "";
+    order: 1;
+    flex: none;
+    width: var(--ex-icon);
+    height: var(--ex-icon);
+    background: var(--gray);
+    mask: var(--ex-folder) center / contain no-repeat;
+  }
+
+  & > div {
+    order: 2;
+    flex: 1;
+    min-width: 0;
+  }
+
+  & div > a,
+  & div > button span {
+    font-family: var(--bodyFont);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--dark);
+  }
+
+  & div > button {
+    width: 100%;
+    min-height: var(--ex-row);
+    font-family: var(--bodyFont);
+  }
+}
+
+// An open folder shows an open folder icon
+li:has(> .folder-outer.open) > .folder-container::before {
+  mask-image: var(--ex-folder-open);
+}
+
+// Top-level folders carry their track colour on the icon
+.explorer-ul > li > .folder-container::before {
+  background: var(--ex-tint);
+}
+
+// Keyboard focus that's easy to see
+.explorer-content a:focus-visible,
+.folder-container button:focus-visible,
+.folder-container a:focus-visible,
+.folder-icon:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+
+// Phone menu: room at the edges and under the menu button, bigger touch targets
+@media all and ($mobile) {
+  .explorer .explorer-content {
+    padding: 5.5rem 1.25rem 2rem;
+  }
+
+  .explorer {
+    --ex-row: 2.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explorer-content ul li > a,
+  .folder-container,
+  .folder-icon,
+  .explorer-content .folder-outer {
+    transition: none;
+  }
+}

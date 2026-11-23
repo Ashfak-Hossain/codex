@@ -62,6 +62,7 @@ function toggleFolder(evt: MouseEvent) {
   // Collapse folder container
   const isCollapsed = !childFolderContainer.classList.contains("open")
   setFolderState(childFolderContainer, isCollapsed)
+  folderContainer.querySelector(".folder-icon")?.setAttribute("aria-expanded", String(!isCollapsed))
 
   const currentFolderState = currentExplorerState.find(
     (item) => item.path === folderContainer.dataset.folderpath,
@@ -258,6 +259,21 @@ async function setupExplorer(currentSlug: FullSlug) {
     for (const icon of folderIcons) {
       icon.addEventListener("click", toggleFolder)
       window.addCleanup(() => icon.removeEventListener("click", toggleFolder))
+
+      // Make the arrow usable from the keyboard: focusable, announced, Enter/Space toggles
+      const name = icon.parentElement?.querySelector(".folder-title")?.textContent ?? "folder"
+      const open = icon.parentElement?.nextElementSibling?.classList.contains("open") ?? false
+      icon.setAttribute("tabindex", "0")
+      icon.setAttribute("role", "button")
+      icon.setAttribute("aria-label", `Show or hide ${name}`)
+      icon.setAttribute("aria-expanded", String(open))
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key !== "Enter" && e.key !== " ") return
+        e.preventDefault()
+        icon.dispatchEvent(new MouseEvent("click", { bubbles: true }))
+      }
+      icon.addEventListener("keydown", onKey)
+      window.addCleanup(() => icon.removeEventListener("keydown", onKey))
     }
   }
 }

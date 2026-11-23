@@ -1,0 +1,173 @@
+@use "../../styles/variables.scss" as *;
+
+.learning-map {
+  // The map switches to its vertical layout based on its own width, not the screen's
+  container-type: inline-size;
+  margin: 1rem 0 3rem;
+  padding: 0 1.5rem;
+
+  .lm-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .lm-pip {
+    flex: none;
+    width: 56px;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .lm-title {
+    margin: 0;
+    font-family: var(--headerFont);
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    letter-spacing: -0.01em;
+    color: var(--dark);
+  }
+}
+
+.lm-line {
+  --lm-accent: var(--secondary);
+  --lm-ink: var(--secondary);
+
+  &[data-track="networking"] {
+    --lm-accent: var(--track-networking);
+    --lm-ink: var(--track-networking-ink);
+  }
+
+  &[data-track="system-design"] {
+    --lm-accent: var(--track-system-design);
+    --lm-ink: var(--track-system-design-ink);
+  }
+
+  margin-bottom: 2rem;
+
+  .lm-name {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--lm-accent);
+  }
+
+  .lm-count {
+    font-family: var(--bodyFont);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--gray);
+  }
+
+  .lm-blurb {
+    margin: 0.2rem 0 0.9rem;
+    font-size: 0.95rem;
+  }
+}
+
+// Desktop: a horizontal line, stations evenly spaced, labels under the dots.
+// With many stations the line scrolls sideways instead of squashing.
+.lm-stations {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0 0.5rem;
+  overflow-x: auto;
+
+  .lm-station {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 7.5rem;
+    margin: 0;
+
+    // the track segment to the next stop
+    &:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      top: calc(0.4rem + 7px);
+      left: 50%;
+      width: 100%;
+      height: 4px;
+      background: var(--lm-accent);
+    }
+  }
+
+  a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.4rem 0.2rem;
+    color: var(--darkgray);
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+
+    &:hover .lm-label {
+      color: var(--lm-ink);
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--lm-ink);
+      outline-offset: -2px;
+    }
+  }
+
+  .lm-dot {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+    border: 4px solid var(--lm-accent);
+    border-radius: 50%;
+    background: var(--light);
+  }
+
+  // Filled once a page is read (reading progress, P2.1)
+  a.is-read .lm-dot {
+    background: var(--lm-accent);
+  }
+}
+
+@media #{$mobile} {
+  .learning-map {
+    padding: 0 1rem;
+  }
+}
+
+// Narrow space (phones, tablets with the sidebar open): the line runs downwards, labels to the right
+@container (max-width: 44rem) {
+  .lm-stations {
+    flex-direction: column;
+    overflow-x: visible;
+
+    .lm-station {
+      min-width: 0;
+
+      &:not(:last-child)::before {
+        top: calc(0.45rem + 9px);
+        left: calc(0.5rem + 7px);
+        width: 4px;
+        height: 100%;
+      }
+    }
+
+    a {
+      flex-direction: row;
+      gap: 0.75rem;
+      padding: 0.45rem 0.5rem;
+      text-align: left;
+    }
+  }
+}

@@ -6,6 +6,9 @@ tags:
   - networking
   - cs
 date: 2026-11-06
+track: networking
+stage: 1
+step: 1
 ---
 
 You write one line of code: `fetch("https://ashfak.dev")`. Your program never mentions Wi-Fi radio frequencies, routing tables across the Bay of Bengal, lost packets, or encryption keys. Yet all of those happen, correctly, every time. Your code can stay that simple because the work is split into **layers**, and each layer does exactly one job while trusting the layer below it to do the rest.

@@ -275,3 +275,33 @@
     transition: none;
   }
 }
+
+// Pip greets the reader at the first `plain` callout on a page, and nowhere else in the text.
+// The image paths are relative to index.css, so they work with or without the /codex/ base.
+.callout.plain:not(.callout.plain ~ .callout.plain) {
+  --pip-size: 52px;
+  position: relative;
+  padding-left: calc(1rem + var(--pip-size) + 0.75rem);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 0.85rem;
+    width: var(--pip-size);
+    height: var(--pip-size);
+    background: url("static/pip/hello-light.svg") center / contain no-repeat;
+  }
+
+  & > .callout-title > .callout-icon {
+    display: none;
+  }
+
+  @media #{$mobile} {
+    --pip-size: 40px;
+  }
+}
+
+:root[saved-theme="dark"] .callout.plain:not(.callout.plain ~ .callout.plain)::before {
+  background-image: url("static/pip/hello-dark.svg");
+}

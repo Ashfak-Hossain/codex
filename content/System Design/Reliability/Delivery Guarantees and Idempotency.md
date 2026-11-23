@@ -6,6 +6,8 @@ tags:
   - system-design
   - cs
 date: 2026-11-06
+track: system-design
+step: 3
 ---
 
 A customer pays for a concert ticket. The payment gateway calls your webhook: "transaction `TRX9A7K` succeeded for booking 42". Your server marks the booking paid and issues a ticket. Then the gateway's request times out on its side, because your reply was slow, so it sends the same webhook again. If your handler simply runs twice, the customer gets two tickets, or worse, is charged twice in some other flow.

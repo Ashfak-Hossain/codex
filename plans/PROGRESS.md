@@ -2,14 +2,14 @@
 
 _The save file. Read it all at the start of a session; update it at the start and end of every task._
 
-_Last updated: 2026-11-07, session 2 (Claude Code)._
+_Last updated: 2026-11-23, session 5 (Claude Code)._
 
 ## Now
 
 - **Phase:** 1 · Design system
-- **Current task:** none in progress (P1.2 finished, uncommitted)
-- **Next task:** P1.3 Learning path bar
-- **Waiting on Ashfak:** look over the callout demo (command in the session log); go-ahead for P1.3
+- **Current task:** none in progress (P1.5 finished; P1.3, P1.5 and the AI Engineering section are uncommitted)
+- **Next task:** P1.4 Home learning map, then P1.6 Design review
+- **Waiting on Ashfak:** commit the pending work; go-ahead for P1.4
 
 ## Status board
 
@@ -21,9 +21,9 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P1.0 | Design decisions (gate)              | ✅     | Answers in DESIGN.md → Decisions                     |
 | P1.1 | Typography and palette               | ✅     | Canvas controls moved to P9.1 by agreement           |
 | P1.2 | Callout set                          | ✅     | Demo in `plans/preview/callouts/`, deleted at P1.6   |
-| P1.3 | Learning path bar                    | ⬜     |                                                      |
+| P1.3 | Learning path bar                    | ✅     | Shows real position; `step` is a sort key            |
 | P1.4 | Home learning map                    | ⬜     | Depends on P2.1 for filled stations                  |
-| P1.5 | Mascot                               | ⬜     | Approved in P1.0                                     |
+| P1.5 | Mascot                               | ✅     | First `plain` callout and 404 page; home map in P1.4 |
 | P1.6 | Design review (gate)                 | ⬜     |                                                      |
 | P2.1 | Reading progress                     | ⬜     |                                                      |
 | P2.2 | Glossary                             | ⬜     |                                                      |
@@ -67,6 +67,78 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-23 · session 5 · Claude Code · P1.5 Mascot done
+
+**Done**
+
+- Pip's drawing lives in one place, `quartz/util/pip.ts` (poses `hello` and `lost`). The four files in `quartz/static/pip/` are generated from it. To regenerate, call `pipSvg(pose, PIP_LINE[theme])` and write `<pose>-<theme>.svg`. `quartz/util/pip.test.ts` fails if they drift.
+- Pip waves from the first `plain` callout on each page only (CSS in `quartz/styles/callouts.scss`, 52 px, 40 px on phones; the speech-bubble icon is hidden there). The image paths are relative to `index.css`, so they work with and without the `/codex/` base.
+- The 404 page shows Pip lost, inline, with the outline following the theme (`quartz/components/pages/404.tsx`, `.pip-lost` in `custom.scss`).
+
+**Verified so far**
+
+- `npm test` 78 of 78 pass; `tsc` the same 4 baseline errors; the build copies `static/pip/*.svg` and `index.css` references them; `404.html` contains Pip.
+
+**Verified in Chrome**
+
+- Callout demo, light, dark and 380 px: the first `plain` callout shows Pip (52 px, 40 px on phones, matching theme file); the second keeps its speech-bubble icon. No page overflow.
+- 404 page served under `/codex/`, light, dark and 380 px: Pip renders and its outline switches colour with the theme.
+- Docs updated: STYLE_GUIDE.md → Callouts, DESIGN.md → Mascot, CLAUDE.md → Custom Components.
+
+**Problems**
+
+- The 404 page loads `/codex/index.css`, so on a local server without `--base /codex/` it shows unstyled. This is how Quartz builds 404 pages, not new. Preview it with `npx quartz build --serve --base /codex/`.
+
+**Next**
+
+- P1.4 Home learning map, then P1.6 Design review.
+
+### 2026-11-15 · session 4 · Claude (chat) · new domain: AI Engineering
+
+**Done**
+
+- New domain `content/AI Engineering/` with a landing map (`index.md`) and a `Weekly Notes/` topic folder (`index.md` log table + `Week 01.md` stub, `draft: true` until filled).
+- Weekly-note template at `content/template/weekly-note.md` (ignored by Quartz): goal → TL;DR → learned → built → stuck on → checkpoint → next week → references.
+- `"Weekly Notes"` added to both Explorer `order` lists in `quartz.layout.ts`.
+
+**Decisions**
+
+- Weekly notes are a log, not a track: no `track`/`step` front matter, no path bar. Topic pages distilled from them can become a track later.
+- Tags: `ai-engineering`, `weekly-notes`, `cs`.
+
+**Next**
+
+- Fill Week 01 and remove `draft: true`; add a row per week to `Weekly Notes/index.md`.
+
+### 2026-11-07 · session 3 · Claude Code · P1.3 done
+
+**Done**
+
+- New path bar on every track page: track name in its colour, stage, "Step n of N", previous and next links. Files: `quartz/components/LearningPath.tsx`, `quartz/components/styles/learningPath.scss`, `quartz/util/trackPath.ts` (+ test), wired in `components/index.ts` and at the top of `beforeBody` in `quartz.layout.ts`.
+- Front matter added to the 9 track pages. Networking steps 1, 2, 4, 5, 14 with stages 1, 1, 1, 1, 3. System Design steps 1–4, no stage.
+- Corrected this file: P1.2 was committed by Ashfak in e1d60f1.
+
+**Decisions**
+
+- The bar shows the real position among existing pages ("Step 3 of 5"), not the planned number. `step` is only a sort key, so planned gaps never show and new pages need no renumbering.
+- `stage` is optional. System Design has no stages yet.
+- The last page in a track has no next link. The `_Next_` line at the bottom still carries readers from Networking into System Design.
+
+**Verified**
+
+- Every built page checked: the 9 track pages show the right position and links, matching their `_Next_` chain; the other 54 show nothing, including all index pages and home.
+- On Quartz's real dev server in Chrome: next and previous update the bar with no page reload, the bar disappears when moving to a non-track page, real Tab reaches both links with a 2 px focus ring, Enter follows them.
+- Contrast audit: 9 track pages clean in both themes.
+- Looked at desktop in both themes and 380 px; no page overflow. `npm test` 74 of 74 pass, `tsc` the same 4 baseline errors, Prettier the same 10 files.
+
+**Problems**
+
+- Python's `http.server` can't serve Quartz's extensionless URLs, so SPA tests need `quartz build --serve`.
+
+**Next**
+
+- P1.5 Mascot, or P1.4 Home learning map if Ashfak prefers.
 
 ### 2026-11-07 · session 2 (continued) · Claude Code · P1.2 done
 
@@ -201,4 +273,5 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 
 - `npm run check` fails before any of our changes: 4 TypeScript errors in `quartz/components/scripts/spa.inline.ts`, `quartz/processors/parse.ts` and `quartz/components/pages/og.tsx` (plus a related `micromorph` typings message), and Prettier warnings on some Mathematics notes. `npx quartz build` works regardless. Tracked as P9.4.
 - Diagram characters (`─ │ ┌ →` and friends) aren't in the Google Fonts subsets of JetBrains Mono or IBM Plex Mono, so they come from a system font. On macOS Chrome they measure 9.633 px against 9.600 px for letters at 16 px, about 2 px of drift across a 66-character line. Line height 1.6 also leaves gaps in vertical lines. Same for every option and for today's site.
+- On phones, the site title "The Hilbert Notebooks" wraps to three lines in Fraunces, which makes the header tall. Worth fixing in P1.6.
 - In a sandbox without access to Google Fonts, `npx quartz build` fails in the `CustomOgImages` emitter; comment it out locally to test, never in a commit.

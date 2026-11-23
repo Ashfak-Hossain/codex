@@ -10,12 +10,15 @@ assignees: ""
 What fails or looks wrong.
 
 **Steps to reproduce**
+
 ```bash
 npx quartz build --serve
 ```
+
 Paste the error output here.
 
 **Environment**
+
 - Node version: (run `node --version`)
 - npm version: (run `npm --version`)
 - OS:

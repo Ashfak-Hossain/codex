@@ -6,6 +6,8 @@ tags:
   - system-design
   - cs
 date: 2026-11-06
+track: system-design
+step: 1
 ---
 
 Your API endpoint makes 40 database queries to render one page. On your laptop, with Postgres on the same machine, it takes 20 ms and feels instant. In production, the database is in another data centre and the page takes two seconds. Nothing in the code changed; only the distance did.

@@ -6,6 +6,8 @@ tags:
   - system-design
   - cs
 date: 2026-11-06
+track: system-design
+step: 2
 ---
 
 Server A sends a message to server B. What can happen? The obvious answer is "it arrives". The honest answer is: it arrives; or it never arrives; or it arrives so late that A has given up; or it arrives twice; or it arrives after a message that was sent later; or B is down and nothing is there to receive it; or someone on the way reads it or changes it. And A, on its own, often **cannot tell which of these happened**.

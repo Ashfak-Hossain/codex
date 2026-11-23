@@ -55,4 +55,3 @@ HomeHero.afterDOMLoaded = homeHeroScript
 HomeHero.css = styles
 
 export default (() => HomeHero) satisfies QuartzComponentConstructor
-

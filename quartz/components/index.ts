@@ -28,6 +28,7 @@ import MazeLab from "./MazeLab"
 import FourierSeries from "./FourierSeries"
 import GameOfLife from "./GameOfLife"
 import NotebookWidgets from "./NotebookWidgets"
+import LearningPath from "./LearningPath"
 
 export {
   ArticleTitle,
@@ -60,4 +61,5 @@ export {
   FourierSeries,
   GameOfLife,
   NotebookWidgets,
+  LearningPath,
 }

@@ -69,6 +69,22 @@ font[color="crimson" i],
   color: var(--note-orange) !important;
 }
 
+// Pip on the 404 page, drawn inline so its outline follows the theme
+.pip-lost {
+  width: 120px;
+  margin: 2rem 0 -1rem;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+:root[saved-theme="dark"] .pip-lost .pl {
+  stroke: #c9a77a;
+}
+
 // Each track's index and chapter pages wear its colour in the title
 body[data-slug^="Networking/"][data-slug$="/index"] .article-title {
   color: var(--track-networking);

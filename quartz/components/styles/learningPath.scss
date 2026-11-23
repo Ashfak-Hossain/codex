@@ -1,0 +1,89 @@
+@use "../../styles/variables.scss" as *;
+
+.learning-path {
+  --lp-accent: var(--secondary);
+  --lp-ink: var(--secondary);
+
+  &[data-track="networking"] {
+    --lp-accent: var(--track-networking);
+    --lp-ink: var(--track-networking-ink);
+  }
+
+  &[data-track="system-design"] {
+    --lp-accent: var(--track-system-design);
+    --lp-ink: var(--track-system-design-ink);
+  }
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1.25rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  background: color-mix(in srgb, var(--lp-accent) 9%, transparent);
+  border-left: 4px solid var(--lp-accent);
+  border-radius: 8px;
+
+  .lp-where {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+  }
+
+  .lp-track {
+    color: var(--lp-ink);
+  }
+
+  .lp-step {
+    color: var(--darkgray);
+  }
+
+  .lp-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-left: auto;
+  }
+
+  a {
+    color: var(--lp-ink);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--lp-ink);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+  }
+
+  // On a phone the links take their own row: previous on the left, next on the right
+  @media #{$mobile} {
+    .lp-nav {
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .lp-next {
+      margin-left: auto;
+      text-align: right;
+    }
+  }
+
+  // Heard by screen readers, not shown: the arrows already say this on screen
+  .lp-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

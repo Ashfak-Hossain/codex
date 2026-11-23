@@ -154,9 +154,7 @@ algorithms · proofs · competitive programming<br>
 <span class="c-warm">the hilbert notebooks</span>`),
 
     ls: () =>
-      out(
-        `<span class="c-dir">forge-of-algorithms/</span>  <span class="c-dir">canvas/</span>`,
-      ),
+      out(`<span class="c-dir">forge-of-algorithms/</span>  <span class="c-dir">canvas/</span>`),
 
     cat: (args) => {
       const f = args.trim().replace(/\.txt$/, "")

@@ -6,6 +6,9 @@ tags:
   - networking
   - cs
 date: 2026-11-06
+track: networking
+stage: 1
+step: 2
 ---
 
 You type `https://ashfak.dev` and press Enter. About a quarter of a second later the page is on your screen. In between, your laptop has spoken at least five different protocols, your request has crossed a dozen machines that cannot read it, and the server has proven its identity with mathematics. This page follows that request from your keyboard to the server and back, one step at a time, and names the protocol responsible for each step.

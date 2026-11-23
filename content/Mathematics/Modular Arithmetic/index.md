@@ -9,6 +9,6 @@ Computing with remainders. This chapter sets up the congruence relation, then th
 2. [[Binary Exponentiation]] — $a^n$ in $O(\log n)$ by repeated squaring; the backbone of modular exponentiation.
 3. [[Modular Inverse]] — undoing multiplication modulo $m$; five ways to compute $a^{-1}$.
 4. [[Linear Congruences]] — solving $a x \equiv b \pmod m$: when it is solvable and all $\gcd(a,m)$ solutions.
-5. [[Chinese Remainder Theorem]] — solving a *system* $x \equiv r_i \pmod{m_i}$: coprime moduli give one unique answer modulo their product.
+5. [[Chinese Remainder Theorem]] — solving a _system_ $x \equiv r_i \pmod{m_i}$: coprime moduli give one unique answer modulo their product.
 
 _Builds on [[Extended Euclidean Algorithm]]; continue with [[Sieve of Eratosthenes]]._

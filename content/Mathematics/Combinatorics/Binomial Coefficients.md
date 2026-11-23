@@ -9,7 +9,7 @@ date: 2026-05-18
 
 The [[Permutations and Combinations]] page introduced $\binom{n}{r}$ as a count — the number of ways to choose $r$ things from $n$. This page shows the other half of its life: $\binom{n}{r}$ is also an **algebra coefficient**. The same number that counts committees also tells you what happens when you expand $(a+b)^n$.
 
-That double identity — counting object *and* algebra coefficient — is why $\binom{n}{r}$ is called the **binomial coefficient**, and it's where a pile of useful identities comes from.
+That double identity — counting object _and_ algebra coefficient — is why $\binom{n}{r}$ is called the **binomial coefficient**, and it's where a pile of useful identities comes from.
 
 ---
 
@@ -27,7 +27,7 @@ $$
 \end{array}
 $$
 
-You don't compute these from the factorial formula — you *grow* the triangle. Every entry is the sum of the two above it, with $1$s down both edges. That growth rule is **Pascal's rule** from the last page:
+You don't compute these from the factorial formula — you _grow_ the triangle. Every entry is the sum of the two above it, with $1$s down both edges. That growth rule is **Pascal's rule** from the last page:
 
 $$
 \binom{n}{r} = \binom{n-1}{r-1} + \binom{n-1}{r}
@@ -39,7 +39,7 @@ The reasoning was: tag one specific object; a group of $r$ either includes it ($
 
 ## The binomial theorem
 
-Here's where the *coefficient* name is earned. Expand $(a+b)^n$:
+Here's where the _coefficient_ name is earned. Expand $(a+b)^n$:
 
 $$
 (a+b)^n = \sum_{r=0}^{n} \binom{n}{r} a^{n-r} b^{r}
@@ -59,7 +59,7 @@ $$
 (a+b)(a+b)(a+b)
 $$
 
-To expand, you walk through the three brackets and from each one pick either an $a$ or a $b$. A term like $a^2 b$ comes from every way to pick $b$ from exactly *one* of the three brackets — and "choose 1 bracket out of 3" is $\binom{3}{1} = 3$. The coefficient of $a^{n-r}b^r$ counts which $r$ brackets donated a $b$. That's a combination. The binomial theorem is just combinatorics wearing an algebra costume.
+To expand, you walk through the three brackets and from each one pick either an $a$ or a $b$. A term like $a^2 b$ comes from every way to pick $b$ from exactly _one_ of the three brackets — and "choose 1 bracket out of 3" is $\binom{3}{1} = 3$. The coefficient of $a^{n-r}b^r$ counts which $r$ brackets donated a $b$. That's a combination. The binomial theorem is just combinatorics wearing an algebra costume.
 
 ---
 
@@ -81,7 +81,7 @@ $$
 \sum_{r=0}^{n} (-1)^r \binom{n}{r} = 0 \qquad (n \ge 1)
 $$
 
-Plug $a=1, b=-1$ into the theorem. Combinatorially: the even-sized subsets and the odd-sized subsets of a non-empty set are *equal in number*. A small preview of the cancellation that powers [[Inclusion–Exclusion]].
+Plug $a=1, b=-1$ into the theorem. Combinatorially: the even-sized subsets and the odd-sized subsets of a non-empty set are _equal in number_. A small preview of the cancellation that powers [[Inclusion–Exclusion]].
 
 ### Symmetry
 
@@ -89,7 +89,7 @@ $$
 \binom{n}{r} = \binom{n}{n-r}
 $$
 
-Choosing who's *in* is the same as choosing who's *out* — which is why the triangle is a mirror.
+Choosing who's _in_ is the same as choosing who's _out_ — which is why the triangle is a mirror.
 
 ### Hockey-stick identity
 
@@ -97,7 +97,7 @@ $$
 \sum_{i=r}^{n} \binom{i}{r} = \binom{n+1}{r+1}
 $$
 
-In the triangle, this is a diagonal of entries summing to the one just below-and-left of where the diagonal ends — the shape traces a hockey stick. To *read* it: count $(r+1)$-subsets of $\{1, \dots, n+1\}$ by their largest element. If the largest is $i+1$, the other $r$ members come from $\{1,\dots,i\}$ — that's $\binom{i}{r}$. Sum over every possible largest element and you've counted them all.
+In the triangle, this is a diagonal of entries summing to the one just below-and-left of where the diagonal ends — the shape traces a hockey stick. To _read_ it: count $(r+1)$-subsets of $\{1, \dots, n+1\}$ by their largest element. If the largest is $i+1$, the other $r$ members come from $\{1,\dots,i\}$ — that's $\binom{i}{r}$. Sum over every possible largest element and you've counted them all.
 
 ### Vandermonde's identity
 
@@ -107,15 +107,15 @@ $$
 
 Split a group of $m+n$ people into an $m$-team and an $n$-team. To choose $r$ people total, take $k$ from the first team and $r-k$ from the second — then sum over every split of $k$. Counting the same selection two ways, again.
 
-Notice the pattern: **every identity is one set counted two different ways.** That's the entire trick — it even has a name, a *combinatorial proof* or "double counting."
+Notice the pattern: **every identity is one set counted two different ways.** That's the entire trick — it even has a name, a _combinatorial proof_ or "double counting."
 
 ---
 
 ## Computing binomial coefficients
 
-There is no single "binomial coefficient algorithm" — there are **four**, and picking the wrong one is how solutions time out or overflow. The right choice depends on two questions: *do you need one value or a whole table?* and *is there a modulus?* Work through all four; the decision table at the end ties them together.
+There is no single "binomial coefficient algorithm" — there are **four**, and picking the wrong one is how solutions time out or overflow. The right choice depends on two questions: _do you need one value or a whole table?_ and _is there a modulus?_ Work through all four; the decision table at the end ties them together.
 
-The naive route — literally $\frac{n!}{r!(n-r)!}$ — is a trap. $\binom{60}{30}$ is about $1.18 \times 10^{17}$ and fits in a 64-bit integer, yet $60!$ overflows it by *fifty orders of magnitude*. The answer fits; the intermediate factorials do not. Every method below exists to dodge that.
+The naive route — literally $\frac{n!}{r!(n-r)!}$ — is a trap. $\binom{60}{30}$ is about $1.18 \times 10^{17}$ and fits in a 64-bit integer, yet $60!$ overflows it by _fifty orders of magnitude_. The answer fits; the intermediate factorials do not. Every method below exists to dodge that.
 
 ### Method 1 — multiplicative formula (one exact value)
 
@@ -134,14 +134,14 @@ long long binom(int n, int r) {
 }
 ```
 
-The division is **always exact** — never a remainder. After step $i$ the running product is $\binom{n}{i+1}$ multiplied out, and a product of $i+1$ consecutive integers is always divisible by $(i+1)!$, so $(i+1)$ divides in cleanly. Multiply *before* dividing or the invariant breaks.
+The division is **always exact** — never a remainder. After step $i$ the running product is $\binom{n}{i+1}$ multiplied out, and a product of $i+1$ consecutive integers is always divisible by $(i+1)!$, so $(i+1)$ divides in cleanly. Multiply _before_ dividing or the invariant breaks.
 
 - **Use when:** you need a handful of exact values and the answer fits in 64 bits ($n \le 62$ or so for the full row).
 - **Complexity:** $O(r)$ time, $O(1)$ space.
 
 ### Method 2 — Pascal's triangle (a whole table)
 
-Need *many* coefficients, or a modulus that isn't prime? Grow the triangle. Pascal's rule uses **only addition**, so it works under *any* modulus — no inverses, no prime requirement:
+Need _many_ coefficients, or a modulus that isn't prime? Grow the triangle. Pascal's rule uses **only addition**, so it works under _any_ modulus — no inverses, no prime requirement:
 
 ```cpp
 // Full table C[n][r] for all n, r <= N — O(N^2).
@@ -166,7 +166,7 @@ $$
 \binom{n}{r} \equiv n! \cdot (r!)^{-1} \cdot \big((n-r)!\big)^{-1} \pmod p
 $$
 
-Precompute every factorial and every *inverse* factorial once. The clever part: you don't run a modular inverse for each one. Invert the **largest** factorial a single time (via Fermat's little theorem, $a^{-1} \equiv a^{p-2}$), then walk **backwards** — since $(i-1)!^{-1} = i!^{-1} \cdot i$:
+Precompute every factorial and every _inverse_ factorial once. The clever part: you don't run a modular inverse for each one. Invert the **largest** factorial a single time (via Fermat's little theorem, $a^{-1} \equiv a^{p-2}$), then walk **backwards** — since $(i-1)!^{-1} = i!^{-1} \cdot i$:
 
 ```cpp
 const int MOD = 1e9 + 7;
@@ -199,11 +199,11 @@ long long binom(int n, int r) {
 ```
 
 - **Use when:** the modulus is a prime larger than $n$ — the standard CP setting.
-- **Complexity:** $O(n)$ precompute (a *single* $O(\log p)$ inversion, not $n$ of them), then **$O(1)$ per query**.
+- **Complexity:** $O(n)$ precompute (a _single_ $O(\log p)$ inversion, not $n$ of them), then **$O(1)$ per query**.
 
 ### Method 4 — Lucas's theorem (astronomically large $n$, small prime)
 
-Method 3 needs `fact[]` sized to $n$. If $n$ is $10^{18}$, that array can't exist. When the prime $p$ is *small*, **Lucas's theorem** rescues you. Write $n$ and $r$ in base $p$; then the coefficient mod $p$ is the product of the coefficients of the matching digits:
+Method 3 needs `fact[]` sized to $n$. If $n$ is $10^{18}$, that array can't exist. When the prime $p$ is _small_, **Lucas's theorem** rescues you. Write $n$ and $r$ in base $p$; then the coefficient mod $p$ is the product of the coefficients of the matching digits:
 
 $$
 \binom{n}{r} \equiv \prod_{i} \binom{n_i}{r_i} \pmod p,
@@ -234,13 +234,13 @@ If the modulus is a **prime power** $p^b$, factorials share the factor $p$ and a
 
 ### Which method to use
 
-| Your situation | Method | Per-query cost |
-|---|---|---|
-| A few exact values, $n \lesssim 62$ | Multiplicative formula | $O(r)$ |
-| Many values, small $n$, any modulus | Pascal's triangle | $O(1)$ after $O(n^2)$ |
-| Mod a prime $p > n$, $n \le 10^6$ | Factorials + inverse factorials | $O(1)$ after $O(n)$ |
-| $n$ huge, prime $p$ small | Lucas's theorem | $O(p + \log_p n)$ |
-| Modulus a prime power / composite | Strip $p$ / CRT | varies |
+| Your situation                      | Method                          | Per-query cost        |
+| ----------------------------------- | ------------------------------- | --------------------- |
+| A few exact values, $n \lesssim 62$ | Multiplicative formula          | $O(r)$                |
+| Many values, small $n$, any modulus | Pascal's triangle               | $O(1)$ after $O(n^2)$ |
+| Mod a prime $p > n$, $n \le 10^6$   | Factorials + inverse factorials | $O(1)$ after $O(n)$   |
+| $n$ huge, prime $p$ small           | Lucas's theorem                 | $O(p + \log_p n)$     |
+| Modulus a prime power / composite   | Strip $p$ / CRT                 | varies                |
 
 Identify the row first. The code is just the row's lookup.
 
@@ -250,7 +250,7 @@ Identify the row first. The code is just the row's lookup.
 
 > A grid is 4 squares wide and 3 squares tall. You start at the bottom-left corner and may only step **right** or **up**. How many paths reach the top-right corner?
 
-Every path is a sequence of moves: $4$ rights (R) and $3$ ups (U), in some order — $7$ moves total. A path *is* an arrangement of `RRRRUUU`.
+Every path is a sequence of moves: $4$ rights (R) and $3$ ups (U), in some order — $7$ moves total. A path _is_ an arrangement of `RRRRUUU`.
 
 So the question becomes: out of $7$ move-slots, which $3$ are the ups? That choice fixes the whole path:
 
@@ -265,7 +265,7 @@ This "lattice path = which slots get the U" bijection is a combinatorics staple 
 ## Common pitfalls
 
 - **Off-by-one in the row.** Row $n$ has $n+1$ entries, indexed $\binom{n}{0}$ through $\binom{n}{n}$. Row 4 is `1 4 6 4 1`, not `1 3 3 1`.
-- **Swapping the exponents in the theorem.** The term is $\binom{n}{r}a^{n-r}b^{r}$ — the exponent of $b$ matches the *bottom* of the coefficient.
+- **Swapping the exponents in the theorem.** The term is $\binom{n}{r}a^{n-r}b^{r}$ — the exponent of $b$ matches the _bottom_ of the coefficient.
 - **Calling factorials in a loop.** Repeated $\frac{n!}{r!(n-r)!}$ overflows and wastes time. Build the triangle once, or use the multiplicative loop.
 - **Forgetting $n \ge 1$ on the alternating sum.** For $n=0$ the sum is $\binom{0}{0} = 1$, not $0$.
 
@@ -276,7 +276,7 @@ This "lattice path = which slots get the U" bijection is a combinatorics staple 
 - **Pascal's triangle** grows by Pascal's rule, $\binom{n}{r} = \binom{n-1}{r-1} + \binom{n-1}{r}$.
 - **Binomial theorem:** $(a+b)^n = \sum_r \binom{n}{r} a^{n-r} b^r$ — the coefficient counts which brackets donated a $b$.
 - **Row sum** $= 2^n$, **alternating sum** $= 0$, plus **hockey-stick** and **Vandermonde**.
-- Every identity is *one set counted two ways* — that's a combinatorial proof.
+- Every identity is _one set counted two ways_ — that's a combinatorial proof.
 - **In code:** build the triangle in $O(n^2)$ with additions only.
 
 _Next: [[Inclusion–Exclusion]] — counting when your cases overlap, and the cancellation that fixes it._

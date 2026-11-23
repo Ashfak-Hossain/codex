@@ -6,6 +6,9 @@ tags:
   - networking
   - cs
 date: 2026-05-16
+track: networking
+stage: 1
+step: 4
 ---
 
 A laptop joins a Wi-Fi network and a second later it can browse the web — yet a moment before, it had no IP address, no subnet mask, no gateway, no DNS server. It could not have _asked_ a server for these: asking by name needs DNS, reaching a server needs a gateway, and using the link needs an address. Every prerequisite depends on the thing being requested.

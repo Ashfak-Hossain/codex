@@ -9,8 +9,8 @@ date: 2026-05-18
 
 The [[Counting Principles]] page left you with one unfinished question: when does **order matter**? That single question splits the world of counting in two.
 
-- **Permutations** — arrangements, where order *matters*. `ABC` and `CBA` are different.
-- **Combinations** — selections, where order *does not matter*. `ABC` and `CBA` are the same group.
+- **Permutations** — arrangements, where order _matters_. `ABC` and `CBA` are different.
+- **Combinations** — selections, where order _does not matter_. `ABC` and `CBA` are the same group.
 
 Same objects, same "pick $r$ of them" — but two different counts. This page builds both, and shows they're really the same formula with one extra division.
 
@@ -20,7 +20,7 @@ Same objects, same "pick $r$ of them" — but two different counts. This page bu
 
 > A **permutation** is an ordered arrangement. The number of ways to arrange $r$ objects chosen from $n$ distinct objects is written $P(n, r)$ or $nPr$.
 
-Start with the cleanest case: arrange *all* $n$ objects. Use the rule of product, filling positions left to right and watching the menu shrink:
+Start with the cleanest case: arrange _all_ $n$ objects. Use the rule of product, filling positions left to right and watching the menu shrink:
 
 $$
 \underbrace{n}_{\text{pos }1} \times \underbrace{(n-1)}_{\text{pos }2} \times \underbrace{(n-2)}_{\text{pos }3} \times \cdots \times 1
@@ -52,7 +52,7 @@ $$
 
 ## Permutations with repetition
 
-If objects can repeat — each position refills from the *full* set every time — the menu never shrinks. It's just the rule of product, plain:
+If objects can repeat — each position refills from the _full_ set every time — the menu never shrinks. It's just the rule of product, plain:
 
 $$
 n^r
@@ -64,14 +64,14 @@ This is your 8-character password from the last page: $26^8$. Repetition allowed
 
 ## Combinations: when order stops mattering
 
-Now you only want the *group*, not its order. A 3-person committee is the same committee no matter who you name first.
+Now you only want the _group_, not its order. A 3-person committee is the same committee no matter who you name first.
 
 > A **combination** is an unordered selection. The number of ways to choose $r$ objects from $n$ distinct objects is written $C(n, r)$, $nCr$, or $\binom{n}{r}$ (read "$n$ choose $r$").
 
 Here's the key move — and it's the "count loosely, then divide" trick from [[Counting Principles]]:
 
 1. Count the **ordered** picks first: that's $nPr$.
-2. But every group of $r$ objects was counted once for *each* of its orderings — and $r$ objects have $r!$ orderings.
+2. But every group of $r$ objects was counted once for _each_ of its orderings — and $r$ objects have $r!$ orderings.
 3. So divide the overcounting away.
 
 $$
@@ -96,7 +96,7 @@ $$
 
 ## Combinations with repetition
 
-What if you can pick the same item more than once — say, 3 scoops of ice cream from 5 flavours, repeats allowed, and order doesn't matter? A short bijection (a trick called *stars and bars*) gives:
+What if you can pick the same item more than once — say, 3 scoops of ice cream from 5 flavours, repeats allowed, and order doesn't matter? A short bijection (a trick called _stars and bars_) gives:
 
 $$
 \left(\!\!\binom{n}{r}\!\!\right) = \binom{n + r - 1}{r}
@@ -108,20 +108,20 @@ So 3 scoops from 5 flavours is $\binom{5 + 3 - 1}{3} = \binom{7}{3} = 35$. We'll
 
 ## A field guide to the four cases
 
-Every "pick $r$ from $n$" problem lands in exactly one box. Ask two questions: *does order matter?* and *can items repeat?*
+Every "pick $r$ from $n$" problem lands in exactly one box. Ask two questions: _does order matter?_ and _can items repeat?_
 
-| | Order matters | Order doesn't |
-|---|---|---|
-| **No repetition** | $nPr = \dfrac{n!}{(n-r)!}$ | $\dbinom{n}{r} = \dfrac{n!}{r!(n-r)!}$ |
-| **Repetition allowed** | $n^r$ | $\dbinom{n+r-1}{r}$ |
+|                        | Order matters              | Order doesn't                          |
+| ---------------------- | -------------------------- | -------------------------------------- |
+| **No repetition**      | $nPr = \dfrac{n!}{(n-r)!}$ | $\dbinom{n}{r} = \dfrac{n!}{r!(n-r)!}$ |
+| **Repetition allowed** | $n^r$                      | $\dbinom{n+r-1}{r}$                    |
 
-Identifying the box *is* the problem. The formula is just lookup.
+Identifying the box _is_ the problem. The formula is just lookup.
 
 ---
 
 ## Two identities worth knowing
 
-**Symmetry.** Choosing which $r$ to *include* is the same as choosing which $n-r$ to *leave out*:
+**Symmetry.** Choosing which $r$ to _include_ is the same as choosing which $n-r$ to _leave out_:
 
 $$
 \binom{n}{r} = \binom{n}{n-r}
@@ -135,7 +135,7 @@ $$
 \binom{n}{r} = \binom{n-1}{r-1} + \binom{n-1}{r}
 $$
 
-The left term counts groups that *include* it; the right, groups that *exclude* it. This recurrence is the engine of Pascal's triangle — the whole story of the next page, [[Binomial Coefficients]].
+The left term counts groups that _include_ it; the right, groups that _exclude_ it. This recurrence is the engine of Pascal's triangle — the whole story of the next page, [[Binomial Coefficients]].
 
 ---
 
@@ -163,7 +163,7 @@ The division is always exact: after multiplying $i+1$ consecutive integers, the 
 
 ## A worked example
 
-> A standard deck has 52 cards. How many 5-card poker hands are possible? And how many of those are a *flush* (all 5 cards one suit)?
+> A standard deck has 52 cards. How many 5-card poker hands are possible? And how many of those are a _flush_ (all 5 cards one suit)?
 
 A poker hand is unordered — you don't care what order you're dealt. So it's a combination:
 
@@ -184,7 +184,7 @@ Split the decision, count each part, multiply. The [[Counting Principles]] rhyth
 ## Common pitfalls
 
 - **Using a permutation when order doesn't matter.** A committee isn't a podium. If `{A,B,C}` and `{C,B,A}` are the same answer, you want $\binom{n}{r}$, not $nPr$.
-- **Forgetting to divide by $r!$.** That missing division *is* the difference between the two — skip it and you overcount by exactly $r!$.
+- **Forgetting to divide by $r!$.** That missing division _is_ the difference between the two — skip it and you overcount by exactly $r!$.
 - **Building full factorials.** $n!$ overflows fast. Use the multiplicative loop above.
 - **Mixing repetition rules.** "Can the same item appear twice?" decides between $n^r$ and the no-repetition formulas. Check it before reaching for a formula.
 

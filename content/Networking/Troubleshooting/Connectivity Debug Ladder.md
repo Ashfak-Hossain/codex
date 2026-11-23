@@ -6,6 +6,9 @@ tags:
   - networking
   - cs
 date: 2026-11-06
+track: networking
+stage: 3
+step: 14
 ---
 
 "It can't connect." That sentence covers a typo in a hostname, a firewall silently dropping packets, a service that crashed, an expired certificate and a wrong password, and each of those has a completely different fix. Guessing between them wastes hours.

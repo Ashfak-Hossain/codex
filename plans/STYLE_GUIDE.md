@@ -25,8 +25,8 @@ description: … (one sentence, plain words, used for search and link previews)
 tags: [topic, domain, cs]
 date: YYYY-MM-DD
 track: networking # networking | system-design
-stage: 1
-step: 3 # position in the track's reading order
+stage: 1 # optional; System Design has no stages yet
+step: 3 # sort key in the track's reading order; gaps are fine
 ---
 
 Hook: a real situation in 2–4 sentences (a bug, a question, a moment everyone knows).
@@ -93,7 +93,7 @@ Seven types, each with one job. The title is optional; leave it off to get the d
 | `deeper`   | Optional detail; always write `[!deeper]-`  | Go deeper             |
 | `question` | Check yourself; always write `[!question]-` | Question              |
 
-Add `-` after the bracket to start a callout collapsed, as in `> [!deeper]- Why 1460 bytes?`. Don't stack more than two callouts in a row.
+Pip, the mascot, appears on the first `plain` callout of a page only, so open each page with a `plain` callout. Add `-` after the bracket to start a callout collapsed, as in `> [!deeper]- Why 1460 bytes?`. Don't stack more than two callouts in a row.
 
 ## Interactives
 

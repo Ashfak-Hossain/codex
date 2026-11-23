@@ -73,7 +73,7 @@ Stage 4  15 IPv6  16 Load Balancers  17 CDNs & Anycast
 
 - **P6.1 TLS and Certificates.** Encryption vs authentication, key exchange in plain words, certificates and the chain of trust, CAs, Let's Encrypt, SNI, mTLS. _Widget: verify a certificate chain step by step._
 - **P6.2 HTTP.** Requests and responses, methods, status codes, headers, cookies, caching, HTTP/1.1 vs 2 vs 3. _Widget: build a request and see the raw bytes and the response._
-- **P6.3 Re-link the chain.** Debug Ladder becomes step 14; update every `_Next_` link, the Networking index, and the Explorer order.
+- **P6.3 Re-link the chain.** Debug Ladder already has `step: 14` in front matter, so the path bar needs nothing; update every `_Next_` link, the Networking index, and the Explorer order.
 
 ## Phase 7 · Networking, Stage 4: advanced, in production
 

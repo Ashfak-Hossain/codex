@@ -35,7 +35,7 @@ $$
 \left\lfloor\tfrac{100}{2}\right\rfloor + \left\lfloor\tfrac{100}{3}\right\rfloor - \left\lfloor\tfrac{100}{6}\right\rfloor = 50 + 33 - 16 = 67
 $$
 
-The numbers divisible by *both* 2 and 3 are exactly the multiples of $\operatorname{lcm}(2,3)=6$ — counted twice, removed once.
+The numbers divisible by _both_ 2 and 3 are exactly the multiples of $\operatorname{lcm}(2,3)=6$ — counted twice, removed once.
 
 ---
 
@@ -47,7 +47,7 @@ $$
 
 Follow one element sitting in **all three** sets. The singles count it $+3$. The pairwise intersections remove it $-3$. It's now at zero — wrong, it should be counted once. So the triple intersection adds it back $+1$. Net: exactly $1$. ✓
 
-The signs *swing*: add singles, subtract pairs, add triples. Each correction overshoots, and the next term reels it back.
+The signs _swing_: add singles, subtract pairs, add triples. Each correction overshoots, and the next term reels it back.
 
 ---
 
@@ -67,15 +67,15 @@ $$
 \sum_{k=1}^{m} (-1)^{k+1} \binom{m}{k} = 1 - \sum_{k=0}^{m} (-1)^{k} \binom{m}{k} + 1 = 1 - 0 = 1
 $$
 
-That middle sum is the **alternating row sum** from [[Binomial Coefficients]] — it vanishes. Every element, no matter how many sets it lives in, is counted exactly once. The principle is correct *because* of a binomial identity. The chapter closing its own loop.
+That middle sum is the **alternating row sum** from [[Binomial Coefficients]] — it vanishes. Every element, no matter how many sets it lives in, is counted exactly once. The principle is correct _because_ of a binomial identity. The chapter closing its own loop.
 
 ---
 
 ## The complement form (the one you'll actually use)
 
-Most real problems don't ask for a union. They ask: *how many objects have **none** of these properties?* That's the complement, and it's cleaner — no $+1$ sign-flip, just plain alternating signs.
+Most real problems don't ask for a union. They ask: _how many objects have **none** of these properties?_ That's the complement, and it's cleaner — no $+1$ sign-flip, just plain alternating signs.
 
-Let $A_i$ be the set of objects *with* property $i$, inside a universe of size $N$:
+Let $A_i$ be the set of objects _with_ property $i$, inside a universe of size $N$:
 
 $$
 \left| \overline{A_1} \cap \cdots \cap \overline{A_n} \right| = \sum_{S \subseteq \{1,\dots,n\}} (-1)^{|S|} \left| \bigcap_{i \in S} A_i \right|
@@ -89,7 +89,7 @@ The empty set $S$ contributes the whole universe $N$ (an empty intersection is e
 
 > $n$ people each toss their hat in a pile. Each grabs a hat at random. How many ways result in **nobody** getting their own hat back?
 
-An arrangement where *no* element sits in its original spot is a **derangement**, written $D_n$ or $!n$. This is the textbook inclusion–exclusion problem — "none of the properties," where property $i$ is "person $i$ got their own hat."
+An arrangement where _no_ element sits in its original spot is a **derangement**, written $D_n$ or $!n$. This is the textbook inclusion–exclusion problem — "none of the properties," where property $i$ is "person $i$ got their own hat."
 
 Universe: all $n!$ permutations. Fix property $i$ (person $i$ has their hat); the other $n-1$ are free → $(n-1)!$. Fix any $k$ specified people → $(n-k)!$, and there are $\binom{n}{k}$ ways to choose which $k$. The complement form gives:
 
@@ -162,9 +162,9 @@ Those 26 are the integers coprime to $30 = 2\cdot3\cdot5$. Run the same argument
 ## Common pitfalls
 
 - **Using the rule of sum on overlapping cases.** If cases can overlap, plain addition double-counts — that's the entire reason this principle exists.
-- **Getting the sign backwards.** Union form: odd subsets *add*. Complement form: odd subsets *subtract*. Pick one form and hold it.
+- **Getting the sign backwards.** Union form: odd subsets _add_. Complement form: odd subsets _subtract_. Pick one form and hold it.
 - **Forgetting the empty-set term.** In complement form, $S = \emptyset$ contributes the full universe $N$. Drop it and every count collapses.
-- **Brute-forcing too many properties.** $2^n$ explodes. Past $n \approx 20$, exploit symmetry — count by *how many* properties hold, as the derangement formula does.
+- **Brute-forcing too many properties.** $2^n$ explodes. Past $n \approx 20$, exploit symmetry — count by _how many_ properties hold, as the derangement formula does.
 
 ---
 

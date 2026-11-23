@@ -33,9 +33,11 @@ Each track gets one accent, used in its path bar, its line on the home map and i
 
 - Networking: **teal** · System Design: **violet** · Mathematics: **amber**
 
-### Mascot (optional)
+### Mascot (approved, built in P1.5)
 
 "**Pip**", an original small parcel-shaped packet with a face, drawn as simple SVG. Appears in `plain` callouts, the home map and empty states, and maybe on the 404 page. At most 2–3 times per page. Must stay original, never resembling an existing character.
+
+Built: `quartz/util/pip.ts` is the only copy of the drawing (poses `hello` and `lost`); `quartz/static/pip/` holds generated copies, checked by a test. Pip shows on the first `plain` callout of each page and on the 404 page. The home map (P1.4) is next.
 
 ### Home page
 

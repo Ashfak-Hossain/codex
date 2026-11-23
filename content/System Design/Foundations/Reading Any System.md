@@ -6,6 +6,8 @@ tags:
   - system-design
   - cs
 date: 2026-11-06
+track: system-design
+step: 4
 ---
 
 Every few months there is a new database, message broker, protocol or managed service to learn. Reading its documentation front to back takes days and still leaves you unsure how it behaves when things go wrong, which is the only time it really matters.

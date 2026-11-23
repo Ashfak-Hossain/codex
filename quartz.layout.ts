@@ -21,6 +21,8 @@ export const sharedPageComponents: SharedLayout = {
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout = {
   beforeBody: [
+    // Renders only on pages with `track` and `step` in their front matter
+    Component.LearningPath(),
     Component.ConditionalRender({
       component: Component.HomeHero(),
       condition: (page) => page.fileData.slug === "index",
@@ -65,6 +67,7 @@ export const defaultContentPageLayout = {
           "Address Resolution",
           "Troubleshooting",
           "Reliability",
+          "Weekly Notes",
           "Layers and Encapsulation",
           "A Packet's Journey",
           "Latency Numbers",
@@ -144,6 +147,7 @@ export const defaultListPageLayout: PageLayout = {
           "Address Resolution",
           "Troubleshooting",
           "Reliability",
+          "Weekly Notes",
           "Layers and Encapsulation",
           "A Packet's Journey",
           "Latency Numbers",

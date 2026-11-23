@@ -19,7 +19,7 @@ The Rule of Product never met a choice it didn't want to multiply. Hand it a tas
 
 > If a task happens in steps — step 1 in $m$ ways **and** step 2 in $n$ ways — the whole task happens in $m \times n$ ways.
 
-Its favorite word is **AND**. Step 1 happens, *and then* step 2 happens. Both occur.
+Its favorite word is **AND**. Step 1 happens, _and then_ step 2 happens. Both occur.
 
 Picture getting dressed: <font color="#4f81bd">3 shirts</font>, <font color="#c0504d">2 pairs of jeans</font>. Lay out every outfit:
 
@@ -41,7 +41,7 @@ $$
 \underbrace{26 \times 26 \times \cdots \times 26}_{8 \text{ slots}} = 26^8 \approx 2.09 \times 10^{11}
 $$
 
-**Why multiply and not add?** Because every shirt walks into the room and finds *the same two pairs of jeans waiting for it*. Three shirts, two jeans each — you're counting "2" three times over. That's multiplication.
+**Why multiply and not add?** Because every shirt walks into the room and finds _the same two pairs of jeans waiting for it_. Three shirts, two jeans each — you're counting "2" three times over. That's multiplication.
 
 ---
 
@@ -51,7 +51,7 @@ The Rule of Product's quieter partner is the Rule of Sum. It doesn't multiply �
 
 > If a task can be done as **case A or case B**, with no overlap, and A has $m$ ways while B has $n$ ways, the task has $m + n$ ways.
 
-Its favorite word is **OR**. You pick *one* case. These are alternatives, not steps — a fork in the road, not two rooms in a row.
+Its favorite word is **OR**. You pick _one_ case. These are alternatives, not steps — a fork in the road, not two rooms in a row.
 
 Say you commute by **bus or train**: <font color="#4f81bd">3 bus routes</font>, <font color="#c0504d">2 train routes</font>. One trip uses one route:
 
@@ -59,9 +59,9 @@ $$
 3 \;+\; 2 \;=\; 5 \text{ possible trips}
 $$
 
-Nobody rides a bus *and* a train on the same trip, so there's no grid here — just a pile of 3 plus a pile of 2.
+Nobody rides a bus _and_ a train on the same trip, so there's no grid here — just a pile of 3 plus a pile of 2.
 
-The Rule of Sum has **one rule of its own**: the cases must not overlap. If some route somehow counted as both a bus and a train, you'd count it twice and the Rule of Sum would quietly lie to you. When cases *do* overlap, you call in the specialist — [[Inclusion–Exclusion]], a later page. For now, keep your piles separate.
+The Rule of Sum has **one rule of its own**: the cases must not overlap. If some route somehow counted as both a bus and a train, you'd count it twice and the Rule of Sum would quietly lie to you. When cases _do_ overlap, you call in the specialist — [[Inclusion–Exclusion]], a later page. For now, keep your piles separate.
 
 ---
 
@@ -71,12 +71,12 @@ Nearly every beginner mistake is summoning the wrong rule. The cure is one quest
 
 > **Do I do both things, or do I pick one?**
 
-| What's happening | Magic word | Rule | Operation |
-|---|---|---|---|
-| Do this **and then** that | AND | Product | $\times$ |
-| Do this **or** that (separate cases) | OR | Sum | $+$ |
+| What's happening                     | Magic word | Rule    | Operation |
+| ------------------------------------ | ---------- | ------- | --------- |
+| Do this **and then** that            | AND        | Product | $\times$  |
+| Do this **or** that (separate cases) | OR         | Sum     | $+$       |
 
-Read the problem. Underline every *and* and every *or*. They're not grammar — they're instructions telling you which rule to call.
+Read the problem. Underline every _and_ and every _or_. They're not grammar — they're instructions telling you which rule to call.
 
 ---
 
@@ -86,12 +86,12 @@ Real problems don't pick a side — they use both. The combo move:
 
 > **Split into cases (OR), multiply the steps inside each case (AND), then add the cases up.**
 
-**The mission.** How many length-3 strings are *all digits* or *all lowercase letters*?
+**The mission.** How many length-3 strings are _all digits_ or _all lowercase letters_?
 
 - Case A — all digits: each slot picks from 10 → $10 \times 10 \times 10 = 1000$
 - Case B — all letters: each slot picks from 26 → $26 \times 26 \times 26 = 17576$
 
-A string can't be all-digits *and* all-letters, so the cases don't overlap — the Rule of Sum is safe:
+A string can't be all-digits _and_ all-letters, so the cases don't overlap — the Rule of Sum is safe:
 
 $$
 1000 + 17576 = 18576
@@ -103,7 +103,7 @@ Split, multiply, add. That rhythm cracks an enormous fraction of counting proble
 
 ## Counting by bijection: the disguise trick
 
-Sometimes the thing you want to count is a slippery mess — but it's secretly wearing a disguise, and underneath it's something *easy*. If you can match your messy set one-to-one with an easy set, they must be the same size. That perfect matching has a fancy name, **bijection**, but it's just "everyone has exactly one dance partner."
+Sometimes the thing you want to count is a slippery mess — but it's secretly wearing a disguise, and underneath it's something _easy_. If you can match your messy set one-to-one with an easy set, they must be the same size. That perfect matching has a fancy name, **bijection**, but it's just "everyone has exactly one dance partner."
 
 > If every item of $A$ pairs with exactly one item of $B$ and vice versa, then $|A| = |B|$.
 
@@ -121,9 +121,9 @@ The lesson: when counting gets hard, don't push harder — find the easy thing i
 
 ## Dividing away the overcounting
 
-The Rule of Product is enthusiastic. Sometimes *too* enthusiastic — it counts the same outcome more than once. If every real outcome got counted exactly $k$ times, just **divide by $k$** and the overcounting evaporates.
+The Rule of Product is enthusiastic. Sometimes _too_ enthusiastic — it counts the same outcome more than once. If every real outcome got counted exactly $k$ times, just **divide by $k$** and the overcounting evaporates.
 
-**The mission.** Seat 3 people around a *round* table. In a straight row there are $3 \times 2 \times 1 = 6$ orders. But a circle has no "first seat" — rotate everyone one chair over and it's the *same* arrangement. Each real seating got counted $3$ times (once per rotation), so:
+**The mission.** Seat 3 people around a _round_ table. In a straight row there are $3 \times 2 \times 1 = 6$ orders. But a circle has no "first seat" — rotate everyone one chair over and it's the _same_ arrangement. Each real seating got counted $3$ times (once per rotation), so:
 
 $$
 \frac{3 \times 2 \times 1}{3} = 2 \text{ genuinely different circular seatings}
@@ -140,7 +140,7 @@ $$
 Think in steps (AND), but watch the choices carefully — the rules of the dungeon shrink them:
 
 - Digit 1: anything → $10$ ways
-- Digit 2: anything *except* digit 1 → $9$ ways
+- Digit 2: anything _except_ digit 1 → $9$ ways
 - Digit 3: anything except digit 2 → $9$ ways
 - Digit 4: anything except digit 3 → $9$ ways
 
@@ -148,7 +148,7 @@ $$
 10 \times 9 \times 9 \times 9 = 7290
 $$
 
-The plot twist: a step's count isn't always the full menu — a constraint can steal an option. Reading that constraint right *is* the whole skill.
+The plot twist: a step's count isn't always the full menu — a constraint can steal an option. Reading that constraint right _is_ the whole skill.
 
 Don't trust me — make the computer check:
 
@@ -170,9 +170,9 @@ for (int n = 0; n < 10000; n++) {
 
 ## Traps the dungeon leaves for you
 
-- **Multiplying when you should add.** "Bus *or* train" is a sum. Write $3 \times 2$ and you've answered a different question — "a bus leg *and* a train leg" — for a trip nobody took.
+- **Multiplying when you should add.** "Bus _or_ train" is a sum. Write $3 \times 2$ and you've answered a different question — "a bus leg _and_ a train leg" — for a trip nobody took.
 - **Adding overlapping cases.** The Rule of Sum demands disjoint piles. Overlap means double-counting; that's a job for [[Inclusion–Exclusion]].
-- **Forgetting a constraint shrinks the menu.** In the PIN fight, steps 2–4 had 9 choices, not 10. Re-read the restriction *before* you multiply.
+- **Forgetting a constraint shrinks the menu.** In the PIN fight, steps 2–4 had 9 choices, not 10. Re-read the restriction _before_ you multiply.
 - **"Arrange" vs "choose".** Arranging cares about order; choosing doesn't. Mix them up and you overcount — [[Permutations and Combinations]] sorts this out for good.
 
 ---

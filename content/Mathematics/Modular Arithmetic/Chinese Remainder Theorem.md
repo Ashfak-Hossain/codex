@@ -17,7 +17,7 @@ $$
 x \equiv 2 \pmod 3, \qquad x \equiv 3 \pmod 5, \qquad x \equiv 2 \pmod 7.
 $$
 
-[[Linear Congruences|A single congruence]] pins $x$ to one residue class. A *system* of them, with **coprime moduli**, pins it down completely: the **Chinese Remainder Theorem** says there is exactly one answer modulo the product $3 \cdot 5 \cdot 7 = 105$. It is $23$ — and this page is about why such an $x$ always exists, why it is unique, and how to compute it.
+[[Linear Congruences|A single congruence]] pins $x$ to one residue class. A _system_ of them, with **coprime moduli**, pins it down completely: the **Chinese Remainder Theorem** says there is exactly one answer modulo the product $3 \cdot 5 \cdot 7 = 105$. It is $23$ — and this page is about why such an $x$ always exists, why it is unique, and how to compute it.
 
 _Prereqs: [[Modular Arithmetic|modular arithmetic]] · [[Modular Inverse]] · [[Linear Congruences]] · [[Extended Euclidean Algorithm]]._
 
@@ -68,11 +68,11 @@ pair<int64_t, int64_t> crt(const vector<int64_t>& rem, const vector<int64_t>& mo
 > $$x \equiv r_1 \pmod{m_1}, \quad \dots, \quad x \equiv r_k \pmod{m_k}$$
 > has a solution, and that solution is **unique modulo** $M = m_1 m_2 \cdots m_k$.
 
-Two claims in one — *existence* (a solution is there) and *uniqueness* (only one, mod $M$). Both need proof, and the proofs are constructive: they hand you the number.
+Two claims in one — _existence_ (a solution is there) and _uniqueness_ (only one, mod $M$). Both need proof, and the proofs are constructive: they hand you the number.
 
 **Uniqueness.** Suppose $x$ and $x'$ both satisfy every congruence. Then $x \equiv x' \pmod{m_i}$ for each $i$, so each $m_i$ divides $x - x'$. When the $m_i$ are pairwise coprime, a number divisible by all of them is divisible by their **product** — so $M \mid (x - x')$, i.e. $x \equiv x' \pmod M$. At most one solution exists in $[0, M)$. $\square$
 
-(The pairwise-coprime condition is doing real work here. Without it, "divisible by each $m_i$" only forces divisibility by their *lcm*, which is smaller than the product.)
+(The pairwise-coprime condition is doing real work here. Without it, "divisible by each $m_i$" only forces divisibility by their _lcm_, which is smaller than the product.)
 
 ---
 
@@ -86,7 +86,7 @@ $$
 M_i = \frac{M}{m_i} = \prod_{j \ne i} m_j .
 $$
 
-$M_i$ is the product of *every modulus except* $m_i$, so it is divisible by each $m_j$ ($j \ne i$) and **coprime to** $m_i$ (it shares no factor with it). Being coprime to $m_i$, it has an inverse there:
+$M_i$ is the product of _every modulus except_ $m_i$, so it is divisible by each $m_j$ ($j \ne i$) and **coprime to** $m_i$ (it shares no factor with it). Being coprime to $m_i$, it has an inverse there:
 
 $$
 y_i = M_i^{-1} \pmod{m_i} .
@@ -129,13 +129,13 @@ $$
 x = \underbrace{2 \cdot 35 \cdot 2}_{140} \;+\; \underbrace{3 \cdot 21 \cdot 1}_{63} \;+\; \underbrace{2 \cdot 15 \cdot 1}_{30} \;=\; 233 \;\equiv\; {\color{crimson}23} \pmod{105}.
 $$
 
-Check: $23 = 7\cdot3 + 2$, $\;23 = 4\cdot5 + 3$, $\;23 = 3\cdot7 + 2$. ✓ All three remainders land — and $23$ is the *only* answer below $105$.
+Check: $23 = 7\cdot3 + 2$, $\;23 = 4\cdot5 + 3$, $\;23 = 3\cdot7 + 2$. ✓ All three remainders land — and $23$ is the _only_ answer below $105$.
 
 ---
 
 ## Computing It — the Iterative Merge
 
-The $\sum r_i M_i y_i$ formula is the cleanest *proof*, but it needs every modulus in hand at once. In code it is tidier to **fold the system two congruences at a time** — and this version extends painlessly to the non-coprime case below.
+The $\sum r_i M_i y_i$ formula is the cleanest _proof_, but it needs every modulus in hand at once. In code it is tidier to **fold the system two congruences at a time** — and this version extends painlessly to the non-coprime case below.
 
 **Merging two.** Given $x \equiv r_1 \pmod{m_1}$ and $x \equiv r_2 \pmod{m_2}$ with $\gcd(m_1, m_2) = 1$. The first congruence says $x = r_1 + m_1 k$ for some integer $k$. Substitute into the second:
 
@@ -157,10 +157,10 @@ Plug $k$ back: $x = r_1 + m_1 k$ is the merged residue, unique modulo $m_1 m_2$.
 
 Folding $(2,3),\ (3,5),\ (2,7)$, carrying the running pair $(r, m)$:
 
-| step | merge in        | $(r, m)$ before | $m_1^{-1} \bmod m_2$ | $k$ | $(r, m)$ after  |
-| :--: | :-------------- | :-------------- | :------------------: | :-: | :-------------- |
-|  1   | $x \equiv 2\ (3)$ | $(0,\ 1)$       |         $1$          | $2$ | $(2,\ 3)$       |
-|  2   | $x \equiv 3\ (5)$ | $(2,\ 3)$       |         $2$          | $2$ | $(8,\ 15)$      |
+| step | merge in          | $(r, m)$ before | $m_1^{-1} \bmod m_2$ | $k$ | $(r, m)$ after                |
+| :--: | :---------------- | :-------------- | :------------------: | :-: | :---------------------------- |
+|  1   | $x \equiv 2\ (3)$ | $(0,\ 1)$       |         $1$          | $2$ | $(2,\ 3)$                     |
+|  2   | $x \equiv 3\ (5)$ | $(2,\ 3)$       |         $2$          | $2$ | $(8,\ 15)$                    |
 |  3   | $x \equiv 2\ (7)$ | $(8,\ 15)$      |         $1$          | $1$ | $({\color{crimson}23},\ 105)$ |
 
 Each row checks out — $8 \equiv 2\ (3),\ 8 \equiv 3\ (5)$ — and the last lands on $x \equiv 23 \pmod{105}$, the same answer the formula gave.

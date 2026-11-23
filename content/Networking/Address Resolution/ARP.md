@@ -6,6 +6,9 @@ tags:
   - networking
   - cs
 date: 2026-05-16
+track: networking
+stage: 1
+step: 5
 ---
 
 A host wants to send an IP packet to `192.168.1.7` on its own network. It knows the destination IP — but Ethernet does not deliver to IP addresses. A frame is addressed by a 48-bit **MAC address** burned into the destination's network card, and the sender has no idea what that is. The IP address says _who_; the link has no idea _where_ on the wire that is.

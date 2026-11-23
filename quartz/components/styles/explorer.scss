@@ -499,3 +499,8 @@ li:has(> .folder-outer.open) > .folder-container::before {
     transition: none;
   }
 }
+
+// The Glossary folder only links to its A–Z page (entries are hidden), so it needs no arrow
+.folder-container[data-folderpath^="Glossary/"] .folder-icon {
+  visibility: hidden;
+}

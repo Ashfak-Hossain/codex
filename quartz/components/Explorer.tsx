@@ -46,7 +46,9 @@ const defaultOptions: Options = {
       return -1
     }
   },
-  filterFn: (node) => node.slugSegment !== "tags",
+  // Glossary entries stay out of the sidebar (there are dozens); the Glossary folder links to its A–Z index
+  filterFn: (node) =>
+    node.slugSegment !== "tags" && (node.isFolder || !node.slug.startsWith("Glossary/")),
   order: ["filter", "map", "sort"],
 }
 

@@ -95,6 +95,13 @@ Seven types, each with one job. The title is optional; leave it off to get the d
 
 Pip, the mascot, appears on the first `plain` callout of a page only, so open each page with a `plain` callout. Add `-` after the bracket to start a callout collapsed, as in `> [!deeper]- Why 1460 bytes?`. Don't stack more than two callouts in a row.
 
+## Glossary
+
+- Entries live in `content/Glossary/`, one per term: `**In plain words:**`, `**Think of it like this:**` (in the track's analogy world), `**Learn it properly in** [[Page]]`. Tag them `glossary` only; put acronyms and other names in `aliases`.
+- Link a term's first use on each page: `[[MAC address]]`, or `[[MAC address|MAC addresses]]` for other wording.
+- Never give an entry the same name as a real page (wikilinks resolve by filename). When a term gets its own page, delete its entry and point links at the page.
+- Add new entries to the A–Z list in `content/Glossary/index.md`.
+
 ## Interactives
 
 - A page whose concept has a **moving part** (a handshake, a table filling up, a calculation) gets an interactive. Static concepts get a good diagram instead.

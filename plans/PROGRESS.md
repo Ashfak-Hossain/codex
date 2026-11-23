@@ -7,9 +7,9 @@ _Last updated: 2026-11-23, session 5 (Claude Code)._
 ## Now
 
 - **Phase:** 2 · Reader engine (Phase 1 done)
-- **Current task:** none in progress (P2.1 finished, uncommitted)
-- **Next task:** P2.2 Glossary
-- **Waiting on Ashfak:** try reading progress at `localhost:8080`; commit; go-ahead for P2.2 Glossary
+- **Current task:** none in progress (P2.2 finished, uncommitted)
+- **Next task:** P2.3 Quiz widget
+- **Waiting on Ashfak:** skim the glossary at `localhost:8080/Glossary/`; commit; go-ahead for P2.3 Quiz widget
 
 ## Status board
 
@@ -27,7 +27,7 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P1.6 | Design review (gate)                 | ✅     | Approved 2026-11-23; `plans/preview/` deleted               |
 | P1.7 | Sidebar (Explorer) redesign          | ✅     | VS Code / Notion style; review in P1.6                      |
 | P2.1 | Reading progress                     | ✅     | Track pages; ticks in sidebar, path bar, map; Continue link |
-| P2.2 | Glossary                             | ⬜     |                                                             |
+| P2.2 | Glossary                             | ✅     | 67 entries + A–Z; first-use links come with the P3 rewrites |
 | P2.3 | Quiz widget                          | ⬜     |                                                             |
 | P2.4 | Review deck                          | ⬜     |                                                             |
 | P3.1 | Rewrite: Layers and Encapsulation    | ⬜     | First version exists (session 1)                            |
@@ -68,6 +68,25 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-23 · session 5 (continued) · Claude Code · P2.2 Glossary done
+
+**Done**
+
+- Ashfak had already committed and pushed P2.1 himself (7725a2e), so there was nothing left to commit. Removed an empty branch.
+- `content/Glossary/`: 67 entries covering every technical term in the five Networking pages (layers and units, addresses, protocols, DHCP and ARP mechanics, attacks and defences, failure words, RFC and IETF), plus `index.md`, an A–Z list with one-line definitions. Each entry has a plain definition, a parcel-world analogy, and "Learn it properly in" links to the pages that use the term most (picked by counting uses, with a few corrected by hand).
+- ARP and DHCP have no entries: they are real pages, and a glossary page with the same name would break wikilinks. The A–Z page links straight to them.
+- Entries for TCP, UDP, DNS, NAT and HTTP say a full page is planned. When those pages arrive (P4.3, P4.4, P5.2, P5.3, P6.2), delete the glossary entry and repoint links, or the names will clash.
+- Entries are tagged `glossary` only, so the `networking` tag page isn't flooded. Acronyms and other names are `aliases`.
+- Sidebar: entries are hidden by the Explorer `filterFn` in `quartz/components/Explorer.tsx`. The Glossary folder stays, links to the A–Z page, and has no arrow.
+
+**Verified**
+
+- Build: no broken links. In Chrome on the dev server, hovering a term shows its entry as a popover in both themes. The sidebar shows one Glossary folder with no children. The A–Z page has letters A–U. Entry pages work at 380 px. No banned words. `npm test` 80 of 80, `tsc` the same 4 baseline errors.
+
+**Not done here**
+
+- "First use of a term on a page links to its entry" is part of each page's rewrite (Phase 3 definition of done), not this task.
 
 ### 2026-11-23 · session 5 (continued) · Claude Code · P1.6 done, P2.1 done
 

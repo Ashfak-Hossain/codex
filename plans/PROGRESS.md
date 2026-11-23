@@ -7,9 +7,9 @@ _Last updated: 2026-11-23, session 5 (Claude Code)._
 ## Now
 
 - **Phase:** 2 · Reader engine (Phase 1 done)
-- **Current task:** none in progress (P2.2 finished, uncommitted)
-- **Next task:** P2.3 Quiz widget
-- **Waiting on Ashfak:** skim the glossary at `localhost:8080/Glossary/`; commit; go-ahead for P2.3 Quiz widget
+- **Current task:** none in progress (P2.3 finished, uncommitted)
+- **Next task:** P2.4 Review deck
+- **Waiting on Ashfak:** try the quiz at the end of Layers and Encapsulation; commit; go-ahead for P2.4 Review deck
 
 ## Status board
 
@@ -28,7 +28,7 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P1.7 | Sidebar (Explorer) redesign          | ✅     | VS Code / Notion style; review in P1.6                      |
 | P2.1 | Reading progress                     | ✅     | Track pages; ticks in sidebar, path bar, map; Continue link |
 | P2.2 | Glossary                             | ✅     | 67 entries + A–Z; first-use links come with the P3 rewrites |
-| P2.3 | Quiz widget                          | ⬜     |                                                             |
+| P2.3 | Quiz widget                          | ✅     | Markdown-authored; first quiz on Layers and Encapsulation   |
 | P2.4 | Review deck                          | ⬜     |                                                             |
 | P3.1 | Rewrite: Layers and Encapsulation    | ⬜     | First version exists (session 1)                            |
 | P3.2 | Rewrite: A Packet's Journey          | ⬜     | First version exists (session 1)                            |
@@ -68,6 +68,23 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-24 · session 5 (continued) · Claude Code · P2.3 Quiz widget done
+
+**Done**
+
+- New `quiz` widget in `NotebookWidgets` (`scripts/notebookWidgets.inline.ts` → `mountQuiz`, styles at the end of `styles/notebookWidgets.scss`). A quiz is written in plain Markdown inside the placeholder: a numbered list of questions, each with a task list of options (`- [x]` marks the right one) and a `>` explanation. Leave blank lines after `<div class="nbw" data-widget="quiz">` and before `</div>`, or the Markdown inside won't be parsed.
+- Each option is a button. On answering: ✕ on a wrong pick, ✓ on the right answer, the question locks, and the explanation appears ("Correct." or "Not quite."). The score updates as you go; at the end "You got n of N" and a "Try again" button that resets and moves focus to the first option.
+- Accessibility: options are a labelled group of real buttons; locked buttons use `aria-disabled` so focus stays put; hidden text announces "(your answer, correct)" and similar; feedback and score are live regions. The raw Markdown is hidden until the widget mounts, so the answers never flash. Motion is off under reduced motion.
+- First real quiz: three questions at the end of "Check yourself" on Layers and Encapsulation, each based on a statement the page makes (the address each layer uses, how far a router opens a packet, what HTTPS is).
+
+**Verified**
+
+- On the dev server in Chrome: wrong and right answers, locking, keyboard (Tab and Enter), score, "Try again" with focus, rebuilding after moving away and back without a reload, no errors. Light, dark and 380 px with no overflow. Contrast clean with every question answered, in both themes. `npm test` 80 of 80, `tsc` the same 4 baseline errors.
+
+**Next**
+
+- P2.4 Review deck. Phase 3 rewrites add a quiz to each page.
 
 ### 2026-11-23 · session 5 (continued) · Claude Code · P2.2 Glossary done
 

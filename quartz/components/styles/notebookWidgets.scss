@@ -518,3 +518,154 @@
   font-variant-numeric: tabular-nums;
   color: var(--dark);
 }
+
+/* ------------------------------------------------------------------ */
+/* quiz                                                               */
+/* ------------------------------------------------------------------ */
+
+// Until the script turns it into buttons, don't show the Markdown (it gives the answers away)
+.nbw[data-widget="quiz"]:not(.nbw-quiz-ready) > ol {
+  display: none;
+}
+
+.nbw-qhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.nbw-score {
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+.nbw-qlist {
+  margin: 0;
+  padding-left: 1.4rem;
+
+  > li + li {
+    margin-top: 1.1rem;
+  }
+}
+
+.nbw-qtext {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.nbw-opts {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.nbw-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  text-align: left;
+  color: var(--darkgray);
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover:not([aria-disabled="true"]) {
+    border-color: var(--secondary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+  }
+
+  &[aria-disabled="true"] {
+    cursor: default;
+  }
+
+  .nbw-mark {
+    flex: none;
+    width: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &.is-right {
+    background: var(--nbw-ok-bg);
+    border-color: var(--nbw-ok);
+    color: var(--dark);
+
+    .nbw-mark {
+      color: var(--nbw-ok);
+    }
+  }
+
+  &.is-wrong {
+    background: var(--nbw-bad-bg);
+    border-color: var(--nbw-bad);
+    color: var(--dark);
+
+    .nbw-mark {
+      color: var(--nbw-bad);
+    }
+  }
+}
+
+.nbw-feedback {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--gray);
+  border-radius: 4px;
+  color: var(--darkgray);
+
+  &.is-right {
+    border-left-color: var(--nbw-ok);
+  }
+
+  &.is-wrong {
+    border-left-color: var(--nbw-bad);
+  }
+
+  p {
+    display: inline;
+  }
+}
+
+.nbw-qdone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--lightgray);
+  font-weight: 600;
+  color: var(--dark);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.nbw-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nbw-opt {
+    transition: none;
+  }
+}

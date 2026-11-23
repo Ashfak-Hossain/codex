@@ -95,6 +95,24 @@ Seven types, each with one job. The title is optional; leave it off to get the d
 
 Pip, the mascot, appears on the first `plain` callout of a page only, so open each page with a `plain` callout. Add `-` after the bracket to start a callout collapsed, as in `> [!deeper]- Why 1460 bytes?`. Don't stack more than two callouts in a row.
 
+## Quiz
+
+End "Check yourself" with a short quiz of 3–5 questions. Base each question on something the page says, don't repeat the `question` callouts, and give every question one right answer and an explanation:
+
+```markdown
+<div class="nbw" data-widget="quiz">
+
+1. Which address does the transport layer use to pick the right program?
+   - [ ] The MAC address
+   - [x] The port number
+
+   > The port picks the program; the MAC and IP addresses get the data to the machine.
+
+</div>
+```
+
+Keep the blank lines after the opening `<div>` and before `</div>`.
+
 ## Glossary
 
 - Entries live in `content/Glossary/`, one per term: `**In plain words:**`, `**Think of it like this:**` (in the track's analogy world), `**Learn it properly in** [[Page]]`. Tag them `glossary` only; put acronyms and other names in `aliases`.

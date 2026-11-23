@@ -187,6 +187,36 @@ Answer each one in your head before you open it.
 > [!question]- Which protocol translates a hostname to an IP address, and which translates an IP address to a MAC address?
 > DNS translates names to IP addresses. [[ARP]] translates an IP address on the local network to a MAC address.
 
+Then try the quick quiz:
+
+<div class="nbw" data-widget="quiz">
+
+1. Which address does the transport layer use to pick the right program on a machine?
+   - [ ] The MAC address
+   - [ ] The IP address
+   - [x] The port number
+   - [ ] The domain name
+
+   > Each layer has its own address: a MAC address for the link, an IP address for the network, a port for transport and a name for the application. The port picks the program.
+
+2. How far up the layers does an ordinary router open a packet?
+   - [ ] Only the link layer
+   - [x] Up to IP, the network layer
+   - [ ] Up to TCP, the transport layer
+   - [ ] All the way to HTTP
+
+   > A router needs the destination IP address to choose the next hop, so it opens the link and network layers and leaves everything inside alone. Only the two endpoints open every layer.
+
+3. What is HTTPS?
+   - [ ] A different protocol from HTTP, with its own kinds of request
+   - [x] The same HTTP, carried inside TLS
+   - [ ] HTTP with the request written in a shorter format
+   - [ ] HTTP sent without a TCP connection
+
+   > HTTPS is the same HTTP carried inside the security layer. Take TLS away and the bytes are identical.
+
+</div>
+
 ---
 
 ## Recap

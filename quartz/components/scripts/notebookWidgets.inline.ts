@@ -646,11 +646,167 @@ function mountLatency(root: HTMLElement) {
 }
 
 /* ------------------------------------------------------------------ */
+/* quiz                                                               */
+/* Written in plain Markdown inside the placeholder:                  */
+/*   <div class="nbw" data-widget="quiz">                             */
+/*   (blank line)                                                     */
+/*   1. Question?                                                     */
+/*      - [ ] Wrong option                                            */
+/*      - [x] Right option                                            */
+/*      (blank line)                                                  */
+/*      > Explanation shown after answering.                          */
+/*   (blank line)                                                     */
+/*   </div>                                                           */
+/* ------------------------------------------------------------------ */
+
+interface QuizQuestion {
+  text: string
+  options: { html: string; correct: boolean }[]
+  explain: string
+}
+
+function parseQuiz(root: HTMLElement): QuizQuestion[] {
+  const items = root.querySelectorAll<HTMLLIElement>(":scope > ol > li")
+  const questions: QuizQuestion[] = []
+  items.forEach((li) => {
+    const text = li.querySelector(":scope > p")?.innerHTML.trim() ?? ""
+    const options = [...li.querySelectorAll<HTMLLIElement>(":scope > ul > li")].map((opt) => {
+      const clone = opt.cloneNode(true) as HTMLLIElement
+      const box = clone.querySelector("input[type=checkbox]")
+      // read the attribute from the page source, not the live state another script may change
+      const correct = Boolean(opt.querySelector("input[type=checkbox]")?.hasAttribute("checked"))
+      box?.remove()
+      return { html: clone.innerHTML.trim(), correct }
+    })
+    const explain = li.querySelector(":scope > blockquote")?.innerHTML.trim() ?? ""
+    if (text && options.length >= 2 && options.some((o) => o.correct)) {
+      questions.push({ text, options, explain })
+    }
+  })
+  return questions
+}
+
+let quizCount = 0
+
+function mountQuiz(root: HTMLElement) {
+  if (root.classList.contains("nbw-quiz-ready")) return
+  const questions = parseQuiz(root)
+  if (questions.length === 0) return // leave the Markdown as it is
+
+  const id = `nbw-quiz-${quizCount++}`
+  const answers: (number | null)[] = questions.map(() => null)
+
+  root.classList.add("nbw-quiz-ready")
+  root.innerHTML =
+    '<div class="nbw-qhead"><span class="nbw-lbl">Quick quiz</span>' +
+    '<span class="nbw-score" aria-live="polite"></span></div>' +
+    '<ol class="nbw-qlist">' +
+    questions
+      .map(
+        (q, qi) =>
+          `<li class="nbw-q" data-q="${qi}">` +
+          `<p class="nbw-qtext" id="${id}-q${qi}">${q.text}</p>` +
+          `<div class="nbw-opts" role="group" aria-labelledby="${id}-q${qi}">` +
+          q.options
+            .map(
+              (o, oi) =>
+                `<button type="button" class="nbw-opt" data-q="${qi}" data-o="${oi}">` +
+                `<span class="nbw-mark" aria-hidden="true"></span><span class="nbw-otext">${o.html}</span>` +
+                `<span class="nbw-sr nbw-ostate"></span></button>`,
+            )
+            .join("") +
+          "</div>" +
+          `<div class="nbw-feedback" aria-live="polite" hidden></div>` +
+          "</li>",
+      )
+      .join("") +
+    "</ol>" +
+    '<div class="nbw-qdone" hidden><span class="nbw-qresult"></span>' +
+    '<button type="button" class="nbw-btn" data-act="retry">Try again</button></div>'
+
+  const score = root.querySelector<HTMLElement>(".nbw-score")!
+  const done = root.querySelector<HTMLElement>(".nbw-qdone")!
+
+  function render() {
+    const answered = answers.filter((a) => a !== null).length
+    const right = answers.filter((a, qi) => a !== null && questions[qi].options[a].correct).length
+    score.textContent = `${answered} of ${questions.length} answered`
+
+    questions.forEach((q, qi) => {
+      const item = root.querySelector<HTMLElement>(`.nbw-q[data-q="${qi}"]`)!
+      const chosen = answers[qi]
+      item.querySelectorAll<HTMLButtonElement>(".nbw-opt").forEach((btn, oi) => {
+        const isChosen = chosen === oi
+        const isCorrect = q.options[oi].correct
+        btn.classList.toggle("is-chosen", isChosen)
+        btn.classList.toggle("is-right", chosen !== null && isCorrect)
+        btn.classList.toggle("is-wrong", isChosen && !isCorrect)
+        btn.setAttribute("aria-disabled", String(chosen !== null))
+        const mark = btn.querySelector<HTMLElement>(".nbw-mark")!
+        mark.textContent = chosen === null ? "" : isCorrect ? "✓" : isChosen ? "✕" : ""
+        const state = btn.querySelector<HTMLElement>(".nbw-ostate")!
+        state.textContent =
+          chosen === null
+            ? ""
+            : isCorrect && isChosen
+              ? " (your answer, correct)"
+              : isCorrect
+                ? " (correct answer)"
+                : isChosen
+                  ? " (your answer, not correct)"
+                  : ""
+      })
+      const fb = item.querySelector<HTMLElement>(".nbw-feedback")!
+      if (chosen === null) {
+        fb.hidden = true
+        fb.innerHTML = ""
+      } else {
+        const ok = q.options[chosen].correct
+        fb.hidden = false
+        fb.className = "nbw-feedback " + (ok ? "is-right" : "is-wrong")
+        fb.innerHTML = `<strong>${ok ? "Correct." : "Not quite."}</strong> ${q.explain}`
+      }
+    })
+
+    if (answered === questions.length) {
+      done.hidden = false
+      done.querySelector<HTMLElement>(".nbw-qresult")!.textContent =
+        right === questions.length
+          ? `All ${right} right. Nicely done.`
+          : `You got ${right} of ${questions.length}. Read the notes above, then try again.`
+    } else {
+      done.hidden = true
+    }
+  }
+
+  function onClick(e: Event) {
+    const target = e.target as HTMLElement
+    if (target.closest('[data-act="retry"]')) {
+      answers.fill(null)
+      render()
+      root.querySelector<HTMLButtonElement>(".nbw-opt")?.focus()
+      return
+    }
+    const btn = target.closest<HTMLButtonElement>(".nbw-opt")
+    if (!btn) return
+    const qi = Number(btn.dataset.q)
+    if (answers[qi] !== null) return // one try per question until "Try again"
+    answers[qi] = Number(btn.dataset.o)
+    render()
+  }
+
+  root.addEventListener("click", onClick)
+  window.addCleanup(() => root.removeEventListener("click", onClick))
+  render()
+}
+
+/* ------------------------------------------------------------------ */
 
 const MOUNTS: Record<string, (el: HTMLElement) => void> = {
   "packet-journey": mountJourney,
   "tcp-sim": mountTcpSim,
   "latency-scale": mountLatency,
+  quiz: mountQuiz,
 }
 
 document.addEventListener("nav", () => {

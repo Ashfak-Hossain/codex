@@ -7,9 +7,9 @@ _Last updated: 2026-11-23, session 5 (Claude Code)._
 ## Now
 
 - **Phase:** 1 · Design system
-- **Current task:** none in progress (P1.3, P1.4, P1.5, P1.7 and the AI Engineering section are uncommitted)
-- **Next task:** P1.6 Design review (gate), now including the new sidebar
-- **Waiting on Ashfak:** look over the new sidebar and home map; commit the pending work; go-ahead for P1.6
+- **Current task:** **P1.6 Design review (gate)**: in progress; waiting for Ashfak's notes
+- **Next task:** Phase 2 · P2.1 Reading progress
+- **Waiting on Ashfak:** review the site (checklist in this session's log) and send notes; merge `design/home-map-and-sidebar` into `master`
 
 ## Status board
 
@@ -24,7 +24,7 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 | P1.3 | Learning path bar                    | ✅     | Shows real position; `step` is a sort key            |
 | P1.4 | Home learning map                    | ✅     | Filled stations and "continue" wait for P2.1         |
 | P1.5 | Mascot                               | ✅     | First `plain` callout and 404 page; home map in P1.4 |
-| P1.6 | Design review (gate)                 | ⬜     |                                                      |
+| P1.6 | Design review (gate)                 | 🟨     | Waiting for Ashfak's notes                           |
 | P1.7 | Sidebar (Explorer) redesign          | ✅     | VS Code / Notion style; review in P1.6               |
 | P2.1 | Reading progress                     | ⬜     |                                                      |
 | P2.2 | Glossary                             | ⬜     |                                                      |
@@ -68,6 +68,25 @@ Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · �
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-23 · session 5 (continued) · Claude Code · P1.6 design review started
+
+**Done**
+
+- Committed the home map, sidebar and plans as 9bc6c14 on a new branch `design/home-map-and-sidebar`, because Claude doesn't commit straight to `master`. Ashfak's own ac8ec58 (path bar, Pip, AI Engineering) is on `master` and not yet pushed.
+- Fixed the logged phone-header issue: the site title is 1.2rem below 800 px, so it takes two lines at 380 px instead of three. One line doesn't fit beside the search box and buttons. Uncommitted.
+
+**Review checklist for Ashfak** (open each in light and dark, and once at phone width)
+
+1. Home, `localhost:8080`: terminal hero, then the learning map below it.
+2. A track page, `/Networking/Host-Configuration/DHCP`: path bar, sidebar, fonts, colours.
+3. A Mathematics page, `/Mathematics/Euclidean-Algorithms/Greatest-Common-Divisor`: maths colours, code, sidebar.
+4. Callout demo (`npx quartz build --serve -d plans/preview/callouts --port 8081 --wsPort 3002 -o /tmp/callout-demo`, then `localhost:8081/demo`) and the 404 page (`npx quartz build --serve --base /codex/`, any made-up address).
+5. Open choices: a Mathematics line on the map (needs `track`/`step` front matter on Math notes), cursive dates (kept for now), and long sidebar titles wrapping or ending in "…".
+
+**Next**
+
+- Fix what Ashfak flags, delete `plans/preview/`, set P1.6 to ✅, then Phase 2 (P2.1 Reading progress).
 
 ### 2026-11-23 · session 5 (continued) · Claude Code · P1.7 round 2: VS Code / Notion style
 
@@ -331,5 +350,4 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 
 - `npm run check` fails before any of our changes: 4 TypeScript errors in `quartz/components/scripts/spa.inline.ts`, `quartz/processors/parse.ts` and `quartz/components/pages/og.tsx` (plus a related `micromorph` typings message), and Prettier warnings on some Mathematics notes. `npx quartz build` works regardless. Tracked as P9.4.
 - Diagram characters (`─ │ ┌ →` and friends) aren't in the Google Fonts subsets of JetBrains Mono or IBM Plex Mono, so they come from a system font. On macOS Chrome they measure 9.633 px against 9.600 px for letters at 16 px, about 2 px of drift across a 66-character line. Line height 1.6 also leaves gaps in vertical lines. Same for every option and for today's site.
-- On phones, the site title "The Hilbert Notebooks" wraps to three lines in Fraunces, which makes the header tall. Worth fixing in P1.6.
 - In a sandbox without access to Google Fonts, `npx quartz build` fails in the `CustomOgImages` emitter; comment it out locally to test, never in a commit.

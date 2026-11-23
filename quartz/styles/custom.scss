@@ -85,6 +85,14 @@ font[color="crimson" i],
   stroke: #c9a77a;
 }
 
+// Phones: a smaller site title, so it takes two lines instead of three and the header stays short
+@media all and (max-width: 800px) {
+  h2.page-title {
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+}
+
 // Each track's index and chapter pages wear its colour in the title
 body[data-slug^="Networking/"][data-slug$="/index"] .article-title {
   color: var(--track-networking);

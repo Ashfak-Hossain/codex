@@ -6,68 +6,96 @@ _Last updated: 2026-11-23, session 5 (Claude Code)._
 
 ## Now
 
-- **Phase:** 1 · Design system
-- **Current task:** **P1.6 Design review (gate)**: in progress; waiting for Ashfak's notes
-- **Next task:** Phase 2 · P2.1 Reading progress
-- **Waiting on Ashfak:** review the site (checklist in this session's log) and send notes; merge `design/home-map-and-sidebar` into `master`
+- **Phase:** 2 · Reader engine (Phase 1 done)
+- **Current task:** none in progress (P2.1 finished, uncommitted)
+- **Next task:** P2.2 Glossary
+- **Waiting on Ashfak:** try reading progress at `localhost:8080`; commit; go-ahead for P2.2 Glossary
 
 ## Status board
 
 Legend: ⬜ todo · 🟨 in progress · 👀 waiting for review · ✅ done · ⏸ parked
 
-| ID   | Task                                 | Status | Notes                                                |
-| ---- | ------------------------------------ | ------ | ---------------------------------------------------- |
-| P0.1 | Plan and progress system             | ✅     | This folder, `/notebook` commands, CLAUDE.md section |
-| P1.0 | Design decisions (gate)              | ✅     | Answers in DESIGN.md → Decisions                     |
-| P1.1 | Typography and palette               | ✅     | Canvas controls moved to P9.1 by agreement           |
-| P1.2 | Callout set                          | ✅     | Demo in `plans/preview/callouts/`, deleted at P1.6   |
-| P1.3 | Learning path bar                    | ✅     | Shows real position; `step` is a sort key            |
-| P1.4 | Home learning map                    | ✅     | Filled stations and "continue" wait for P2.1         |
-| P1.5 | Mascot                               | ✅     | First `plain` callout and 404 page; home map in P1.4 |
-| P1.6 | Design review (gate)                 | 🟨     | Waiting for Ashfak's notes                           |
-| P1.7 | Sidebar (Explorer) redesign          | ✅     | VS Code / Notion style; review in P1.6               |
-| P2.1 | Reading progress                     | ⬜     |                                                      |
-| P2.2 | Glossary                             | ⬜     |                                                      |
-| P2.3 | Quiz widget                          | ⬜     |                                                      |
-| P2.4 | Review deck                          | ⬜     |                                                      |
-| P3.1 | Rewrite: Layers and Encapsulation    | ⬜     | First version exists (session 1)                     |
-| P3.2 | Rewrite: A Packet's Journey          | ⬜     | First version exists (session 1)                     |
-| P3.3 | Rewrite: DHCP                        | ⬜     | Prereqs, questions and next link added in session 1  |
-| P3.4 | Rewrite: ARP                         | ⬜     | Prereqs, questions and next link added in session 1  |
-| P3.5 | Rewrite: Connectivity Debug Ladder   | ⬜     | First version exists (session 1)                     |
-| P4.1 | IP Addresses and Subnets             | ⬜     |                                                      |
-| P4.2 | Routing                              | ⬜     |                                                      |
-| P4.3 | NAT                                  | ⬜     |                                                      |
-| P4.4 | DNS                                  | ⬜     |                                                      |
-| P5.1 | Ports and Sockets                    | ⬜     |                                                      |
-| P5.2 | UDP                                  | ⬜     |                                                      |
-| P5.3 | TCP                                  | ⬜     |                                                      |
-| P6.1 | TLS and Certificates                 | ⬜     |                                                      |
-| P6.2 | HTTP                                 | ⬜     |                                                      |
-| P6.3 | Re-link the chain                    | ⬜     |                                                      |
-| P7.1 | IPv6                                 | ⬜     |                                                      |
-| P7.2 | Load Balancers and Reverse Proxies   | ⬜     |                                                      |
-| P7.3 | CDNs and Anycast                     | ⬜     |                                                      |
-| P7.4 | Firewalls and VPNs                   | ⬜     |                                                      |
-| P7.5 | Kubernetes Networking                | ⬜     |                                                      |
-| P7.6 | BGP                                  | ⬜     |                                                      |
-| P8.1 | Rewrite the four System Design pages | ⬜     | First versions exist (session 1)                     |
-| P8.2 | Caching                              | ⬜     |                                                      |
-| P8.3 | Rate Limiting                        | ⬜     |                                                      |
-| P8.4 | Queues and Streams                   | ⬜     |                                                      |
-| P8.5 | Replication and Consistency          | ⬜     |                                                      |
-| P8.6 | Sharding and Partitioning            | ⬜     |                                                      |
-| P8.7 | Consensus (Raft)                     | ⬜     |                                                      |
-| P8.8 | Observability                        | ⬜     |                                                      |
-| P8.9 | API Design                           | ⬜     |                                                      |
-| P9.1 | Accessibility audit                  | ⬜     | Includes canvas control contrast (1.26–4.42:1)       |
-| P9.2 | Performance                          | ⬜     |                                                      |
-| P9.3 | Link and reference check             | ⬜     |                                                      |
-| P9.4 | Make `npm run check` pass            | ⬜     | See Known issues                                     |
+| ID   | Task                                 | Status | Notes                                                       |
+| ---- | ------------------------------------ | ------ | ----------------------------------------------------------- |
+| P0.1 | Plan and progress system             | ✅     | This folder, `/notebook` commands, CLAUDE.md section        |
+| P1.0 | Design decisions (gate)              | ✅     | Answers in DESIGN.md → Decisions                            |
+| P1.1 | Typography and palette               | ✅     | Canvas controls moved to P9.1 by agreement                  |
+| P1.2 | Callout set                          | ✅     | Demo deleted at P1.6 (in git history)                       |
+| P1.3 | Learning path bar                    | ✅     | Shows real position; `step` is a sort key                   |
+| P1.4 | Home learning map                    | ✅     | Stations fill and Continue works since P2.1                 |
+| P1.5 | Mascot                               | ✅     | First `plain` callout and 404 page; home map in P1.4        |
+| P1.6 | Design review (gate)                 | ✅     | Approved 2026-11-23; `plans/preview/` deleted               |
+| P1.7 | Sidebar (Explorer) redesign          | ✅     | VS Code / Notion style; review in P1.6                      |
+| P2.1 | Reading progress                     | ✅     | Track pages; ticks in sidebar, path bar, map; Continue link |
+| P2.2 | Glossary                             | ⬜     |                                                             |
+| P2.3 | Quiz widget                          | ⬜     |                                                             |
+| P2.4 | Review deck                          | ⬜     |                                                             |
+| P3.1 | Rewrite: Layers and Encapsulation    | ⬜     | First version exists (session 1)                            |
+| P3.2 | Rewrite: A Packet's Journey          | ⬜     | First version exists (session 1)                            |
+| P3.3 | Rewrite: DHCP                        | ⬜     | Prereqs, questions and next link added in session 1         |
+| P3.4 | Rewrite: ARP                         | ⬜     | Prereqs, questions and next link added in session 1         |
+| P3.5 | Rewrite: Connectivity Debug Ladder   | ⬜     | First version exists (session 1)                            |
+| P4.1 | IP Addresses and Subnets             | ⬜     |                                                             |
+| P4.2 | Routing                              | ⬜     |                                                             |
+| P4.3 | NAT                                  | ⬜     |                                                             |
+| P4.4 | DNS                                  | ⬜     |                                                             |
+| P5.1 | Ports and Sockets                    | ⬜     |                                                             |
+| P5.2 | UDP                                  | ⬜     |                                                             |
+| P5.3 | TCP                                  | ⬜     |                                                             |
+| P6.1 | TLS and Certificates                 | ⬜     |                                                             |
+| P6.2 | HTTP                                 | ⬜     |                                                             |
+| P6.3 | Re-link the chain                    | ⬜     |                                                             |
+| P7.1 | IPv6                                 | ⬜     |                                                             |
+| P7.2 | Load Balancers and Reverse Proxies   | ⬜     |                                                             |
+| P7.3 | CDNs and Anycast                     | ⬜     |                                                             |
+| P7.4 | Firewalls and VPNs                   | ⬜     |                                                             |
+| P7.5 | Kubernetes Networking                | ⬜     |                                                             |
+| P7.6 | BGP                                  | ⬜     |                                                             |
+| P8.1 | Rewrite the four System Design pages | ⬜     | First versions exist (session 1)                            |
+| P8.2 | Caching                              | ⬜     |                                                             |
+| P8.3 | Rate Limiting                        | ⬜     |                                                             |
+| P8.4 | Queues and Streams                   | ⬜     |                                                             |
+| P8.5 | Replication and Consistency          | ⬜     |                                                             |
+| P8.6 | Sharding and Partitioning            | ⬜     |                                                             |
+| P8.7 | Consensus (Raft)                     | ⬜     |                                                             |
+| P8.8 | Observability                        | ⬜     |                                                             |
+| P8.9 | API Design                           | ⬜     |                                                             |
+| P9.1 | Accessibility audit                  | ⬜     | Includes canvas control contrast (1.26–4.42:1)              |
+| P9.2 | Performance                          | ⬜     |                                                             |
+| P9.3 | Link and reference check             | ⬜     |                                                             |
+| P9.4 | Make `npm run check` pass            | ⬜     | See Known issues                                            |
 
 ## Session log
 
 _Newest first. One entry per session: date, task, done, files, decisions, problems, next._
+
+### 2026-11-23 · session 5 (continued) · Claude Code · P1.6 done, P2.1 done
+
+**P1.6 Design review**
+
+- Ashfak: "looks fine". Approved. Open choices kept as they were: no Mathematics line on the map, cursive dates, sidebar titles wrap. Deleted `plans/preview/` (callout demo and P1.0 preview; both are in git history). Phase 1 is complete.
+
+**P2.1 Reading progress**
+
+- `quartz/components/ReadingProgress.tsx` + `scripts/readingProgress.inline.ts` + `styles/readingProgress.scss`. On track pages, a "Mark as read" button at the end of the page; it becomes "✓ Read · mark as unread". It ticks itself when `h2#recap` scrolls into view, and unmarking stops the auto-tick for the rest of that visit.
+- Ticks appear in the sidebar (a ✓ at the end of the row, with "read" for screen readers), the path bar (" · ✓ Read") and the home map (filled station, link labelled "(read)").
+- Home: "Continue where you left off" goes to the last track page opened, or to the next unread stop on its line if that page is read. It's hidden when there's nothing to continue.
+- Storage: `localStorage` keys `hilbert-notebooks:read` (`{ slug: ISO date }`) and `hilbert-notebooks:last` (`{ slug, title }`). Every access is guarded. If storage is blocked, the button and the Continue link stay hidden.
+- Registered in both the content layout's `afterBody` and `sharedPageComponents.afterBody`, because the content layout replaces the shared list. That way folder and tag pages also tick their sidebar.
+
+**Verified** (Chrome over DevTools on `quartz build --serve`, fresh profile)
+
+- Mark by hand → sidebar, path bar and storage update. Moving to home without a reload shows the filled station and "Continue → ARP". Scrolling to ARP's Recap auto-ticks it; unmarking then re-scrolling doesn't re-tick. The folder page sidebar shows ticks.
+- Storage blocked: button and Continue hidden, and the new script raises no errors.
+- Button in both states, both themes and 380 px; contrast clean on DHCP and home in both themes. `npm test` 80 of 80, `tsc` the same 4 baseline errors.
+
+**Problems found, not fixed**
+
+- With storage blocked, three existing Quartz scripts throw: the theme prescript (`localStorage.getItem("theme")`), the graph and the Explorer (`fileTree`). These failures are old, not new. Candidate for P9.1.
+
+**Next**
+
+- P2.2 Glossary.
 
 ### 2026-11-23 · session 5 (continued) · Claude Code · P1.6 design review started
 
@@ -340,6 +368,7 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 | 2026-11-06 | P1.0: typography A, teal/violet/amber, Pip yes, keep hero with map below                   |
 | 2026-11-07 | Note colours via CSS per theme, note text untouched; canvas contrast waits for P9.1        |
 | 2026-11-07 | Keep the cursive date font; index pages carry no body `# Title`                            |
+| 2026-11-23 | P1.6 approved: no Mathematics line on the map, keep cursive dates, sidebar titles wrap     |
 | 2026-11-07 | Voice: \"you\" and one skeleton on Networking and System Design; Mathematics keeps its own |
 
 ## Open questions
@@ -350,4 +379,5 @@ _Newest first. One entry per session: date, task, done, files, decisions, proble
 
 - `npm run check` fails before any of our changes: 4 TypeScript errors in `quartz/components/scripts/spa.inline.ts`, `quartz/processors/parse.ts` and `quartz/components/pages/og.tsx` (plus a related `micromorph` typings message), and Prettier warnings on some Mathematics notes. `npx quartz build` works regardless. Tracked as P9.4.
 - Diagram characters (`─ │ ┌ →` and friends) aren't in the Google Fonts subsets of JetBrains Mono or IBM Plex Mono, so they come from a system font. On macOS Chrome they measure 9.633 px against 9.600 px for letters at 16 px, about 2 px of drift across a 66-character line. Line height 1.6 also leaves gaps in vertical lines. Same for every option and for today's site.
+- With `localStorage` blocked (for example Chrome set to block all cookies), Quartz's theme prescript, graph and Explorer scripts throw unguarded errors. Reading progress itself handles it. To fix in P9.1.
 - In a sandbox without access to Google Fonts, `npx quartz build` fails in the `CustomOgImages` emitter; comment it out locally to test, never in a commit.

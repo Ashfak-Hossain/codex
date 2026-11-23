@@ -25,7 +25,7 @@ Chosen 2026-11-06: option A, applied in P1.1. Replaced Proza Libre, Bricolage Gr
 | B · Bookish | Fraunces                       | Literata                   | IBM Plex Mono  | A real book; best for long reads |
 | C · Clean   | Bricolage Grotesque (keep)     | Inter                      | IBM Plex Mono  | Modern, closest to today         |
 
-All of these fonts are on Google Fonts (checked 2026-11-06). Compare them in `plans/preview/design-preview.html`.
+All of these fonts are on Google Fonts (checked 2026-11-06). They were compared on a preview page, deleted after P1.6 (it's in git history).
 
 ### Track colours
 
@@ -87,9 +87,9 @@ Prefer **no new dependencies**. Already available: Quartz's popovers, callouts, 
 
 ## Decisions
 
-| Date       | Decision                                                                                                  |
-| ---------- | --------------------------------------------------------------------------------------------------------- |
-| 2026-11-06 | Typography: **A · Cosy**. Fraunces headings, Atkinson Hyperlegible Next body, JetBrains Mono code         |
-| 2026-11-06 | Track colours: Networking teal, System Design violet, Mathematics amber                                   |
-| 2026-11-06 | Mascot: **yes**, Pip as sketched in `plans/preview/design-preview.html`, at most 2–3 appearances per page |
-| 2026-11-06 | Home page: keep the terminal hero and add the learning map below it                                       |
+| Date       | Decision                                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 2026-11-06 | Typography: **A · Cosy**. Fraunces headings, Atkinson Hyperlegible Next body, JetBrains Mono code                         |
+| 2026-11-06 | Track colours: Networking teal, System Design violet, Mathematics amber                                                   |
+| 2026-11-06 | Mascot: **yes**, Pip as sketched on the P1.0 preview page (now in `quartz/util/pip.ts`), at most 2–3 appearances per page |
+| 2026-11-06 | Home page: keep the terminal hero and add the learning map below it                                                       |

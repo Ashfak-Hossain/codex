@@ -1,0 +1,82 @@
+.reading-progress {
+  --rp-accent: var(--secondary);
+  --rp-ink: var(--secondary);
+
+  &[data-track="networking"] {
+    --rp-accent: var(--track-networking);
+    --rp-ink: var(--track-networking-ink);
+  }
+
+  &[data-track="system-design"] {
+    --rp-accent: var(--track-system-design);
+    --rp-ink: var(--track-system-design-ink);
+  }
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 2.5rem 0 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--lightgray);
+
+  &[hidden] {
+    display: none;
+  }
+
+  .rp-toggle {
+    min-height: 2.5rem;
+    padding: 0.45rem 1rem;
+    font-family: var(--bodyFont);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--rp-ink);
+    background: color-mix(in srgb, var(--rp-accent) 10%, transparent);
+    border: 1.5px solid color-mix(in srgb, var(--rp-accent) 55%, transparent);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--rp-accent) 18%, transparent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--rp-ink);
+      outline-offset: 2px;
+    }
+  }
+
+  &.is-read .rp-toggle {
+    color: var(--light);
+    background: var(--rp-ink);
+    border-color: var(--rp-ink);
+  }
+
+  .rp-note {
+    font-size: 0.85rem;
+    color: var(--gray);
+  }
+}
+
+// Ticks elsewhere: sidebar pages and the path bar
+.explorer-content a.is-read::after {
+  content: "✓" / "read";
+  margin-left: auto;
+  padding-left: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ex-ink, var(--secondary));
+}
+
+.learning-path.is-read .lp-step::after {
+  content: " · ✓ Read";
+  font-weight: 600;
+  color: var(--lp-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress .rp-toggle {
+    transition: none;
+  }
+}

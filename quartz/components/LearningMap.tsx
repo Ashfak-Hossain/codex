@@ -39,6 +39,10 @@ const LearningMap: QuartzComponent = ({ fileData, allFiles }: QuartzComponentPro
           </h2>
         </div>
       </div>
+      {/* Filled in by the reading-progress script from the last page you opened */}
+      <p class="lm-continue" hidden>
+        <span>Continue where you left off:</span> <a href="#"></a> <span aria-hidden="true">→</span>
+      </p>
       {lines.map((line) => (
         <div class="lm-line" data-track={line.id}>
           <h3 class="lm-name">

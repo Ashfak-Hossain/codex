@@ -33,6 +33,25 @@
   }
 }
 
+.lm-continue {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: -0.5rem 0 1.5rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.95rem;
+  background: var(--highlight);
+  border-radius: 999px;
+
+  &[hidden] {
+    display: none;
+  }
+
+  a {
+    font-weight: 600;
+  }
+}
+
 .lm-line {
   --lm-accent: var(--secondary);
   --lm-ink: var(--secondary);

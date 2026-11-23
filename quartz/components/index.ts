@@ -30,6 +30,7 @@ import GameOfLife from "./GameOfLife"
 import NotebookWidgets from "./NotebookWidgets"
 import LearningPath from "./LearningPath"
 import LearningMap from "./LearningMap"
+import ReadingProgress from "./ReadingProgress"
 
 export {
   ArticleTitle,
@@ -64,4 +65,5 @@ export {
   NotebookWidgets,
   LearningPath,
   LearningMap,
+  ReadingProgress,
 }

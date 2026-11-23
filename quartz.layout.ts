@@ -5,7 +5,8 @@ import * as Component from "./quartz/components"
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  // Folder and tag pages use this list; it brings the reading-progress ticks to their sidebar
+  afterBody: [Component.ReadingProgress()],
   footer: Component.ConditionalRender({
     component: Component.Footer({
       links: {
@@ -109,6 +110,8 @@ export const defaultContentPageLayout = {
     }),
   ],
   afterBody: [
+    // "Mark as read" on track pages, and read ticks in the sidebar, path bar and home map
+    Component.ReadingProgress(),
     // Mounts interactive widgets on any note containing <div class="nbw" data-widget="...">
     Component.NotebookWidgets(),
     Component.ConditionalRender({
